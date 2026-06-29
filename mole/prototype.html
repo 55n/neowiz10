@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>두더지 생존</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #080400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: monospace;
+  user-select: none;
+  -webkit-user-select: none;
+}
+canvas { display: block; }
+#controls {
+  display: flex;
+  gap: 24px;
+  margin-top: 14px;
+}
+.btn {
+  width: 90px;
+  height: 64px;
+  background: #222;
+  border: 2px solid #444;
+  border-radius: 10px;
+  color: #aaa;
+  font-size: 28px;
+  cursor: pointer;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { background: #444; color: #fff; }
+#hint { color: #444; font-size: 11px; margin-top: 8px; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="controls">
+  <div class="btn" id="btnL">◀</div>
+  <div class="btn" id="btnR">▶</div>
+</div>
+<div id="hint">← → 또는 A / D 키 &nbsp;|&nbsp; R = 재시작</div>
+
+<script>
+// ─── 상수 ───────────────────────────────────────────────────────────────────
+const TW = 60;           // 타일 너비
+const TH = 40;           // 타일 높이
+const COLS = 9;
+const VISIBLE = 15;      // 화면에 보이는 행 수
+const CW = COLS * TW + TW / 2;  // 홀수 행 오프셋 수용
+const CH = VISIBLE * TH;
+const TOTAL = 100;       // 총 파야 할 깊이
+
+const SOFT = 0, HARD = 1;
+
+// 색상
+const BG       = '#0e0700';
+const COL_SOFT = '#7a4f1a';
+const COL_SOFT_CRACKED = '#5a3810';
+const COL_HARD = '#252230';
+const HINT_SOFT = '#c08040';  // 균열로 보이는 흙
+const HINT_HARD = '#1a1828';  // 균열로 보이는 암반
+
+// ─── 캔버스 ─────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+canvas.width = CW;
+canvas.height = CH;
+const ctx = canvas.getContext('2d');
+
+// ─── 상태 ────────────────────────────────────────────────────────────────────
+let grid, player, threat, camRow, gameOver, won, maxDepth;
+
+// ─── 그리드 헬퍼 ─────────────────────────────────────────────────────────────
+function tileX(row, col) {
+  return row % 2 === 0 ? col * TW : col * TW + TW / 2;
+}
+
+// 현재 타일의 아래 두 자식 타일 (오프셋 브릭 구조)
+function getChildren(row, col) {
+  let next = row + 1;
+  if (next >= TOTAL) return [];
+  if (row % 2 === 0) {
+    // 짝수 행 → 홀수 행: 왼쪽 자식=(col-1), 오른쪽 자식=col
+    let result = [];
+    if (col - 1 >= 0)    result.push({ r: next, c: col - 1, dir: 'left'  });
+    if (col < COLS)      result.push({ r: next, c: col,     dir: 'right' });
+    return result;
+  } else {
+    // 홀수 행 → 짝수 행: 왼쪽 자식=col, 오른쪽 자식=(col+1)
+    let result = [];
+    result.push({ r: next, c: col,     dir: 'left'  });
+    if (col + 1 < COLS)  result.push({ r: next, c: col + 1, dir: 'right' });
+    return result;
+  }
+}
+
+// ─── 초기화 ───────────────────────────────────────────────────────────────────
+function init() {
+  grid = [];
+  for (let r = 0; r < TOTAL; r++) {
+    grid[r] = [];
+    for (let col = 0; col < COLS; col++) {
+      let hardChance = 0.18 + (r / TOTAL) * 0.30;
+      grid[r][col] = { type: Math.random() < hardChance ? HARD : SOFT, hits: 0, flash: 0 };
+    }
+  }
+
+  // 시작 위치 보장
+  let startCol = Math.floor(COLS / 2);
+  player = { r: 0, c: startCol };
+  grid[0][startCol] = { type: SOFT, hits: 2, flash: 0 };
+
+  // 시작 위치 직하방 자식 중 하나는 반드시 파낼 수 있게
+  getChildren(0, startCol).forEach((ch, i) => {
+    if (i === 0) grid[ch.r][ch.c].type = SOFT;
+  });
+
+  threat   = { row: -7 };
+  camRow   = 0;
+  gameOver = false;
+  won      = false;
+  maxDepth = 0;
+}
+
+// ─── 입력 처리 ────────────────────────────────────────────────────────────────
+function tryMove(dir) {
+  if (gameOver) return;
+
+  let ch = getChildren(player.r, player.c).find(t => t.dir === dir);
+  if (!ch) return;
+
+  let tile = grid[ch.r][ch.c];
+
+  if (tile.type === HARD) {
+    tile.flash = 8;   // 막혔음을 시각으로 표시
+    return;
+  }
+
+  tile.hits++;
+  if (tile.hits >= 2) {
+    // 두 번째 타격 → 이동
+    player.r = ch.r;
+    player.c = ch.c;
+    maxDepth = Math.max(maxDepth, player.r);
+  }
+  // 첫 번째 타격 → 균열만 생김 (자식 타일 힌트 공개)
+}
+
+// ─── 업데이트 ─────────────────────────────────────────────────────────────────
+let shakeAmt = 0;
+
+function update() {
+  if (gameOver) return;
+
+  // 위협 전진 속도: 깊어질수록 빨라짐
+  let speed = 0.010 + (maxDepth / TOTAL) * 0.022;
+  threat.row += speed;
+
+  // 충격파 근접도에 따라 화면 흔들림
+  let dist = player.r - threat.row;
+  shakeAmt = dist < 6 ? Math.max(0, (6 - dist) / 6) * 4 : 0;
+
+  // 카메라 (플레이어 기준 위로 35%)
+  camRow = Math.max(0, player.r - Math.floor(VISIBLE * 0.35));
+
+  // 플래시 감소
+  for (let r = 0; r < TOTAL; r++)
+    for (let col = 0; col < COLS; col++)
+      if (grid[r][col].flash > 0) grid[r][col].flash--;
+
+  if (threat.row >= player.r) { gameOver = true; won = false; }
+  if (player.r >= TOTAL - 2)  { gameOver = true; won = true;  }
+}
+
+// ─── 렌더링 ───────────────────────────────────────────────────────────────────
+function drawTile(row, col) {
+  let tile = grid[row][col];
+  if (tile.hits >= 2) return;  // 이미 파낸 타일 = 빈 공간
+
+  let x  = tileX(row, col);
+  let y  = (row - camRow) * TH;
+  let iw = TW - 2, ih = TH - 2;
+
+  // 기본 색
+  let baseCol = tile.type === HARD
+    ? COL_HARD
+    : (tile.hits === 1 ? COL_SOFT_CRACKED : COL_SOFT);
+
+  ctx.fillStyle = baseCol;
+  ctx.fillRect(x + 1, y + 1, iw, ih);
+
+  // 암반 플래시 (이동 불가 피드백)
+  if (tile.flash > 0) {
+    ctx.fillStyle = `rgba(255,80,0,${(tile.flash / 8) * 0.55})`;
+    ctx.fillRect(x + 1, y + 1, iw, ih);
+  }
+
+  // 균열 타일: 아래 자식 타입 힌트를 V형으로 공개
+  if (tile.hits === 1 && tile.type === SOFT) {
+    let kids = getChildren(row, col);
+    let lKid = kids.find(k => k.dir === 'left');
+    let rKid = kids.find(k => k.dir === 'right');
+
+    let lColor = (lKid && grid[lKid.r] && grid[lKid.r][lKid.c])
+      ? (grid[lKid.r][lKid.c].type === HARD ? HINT_HARD : HINT_SOFT)
+      : BG;
+    let rColor = (rKid && grid[rKid.r] && grid[rKid.r][rKid.c])
+      ? (grid[rKid.r][rKid.c].type === HARD ? HINT_HARD : HINT_SOFT)
+      : BG;
+
+    // 왼쪽 힌트 삼각형
+    ctx.fillStyle = lColor;
+    ctx.beginPath();
+    ctx.moveTo(x + 1,        y + ih * 0.52);
+    ctx.lineTo(x + 1,        y + ih + 1);
+    ctx.lineTo(x + iw * 0.5, y + ih + 1);
+    ctx.closePath();
+    ctx.fill();
+
+    // 오른쪽 힌트 삼각형
+    ctx.fillStyle = rColor;
+    ctx.beginPath();
+    ctx.moveTo(x + iw * 0.5, y + ih + 1);
+    ctx.lineTo(x + iw + 1,   y + ih + 1);
+    ctx.lineTo(x + iw + 1,   y + ih * 0.52);
+    ctx.closePath();
+    ctx.fill();
+
+    // 균열선 (힌트 위에 덧그림)
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x + iw * 0.38, y + 2);
+    ctx.lineTo(x + iw * 0.50, y + ih * 0.48);
+    ctx.lineTo(x + iw * 0.50, y + ih + 1);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + iw * 0.58, y + 2);
+    ctx.lineTo(x + iw * 0.50, y + ih * 0.30);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + iw * 0.28, y + ih * 0.35);
+    ctx.lineTo(x + iw * 0.50, y + ih * 0.48);
+    ctx.stroke();
+  }
+
+  // 테두리
+  ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + 1, y + 1, iw, ih);
+}
+
+function drawPlayer() {
+  let px = tileX(player.r, player.c) + TW / 2;
+  let py = (player.r - camRow) * TH + TH / 2;
+
+  // 몸통
+  ctx.fillStyle = '#c8a060';
+  ctx.beginPath();
+  ctx.ellipse(px, py, 13, 11, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#8a6030';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // 눈
+  ctx.fillStyle = '#111';
+  ctx.beginPath(); ctx.arc(px - 4, py - 2, 2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(px + 4, py - 2, 2, 0, Math.PI * 2); ctx.fill();
+
+  // 코
+  ctx.fillStyle = '#ff9090';
+  ctx.beginPath(); ctx.arc(px, py + 3, 1.8, 0, Math.PI * 2); ctx.fill();
+
+  // 발톱 (dig 느낌)
+  ctx.strokeStyle = '#a07840';
+  ctx.lineWidth = 1.5;
+  [-10, -5, 5, 10].forEach(dx => {
+    ctx.beginPath();
+    ctx.moveTo(px + dx, py + 11);
+    ctx.lineTo(px + dx, py + 16);
+    ctx.stroke();
+  });
+}
+
+function drawThreat() {
+  let ty = (threat.row - camRow) * TH;
+
+  // 아래 화염 glow
+  let grd = ctx.createLinearGradient(0, ty - 50, 0, ty + 16);
+  grd.addColorStop(0, 'rgba(255,60,0,0)');
+  grd.addColorStop(0.6, 'rgba(255,80,0,0.3)');
+  grd.addColorStop(1, 'rgba(255,160,0,0.7)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, ty - 50, CW, 66);
+
+  // 충격파 선
+  ctx.fillStyle = '#ff5500';
+  ctx.fillRect(0, ty - 5, CW, 10);
+  ctx.fillStyle = '#ffee00';
+  ctx.fillRect(0, ty - 1, CW, 2);
+
+  // 위쪽 어둠 (이미 파괴된 영역)
+  ctx.fillStyle = 'rgba(255,20,0,0.08)';
+  ctx.fillRect(0, 0, CW, ty - 5);
+}
+
+function drawHUD() {
+  let dist = player.r - threat.row;
+  let danger = dist < 5;
+
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(0, 0, CW, 26);
+
+  ctx.fillStyle = '#aa7040';
+  ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(`깊이  ${player.r} m`, 10, 17);
+
+  ctx.fillStyle = danger ? '#ff5500' : '#665040';
+  ctx.textAlign = 'right';
+  ctx.fillText(`충격파 ↑ ${dist.toFixed(1)} m`, CW - 10, 17);
+}
+
+function drawFog() {
+  let px = tileX(player.r, player.c) + TW / 2;
+  let py = (player.r - camRow) * TH + TH / 2;
+
+  // 깊이 비율 (0=초반, 1=클라이맥스)
+  let t = Math.min(1, player.r / TOTAL);
+
+  // 시야 반경: 초반 1.5타일 → 후반 7타일 (픽셀 단위)
+  let minR = TW * 1.5;
+  let maxR = TW * 7;
+  let viewR = minR + (maxR - minR) * (t * t);  // 제곱으로 후반에 빠르게 열림
+
+  // destination-out으로 어둠에 구멍을 뚫는 방식
+  // 별도 오프스크린 캔버스 사용
+  if (!drawFog._buf) {
+    drawFog._buf = document.createElement('canvas');
+  }
+  let buf = drawFog._buf;
+  buf.width = CW; buf.height = CH;
+  let bc = buf.getContext('2d');
+
+  // 어둠 채우기
+  bc.fillStyle = `rgba(0,0,0,${0.96 - t * 0.30})`;
+  bc.fillRect(0, 0, CW, CH);
+
+  // 플레이어 주변을 투명하게 (방사형 그라디언트)
+  bc.globalCompositeOperation = 'destination-out';
+  let grad = bc.createRadialGradient(px, py, viewR * 0.3, px, py, viewR);
+  grad.addColorStop(0, 'rgba(0,0,0,1)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  bc.fillStyle = grad;
+  bc.beginPath();
+  bc.arc(px, py, viewR, 0, Math.PI * 2);
+  bc.fill();
+
+  bc.globalCompositeOperation = 'source-over';
+  ctx.drawImage(buf, 0, 0);
+}
+
+function draw() {
+  let sx = shakeAmt > 0 ? (Math.random() - 0.5) * shakeAmt * 2 : 0;
+  let sy = shakeAmt > 0 ? (Math.random() - 0.5) * shakeAmt * 2 : 0;
+
+  ctx.save();
+  ctx.translate(sx, sy);
+
+  // 배경
+  ctx.fillStyle = BG;
+  ctx.fillRect(-10, -10, CW + 20, CH + 20);
+
+  // 타일
+  let r0 = Math.max(0, Math.floor(camRow) - 1);
+  let r1 = Math.min(TOTAL, r0 + VISIBLE + 3);
+  for (let r = r0; r < r1; r++)
+    for (let col = 0; col < COLS; col++)
+      drawTile(r, col);
+
+  drawPlayer();
+  drawThreat();
+  drawFog();
+  drawHUD();
+
+  ctx.restore();
+
+  // ── 오버레이 ──────────────────────────────────────────────────────────────
+  if (gameOver && !won) {
+    ctx.fillStyle = 'rgba(0,0,0,0.78)';
+    ctx.fillRect(0, 0, CW, CH);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ff4400';
+    ctx.font = 'bold 28px monospace';
+    ctx.fillText('', CW / 2, CH / 2 - 30);
+
+    ctx.fillStyle = '#776655';
+    ctx.font = '14px monospace';
+    ctx.fillText(`최대 깊이: ${maxDepth} m`, CW / 2, CH / 2 + 8);
+
+    ctx.fillStyle = '#444';
+    ctx.font = '12px monospace';
+    ctx.fillText('R 또는 화면 탭 → 재시작', CW / 2, CH / 2 + 38);
+  }
+
+  if (gameOver && won) {
+    ctx.fillStyle = 'rgba(0,0,0,0.80)';
+    ctx.fillRect(0, 0, CW, CH);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffd060';
+    ctx.font = 'bold 26px monospace';
+    ctx.fillText('살아남았다', CW / 2, CH / 2 - 55);
+
+    ctx.fillStyle = '#887766';
+    ctx.font = '13px monospace';
+    [
+      '운석이 지상을 초토화한다.',
+      '하지만 당신은 깊은 땅 속,',
+      '어둠 속에서 숨을 죽이고 버텼다.',
+      '',
+      '— 수백만 년 후 —',
+      '후손들이 번성한다.',
+    ].forEach((line, i) => {
+      ctx.fillText(line, CW / 2, CH / 2 - 18 + i * 20);
+    });
+  }
+}
+
+// ─── 게임 루프 ────────────────────────────────────────────────────────────────
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ─── 키보드 ───────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') tryMove('left');
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') tryMove('right');
+  if (e.key === 'r' || e.key === 'R') init();
+  if ((e.key === ' ' || e.key === 'Enter') && gameOver) init();
+});
+
+// ─── 터치 버튼 ────────────────────────────────────────────────────────────────
+document.getElementById('btnL').addEventListener('pointerdown', e => {
+  e.preventDefault(); tryMove('left');
+});
+document.getElementById('btnR').addEventListener('pointerdown', e => {
+  e.preventDefault(); tryMove('right');
+});
+
+canvas.addEventListener('click', () => { if (gameOver) init(); });
+
+// ─── 시작 ─────────────────────────────────────────────────────────────────────
+init();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

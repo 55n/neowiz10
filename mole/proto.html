@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: beige;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+</body>
+<script> 
+    const canvas = document.querySelector('canvas');
+    const c = canvas.getContext('2d');
+
+    const COLS = 9;
+    const ROWS = 999;
+    const VISIBLE = 15;
+
+    const TW = 60;
+    const TH = 40;
+
+    const FW = TW * COLS;
+    const FH = TH * VISIBLE;
+    
+    canvas.width = FW;
+    canvas.height = FH;
+
+    const CX = (window.innerWidth - FW) / 2;
+    const CY = (window.innerHeight - FH) /2
+
+    console.log(canvas, FW, FH);
+
+    function drawFrame() {
+        c.fillStyle = 'black';
+        c.fillRect(CX, CY, FW, FH);
+    }
+
+    function drawMole() {
+        c.fillStyle = 'red';
+        c.fillRect(100, 100, 10, 10);
+    }
+
+    function init() {
+        drawFrame();
+        drawMole();
+    }
+    
+    init();
+
+    function loop() {
+        requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+
+</script>
+</html>
