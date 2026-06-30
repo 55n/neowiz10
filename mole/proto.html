@@ -1,67 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            background-color: beige;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-    <canvas></canvas>
-</body>
-<script> 
-    const canvas = document.querySelector('canvas');
-    const c = canvas.getContext('2d');
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>두더지</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #3d260f;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 100vw;
+				height: 100vh;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+	<body></body>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@v0.149.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.149.0/examples/jsm/"
+			}
+		}
+	</script>
+	<script type="module">
+		import * as THREE from "three";
 
-    const COLS = 9;
-    const ROWS = 999;
-    const VISIBLE = 15;
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(
+			75,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			1000,
+		);
+		const renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setSize(500, 500);
+		document.body.appendChild(renderer.domElement);
 
-    const TW = 60;
-    const TH = 40;
+		const geometry = new THREE.BoxGeometry(1, 1, 1);
+		const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-    const FW = TW * COLS;
-    const FH = TH * VISIBLE;
-    
-    canvas.width = FW;
-    canvas.height = FH;
+		const tiles = Array.from(Array(5), () => new Array(2));
 
-    const CX = (window.innerWidth - FW) / 2;
-    const CY = (window.innerHeight - FH) /2
+		const cube = new THREE.Mesh(geometry, material);
+		scene.add(cube);
 
-    console.log(canvas, FW, FH);
+		// 나중에 생성된 거 보고 라이트 추가할 것
 
-    function drawFrame() {
-        c.fillStyle = 'black';
-        c.fillRect(CX, CY, FW, FH);
-    }
+		camera.position.z = 15;
 
-    function drawMole() {
-        c.fillStyle = 'red';
-        c.fillRect(100, 100, 10, 10);
-    }
+		function animate() {
+			requestAnimationFrame(animate);
+			renderer.render(scene, camera);
+		}
 
-    function init() {
-        drawFrame();
-        drawMole();
-    }
-    
-    init();
-
-    function loop() {
-        requestAnimationFrame(loop);
-    }
-
-    requestAnimationFrame(loop);
-
-</script>
+		animate();
+	</script>
 </html>

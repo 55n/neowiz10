@@ -31,7 +31,7 @@ namespace Class1
              * 출력: Console.Write
              */
 
-            /*int i;// 초기값 없는 null값 상태
+            int i;// 초기값 없는 null값 상태
             int z = 4;
             float f = 4f;// 초기값에 값f라고 사용해야 합니다
             double d = 4d;// 마찬가지로 초기값에 값d라고 사용해야 합니다.
@@ -40,11 +40,11 @@ namespace Class1
             string s = "abcdefg";
 
             bool isB = true;
-            i = 5;*/
+            i = 5;
 
             //=============================================================
 
-            /*Console.Write("안녕하세요");
+            Console.Write("안녕하세요");
             Console.WriteLine();
             Console.WriteLine("ㅋㅋ안녕하세요");
 
@@ -64,7 +64,7 @@ namespace Class1
             float b = 105.1f;
 
             Console.WriteLine(a);
-            Console.WriteLine(b);*/
+            Console.WriteLine(b);
 
 
             // 출력문만 사용해서 도트 찍기
