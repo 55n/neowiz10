@@ -1,0 +1,7 @@
+C:\course\projects\Class3\obj\Debug\Class3.csproj.AssemblyReference.cache
+C:\course\projects\Class3\obj\Debug\Class3.csproj.CoreCompileInputs.cache
+C:\course\projects\Class3\bin\Debug\Class3.exe.config
+C:\course\projects\Class3\bin\Debug\Class3.exe
+C:\course\projects\Class3\bin\Debug\Class3.pdb
+C:\course\projects\Class3\obj\Debug\Class3.exe
+C:\course\projects\Class3\obj\Debug\Class3.pdb
