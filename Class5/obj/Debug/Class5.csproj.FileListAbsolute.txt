@@ -1,0 +1,7 @@
+C:\course\projects\Class5\bin\Debug\Class5.exe.config
+C:\course\projects\Class5\bin\Debug\Class5.exe
+C:\course\projects\Class5\bin\Debug\Class5.pdb
+C:\course\projects\Class5\obj\Debug\Class5.csproj.AssemblyReference.cache
+C:\course\projects\Class5\obj\Debug\Class5.csproj.CoreCompileInputs.cache
+C:\course\projects\Class5\obj\Debug\Class5.exe
+C:\course\projects\Class5\obj\Debug\Class5.pdb
