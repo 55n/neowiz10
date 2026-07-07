@@ -1,2 +1,10 @@
 C:\course\projects\Homework9\obj\Debug\Homework9.csproj.AssemblyReference.cache
 C:\course\projects\Homework9\obj\Debug\Homework9.csproj.CoreCompileInputs.cache
+C:\projects\course\Homework9\bin\Debug\Homework9.exe.config
+C:\projects\course\Homework9\bin\Debug\Homework9.exe
+C:\projects\course\Homework9\bin\Debug\Homework9.pdb
+C:\projects\course\Homework9\obj\Debug\Homework9.csproj.AssemblyReference.cache
+C:\projects\course\Homework9\obj\Debug\Homework9.csproj.CoreCompileInputs.cache
+C:\projects\course\Homework9\obj\Debug\Homework9.exe
+C:\projects\course\Homework9\obj\Debug\Homework9.pdb
+C:\projects\course\Homework9\obj\Debug\Homework9.exe.config

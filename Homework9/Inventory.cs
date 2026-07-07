@@ -25,78 +25,55 @@ namespace Homework9
                 if (this.inventory[i] == null) // 없으면 인벤토리에 스택을 새로 생성하여 아이템 적재
                 {
                     this.inventory[i] = new ItemStack(item);
-                    this.inventory[i].itemStack[0] = item;
+                    this.inventory[i].pushItemToStack(item);
                     return true;
                 }
                 // 2. 있으면 같은 타입인지 확인
-                else if (this.inventory[i].itemStack[0].itemType.typeId == item.itemType.typeId)
+                else if (this.inventory[i].itemType == item.itemType)
                 {
                     // 3. 타입이 같으면 슬롯에 빈 공간이 있는지 확인
-                    for (int j = 0; j < this.inventory[i].itemStack.Length; j++)
+                    if (this.inventory[i].pushItemToStack(item))
                     {
-                        if (this.inventory[i].itemStack[j] == null) // 빈 공간이 있으면 적재
-                        {
-                            this.inventory[i].itemStack[j] = item;
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
+
             // 4. 스택에 빈 공간도 없고 남는 슬롯도 없으면 적재 불가
             return false;
         }
 
         public Item[] pick(int index, int amount)
         {
-            int lastIndex = 0;
+            if (this.inventory[index] == null) return null; // 빈 슬롯을 고르면 안 됨
 
-            if (this.inventory[index] == null) // 빈 슬롯을 고르면 안 됨
-            {
-                return null;
-            }
+            if (this.inventory[index].maxAmount < amount) return null; // 스택 최대 크기보다 더 많은 양을 집으려 하면 안 됨
 
-            if (amount > this.inventory[index].itemStack.Length) // 맥스 스택 보다 많은걸 요구해도 안 됨
-            {
-                return null;
-            }
+            if (this.inventory[index].getLastIndex() + 1 < amount) return null; // 스택 현재 카운트보다 더 많은 양을 집으려 하면 안 됨
 
-            for (int i = 0; i < this.inventory[index].itemStack.Length; i++)
-            {
-                if (this.inventory[index].itemStack[i] == null)
-                {
-                    lastIndex = i - 1;
-
-                    if (amount > i)
-                    {
-                        return null;
-                    }
-
-                    break;
-                }
-
-                if (i == this.inventory[index].itemStack.Length - 1)
-                {
-                    lastIndex = i;
-
-                    if (amount > this.inventory[index].itemStack.Length)
-                    {
-                        return null;
-                    }
-                }
-            }
-
-            // 위 조건을 통과한 경우 아이템 반환
             Item[] items = new Item[amount];
+
             for (int i = 0; i < amount; i++)
             {
-                items[i] = this.inventory[index].itemStack[lastIndex - i];
-                this.inventory[index].itemStack[lastIndex - i] = null;
-
-                if (this.inventory[index].itemStack[0] == null)
-                {
-                    this.inventory[index] = null;
-                }
+                items[i] = this.inventory[index].popItemFromStack();
             }
+
+            return items;
+        }
+
+        public Item[] pick(int index) // 인벤토리 한 칸의 모든 아이템 가져옴
+        {
+            if (this.inventory[index] == null) return null; // 빈 슬롯을 고르면 안 됨
+
+            int count = this.inventory[index].getLastIndex() + 1;
+
+            Item[] items = new Item[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                items[i] = this.inventory[index].popItemFromStack();
+            }
+
             return items;
         }
 
@@ -111,13 +88,7 @@ namespace Homework9
                 }
                 else
                 {
-                    int count;
-                    for (count = 0; count < this.inventory[i].itemStack.Length; count++)
-                    {
-                        if (this.inventory[i].itemStack[count] == null) break;
-                    }
-
-                    Console.WriteLine($"{i}번 슬롯     {this.inventory[i].itemStack[0].itemType.name} : {count} 개  {this.inventory[i].itemStack[0].itemType.price}G");
+                    Console.WriteLine($"{i}번 슬롯     {this.inventory[i].name} : {this.inventory[i].getLastIndex() + 1} 개  {this.inventory[i].price}G");
                 }
             }
             Console.WriteLine("########################################");

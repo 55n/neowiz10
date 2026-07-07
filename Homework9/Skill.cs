@@ -39,100 +39,93 @@ namespace Homework9
 
     abstract class Skill
     {
-        public abstract void use(Creature target, Creature caster);
+        public string name {get; protected set;}
+        public string description { get; protected set; }
+        public int magicPointCost { get; protected set;}
+        public abstract void use(Creature target, Creature thrower);
     }
 
     class Kick : Skill
     {
-        public string name;
-        public string description;
-
         public Kick()
         {
             SkillData sd = new SkillData();
             this.name = sd.skillList[0].name;
             this.description = sd.skillList[0].description;
+            this.magicPointCost = 1;
         }
 
-        public override void use(Creature target, Creature caster)
+        public override void use(Creature target, Creature thrower)
         {
-            Console.WriteLine($"{caster.name} 이(가) {this.name}을(를) {target.name} 에게 시전했다");
-            target.getDamage(10);
+            Console.WriteLine($"{this.name}을(를) {target.name} 에게 시전했다");
+            target.getDamage(thrower.attackPoint * 2);
         }
     }
 
     class Heal : Skill
     {
-        public string name;
-        public string description;
-
         public Heal()
         {
             SkillData sd = new SkillData();
             this.name = sd.skillList[1].name;
             this.description = sd.skillList[1].description;
+            this.magicPointCost = 1;
         }
 
-        public override void use(Creature target, Creature caster)
+        public override void use(Creature target, Creature thrower)
         {
-            Console.WriteLine($"{caster.name} 이(가) {this.name}을(를) {target.name} 에게 시전했다");
-            target.getDamage(10);
+            Console.WriteLine($"{this.name}을(를) {target.name} 에게 시전했다");
+            target.getDamage(thrower.attackPoint * 2);
         }
     }
 
     class Sonic : Skill
     {
-        public string name;
-        public string description;
-
         public Sonic()
         {
             SkillData sd = new SkillData();
             this.name = sd.skillList[2].name;
             this.description = sd.skillList[2].description;
+            this.magicPointCost = 1;
         }
 
-        public override void use(Creature target, Creature caster)
+        public override void use(Creature target, Creature thrower)
         {
-            Console.WriteLine($"{caster.name} 이(가) {this.name}을(를) {target.name} 에게 시전했다");
-            target.getDamage(10);
+            Console.WriteLine($"{this.name}을(를) {target.name} 에게 시전했다");
+            target.getDamage(thrower.attackPoint * 2);
         }
     }
 
     class AcidBeam : Skill
     {
-        public string name;
-        public string description;
-
         public AcidBeam()
         {
             SkillData sd = new SkillData();
             this.name = sd.skillList[3].name;
             this.description = sd.skillList[3].description;
+            this.magicPointCost = 1;
         }
 
-        public override void use(Creature target, Creature caster)
+        public override void use(Creature target, Creature thrower)
         {
-            Console.WriteLine($"{caster.name} 이(가) {this.name}을(를) {target.name} 에게 시전했다");
-            target.getDamage(10);
+            Console.WriteLine($"{this.name}을(를) {target.name} 에게 시전했다");
+            target.getDamage(thrower.attackPoint * 2);
         }
     }
     class GroundCrusher : Skill
     {
-        public string name;
-        public string description;
-
         public GroundCrusher()
         {
             SkillData sd = new SkillData();
             this.name = sd.skillList[4].name;
             this.description = sd.skillList[4].description;
+            this.magicPointCost = 1;
         }
 
-        public override void use(Creature target, Creature caster)
+        public override void use(Creature target, Creature thrower)
         {
-            Console.WriteLine($"{caster.name} 이(가) {this.name}을(를) {target.name} 에게 시전했다");
-            target.getDamage(10);
+            Console.WriteLine($"{this.name}을(를) {target.name} 에게 시전했다");
+            target.getDamage(thrower.attackPoint * 2);
         }
     }
 }

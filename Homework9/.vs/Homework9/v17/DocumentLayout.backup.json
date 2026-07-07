@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\projects\\course\\Homework9\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\skill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:skill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\gamemaster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:gamemaster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|c:\\projects\\course\\homework9\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D87ED9EF-A6BF-49A8-B6FF-49243ED645A0}|Homework9.csproj|solutionrelative:item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GameMaster.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\GameMaster.cs",
+              "RelativeDocumentMoniker": "GameMaster.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\GameMaster.cs",
+              "RelativeToolTip": "GameMaster.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAowC4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T13:59:39.539Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Item.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Item.cs",
+              "RelativeDocumentMoniker": "Item.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Item.cs",
+              "RelativeToolTip": "Item.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAiwFYAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T12:17:12.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Inventory.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Inventory.cs",
+              "RelativeDocumentMoniker": "Inventory.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Inventory.cs",
+              "RelativeToolTip": "Inventory.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAIwEYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T12:15:36.228Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Skill.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Skill.cs",
+              "RelativeDocumentMoniker": "Skill.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Skill.cs",
+              "RelativeToolTip": "Skill.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAAADwAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T10:34:23.693Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Creature.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Creature.cs",
+              "RelativeDocumentMoniker": "Creature.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Creature.cs",
+              "RelativeToolTip": "Creature.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwDsAAABiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T10:34:27.733Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Trade.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Trade.cs",
+              "RelativeDocumentMoniker": "Trade.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Trade.cs",
+              "RelativeToolTip": "Trade.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T10:34:17.528Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Homework9\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\projects\\course\\Homework9\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAywEgAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T10:19:39.633Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

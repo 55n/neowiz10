@@ -21,7 +21,7 @@ namespace Homework9
         {
             Item[] items = this.inventory1.pick(index, amount);
 
-            int price = items[0].itemType.price * amount;
+            int price = items[0].price * amount;
 
             Item[] gold = this.inventory2.pick(0, price);
 
@@ -49,6 +49,16 @@ namespace Homework9
 
             return true;
 
+        }
+
+        public void lootItems()
+        {
+            Item[] gold = this.inventory2.pick(0);
+
+            for (int i = 0; i < gold.Length; i++)
+            {
+                inventory1.load(gold[i]);
+            }
         }
     }
 }
