@@ -8,27 +8,48 @@ namespace Homework11
 { 
     class Forge
     {
-        public void viewCraftableItems()
+        public int viewCraftableItems()
         {
-            ItemData idb = new ItemData();
+            List<ItemType> itemList = new ItemData().getAllItemData();
+            List<int[]> indexMap = new List<int[]>();
             int index = 0;
+
             Console.WriteLine();
-            Console.WriteLine("################ 제작 아이템 목록 ###############");
-            foreach (ItemType itemType in idb.getAllItemData())
+            Console.WriteLine("##########################     제작 아이템 목록     #########################");
+            for (int i = 0; i < itemList.Count; i++)
             {
-                if (itemType.isCraftable)
+                if (itemList[i].isCraftable)
                 {
-                    Console.WriteLine($"{index}번 아이템    {itemType.name}     |    {itemType.description}");
+                    int[] indexPair = new int[2];
+                    indexPair[0] = index;
+                    indexPair[1] = i;
+                    indexMap.Add(indexPair);
+                    Console.WriteLine($"{index}번:   {itemList[i].name}     |    {itemList[i].description}");
+                    index++;
                 }
             }
-            Console.WriteLine("#######################################");
+            Console.WriteLine("############################################################################");
+
+            // ==========================================   컨트롤러 영역  ===============================================
+
+            Console.Write("어떤 아이템을 제작할까? : ");
+            int playerAnswer = int.Parse(Console.ReadLine());
             Console.WriteLine();
+
+            for (int i = 0; i < indexMap.Count; i++)
+            {
+                if (indexMap[i][0] == playerAnswer)
+                {
+                    return indexMap[i][1];
+                }
+            }
+
+            return -1;
         }
 
-        public Item craftItem(int craftableItemIndex) // 나중에 아이템을 제작하는데 필요한 재료를 매개변수로 받아야 함
+        public Item craftItem(int itemId) // 나중에 아이템을 제작하는데 필요한 재료를 매개변수로 받아야 함
         {
             ItemFactory itemFactory = new ItemFactory();
-            
 
             Item item = itemFactory.getItem(itemId);
 
@@ -49,9 +70,26 @@ namespace Homework11
             Console.WriteLine("아이템이 분해되었습니다");
         }
 
-        public void enhanceEquipment(IItemUpgradeable item) // 나중에 강화하는데 필요한 재료를 매개변수로 받아야 함
+        public int enhanceEquipment(IItemUpgradeable item) // 나중에 강화하는데 필요한 재료를 매개변수로 받아야 함
         {
-            item.upgrade();
+            Item i = (Item)item;
+
+            if (i.maxUpgradeCount <= i.upgradeCount)
+            {
+                return 0;
+            }
+
+            bool upgradeResult = item.upgrade();
+
+            if (upgradeResult)
+            {
+                Console.WriteLine($"{i.upgradeCount} 번째 강화를 성공했습니다 (남은 강화 횟수: {i.maxUpgradeCount - i.upgradeCount}");
+                return i.upgradeCount;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         

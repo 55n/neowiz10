@@ -1,0 +1,8 @@
+C:\projects\course\Homework11\bin\Debug\Homework11.exe.config
+C:\projects\course\Homework11\bin\Debug\Homework11.exe
+C:\projects\course\Homework11\bin\Debug\Homework11.pdb
+C:\projects\course\Homework11\obj\Debug\Homework11.csproj.AssemblyReference.cache
+C:\projects\course\Homework11\obj\Debug\Homework11.csproj.CoreCompileInputs.cache
+C:\projects\course\Homework11\obj\Debug\Homework11.exe
+C:\projects\course\Homework11\obj\Debug\Homework11.pdb
+C:\projects\course\Homework11\obj\Debug\Homework11.exe.config

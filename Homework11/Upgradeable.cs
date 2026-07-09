@@ -8,7 +8,7 @@ namespace Homework11
 {
     interface IItemUpgradeable
     {
-        void upgrade();
+        bool upgrade();
     }
 
     interface IInventoryUpgradeable

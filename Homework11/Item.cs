@@ -21,8 +21,11 @@ namespace Homework11
         public int maxAmount { get; }
         public int price { get; }
         public bool isCraftable { get; }
+        public int maxUpgradeCount { get; }
+        public int upgradeProbability { get; }
+        public int upgradeCount { get; }
 
-        public ItemType(int itemId, ItemClass itemClass, string name, string description, int maxAmount, int price, bool isCraftable)
+        public ItemType(int itemId, ItemClass itemClass, string name, string description, int maxAmount, int price, bool isCraftable, int maxUpgradeCount, int upgradeProbability, int upgradeCount)
         {
             this.itemId = itemId;
             this.itemClass = itemClass;
@@ -31,6 +34,9 @@ namespace Homework11
             this.maxAmount = maxAmount;
             this.price = price;
             this.isCraftable = isCraftable;
+            this.maxUpgradeCount = maxUpgradeCount;
+            this.upgradeProbability = upgradeProbability;
+            this.upgradeCount = upgradeCount;
         }
     }
     
@@ -40,15 +46,17 @@ namespace Homework11
 
         public ItemData()
         {
-            itemTypes.Add(new ItemType(0, ItemClass.GOLD, "골드", "화폐", 9999, 1, false));
-            itemTypes.Add(new ItemType(1, ItemClass.DISPOSABLE, "HP 포션", "HP를 10% 회복시킨다", 10, 10, false));
-            itemTypes.Add(new ItemType(2, ItemClass.DISPOSABLE, "MP 포션", "MP를 1 회복시킨다", 10, 10, false));
-            itemTypes.Add(new ItemType(3, ItemClass.EQUIPMENT, "기본 칼", "기본으로 주어지는 전투용 칼", 1, 12, true));
-            itemTypes.Add(new ItemType(4, ItemClass.EQUIPMENT, "벌목용 도끼", "나무를 베는데 쓰이는 도끼", 1, 12, true));
-            itemTypes.Add(new ItemType(5, ItemClass.EQUIPMENT, "좋은 칼", "좋아 보이는 칼", 1, 20, true));
-            itemTypes.Add(new ItemType(6, ItemClass.EQUIPMENT, "기본 투구", "기본으로 주어지는 투구", 1, 13, true));
-            itemTypes.Add(new ItemType(7, ItemClass.EQUIPMENT, "기본 장갑", "기본으로 주어지는 장갑", 1, 13, true));
-            itemTypes.Add(new ItemType(8, ItemClass.EQUIPMENT, "기본 신발", "기본으로 주어지는 신발", 1, 13, true));
+            itemTypes = new List<ItemType>();
+
+            itemTypes.Add(new ItemType(0, ItemClass.GOLD, "골드", "화폐", 9999, 1, false, 0, 0, 0));
+            itemTypes.Add(new ItemType(1, ItemClass.DISPOSABLE, "HP 포션", "HP를 10% 회복시킨다", 10, 10, false, 0, 0, 0));
+            itemTypes.Add(new ItemType(2, ItemClass.DISPOSABLE, "MP 포션", "MP를 1 회복시킨다", 10, 10, false, 0, 0, 0));
+            itemTypes.Add(new ItemType(3, ItemClass.EQUIPMENT, "기본 칼", "기본으로 주어지는 전투용 칼", 1, 12, true, 3, 100, 0));
+            itemTypes.Add(new ItemType(4, ItemClass.EQUIPMENT, "벌목용 도끼", "나무를 베는데 쓰이는 도끼", 1, 12, true, 3, 100, 0));
+            itemTypes.Add(new ItemType(5, ItemClass.EQUIPMENT, "좋은 칼", "좋아 보이는 칼", 1, 20, true, 3, 100, 0));
+            itemTypes.Add(new ItemType(6, ItemClass.EQUIPMENT, "기본 투구", "기본으로 주어지는 투구", 1, 13, true, 3, 100, 0));
+            itemTypes.Add(new ItemType(7, ItemClass.EQUIPMENT, "기본 장갑", "기본으로 주어지는 장갑", 1, 13, true, 3, 100, 0));
+            itemTypes.Add(new ItemType(8, ItemClass.EQUIPMENT, "기본 신발", "기본으로 주어지는 신발", 1, 13, true, 3, 100, 0));
         }
 
         public ItemType getItemData(int index)
@@ -71,6 +79,9 @@ namespace Homework11
         public int maxAmount { get; protected set; }
         public int price { get; protected set; }
         public bool isCraftable { get; protected set; }
+        public int maxUpgradeCount { get; protected set; }
+        public int upgradeProbability { get; protected set; }
+        public int upgradeCount { get; protected set; }
     }
 
     class Gold : Item
@@ -130,12 +141,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+            
+            if(randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     class FellingAxe : Item, IItemUpgradeable
@@ -150,12 +179,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+
+            if (randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     class GoodSword : Item, IItemUpgradeable
@@ -170,12 +217,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+
+            if (randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     class BasicHelm : Item, IItemUpgradeable
@@ -190,12 +255,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+
+            if (randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     class BasicGloves : Item, IItemUpgradeable
@@ -210,12 +293,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+
+            if (randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     class BasicBoots : Item, IItemUpgradeable
@@ -230,12 +331,30 @@ namespace Homework11
             this.maxAmount = i.maxAmount;
             this.price = i.price;
             this.isCraftable = i.isCraftable;
+            this.maxUpgradeCount = i.maxUpgradeCount;
+            this.upgradeProbability = i.upgradeProbability;
+            this.upgradeCount = i.upgradeCount;
         }
 
-        public void upgrade()
+        public bool upgrade()
         {
-            this.name += "+";
-            this.price += 10;
+            if (this.upgradeCount >= this.maxUpgradeCount) return false;
+
+            Random random = new Random();
+            int randomResult = random.Next() % 100;
+
+            if (randomResult < this.upgradeProbability)
+            {
+                this.name += "+";
+                this.price += 10;
+                this.upgradeCount++;
+                this.upgradeProbability -= 20;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
@@ -261,20 +380,10 @@ namespace Homework11
 
         public bool pushItemToStack(Item item)
         {
-            int index = getLastIndex();
+            if (itemStack.Count >= item.maxAmount) return false;
 
-            if (index >= item.maxAmount) return false;
-
-            if (index < 0)
-            {
-                itemStack[0] = item;
-                return true;
-            }
-            else
-            {
-                itemStack[index + 1] = item;
-                return true;
-            }
+            itemStack.Add(item);
+            return true;
         }
 
         public Item popItemFromStack()
@@ -297,7 +406,7 @@ namespace Homework11
         {
             int lastIndex = -1;
 
-            if (this.itemStack[0] != null) lastIndex = this.itemStack.Count - 1; 
+            if (this.itemStack.Count > 0) lastIndex = this.itemStack.Count - 1; 
 
             return lastIndex;
         }
