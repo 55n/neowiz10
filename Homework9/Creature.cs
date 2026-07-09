@@ -76,7 +76,6 @@ namespace Homework9
             Console.WriteLine($"######## {this.name} 스탯창 #########");
             Console.WriteLine($"HP: {this.hitPoint}/{this.maxHitPoint}");
             Console.WriteLine($"MP: {this.magicPoint}/{this.maxMagicPoint}");
-            Console.WriteLine();
         }
     }
 
