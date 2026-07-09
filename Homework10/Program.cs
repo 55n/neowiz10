@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Homework10
 {
+
     class Program
     {
         public void GameLoop()

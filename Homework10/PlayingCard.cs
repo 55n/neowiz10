@@ -30,7 +30,7 @@ namespace Homework10
 
     class PlayingCardDeck // 나중에 스택 관련 메서드들을 따로 분리할 것
     {
-        private PlayingCard[] playingCards;
+        public PlayingCard[] playingCards { get; }
 
         public void createDeck()
         {
