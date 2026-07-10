@@ -1,0 +1,7 @@
+C:\course\projects\DesignPatterPractice3\bin\Debug\DesignPatterPractice3.exe.config
+C:\course\projects\DesignPatterPractice3\bin\Debug\DesignPatterPractice3.exe
+C:\course\projects\DesignPatterPractice3\bin\Debug\DesignPatterPractice3.pdb
+C:\course\projects\DesignPatterPractice3\obj\Debug\DesignPatterPractice3.csproj.AssemblyReference.cache
+C:\course\projects\DesignPatterPractice3\obj\Debug\DesignPatterPractice3.csproj.CoreCompileInputs.cache
+C:\course\projects\DesignPatterPractice3\obj\Debug\DesignPatterPractice3.exe
+C:\course\projects\DesignPatterPractice3\obj\Debug\DesignPatterPractice3.pdb

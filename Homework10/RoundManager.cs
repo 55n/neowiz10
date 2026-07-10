@@ -8,10 +8,42 @@ namespace Homework10
 {
     class RoundManager
     {
-        public int BLACKJACK = 21;
-        public int ACE_TEN = 10;
+        private int BLACKJACK = 21;
+        private int DEALER_THRESHOLD = 17;
+        private int ACE_PLUS = 10;
+        public int[] totalBetting = new int[2];
 
-        public int handScoring(PlayingCardDeck hand)
+        public bool betting(Player player1, Player player2, int bettingCost)
+        {
+            int playerBetting = player1.bet(bettingCost);
+            int dealerBetting = player2.bet(bettingCost);
+
+            if(playerBetting == 0 || dealerBetting == 0)
+            {
+                return false;
+            }
+            else
+            {
+                totalBetting[0] = playerBetting;
+                totalBetting[1] = dealerBetting;
+                return true;
+            }
+        }
+
+        public bool hasHandAce(PlayingCardDeck hand)
+        {
+            for(int i = 0; i < hand.getLastIndex() + 1;i++)
+            {
+                if(hand.playingCards[i].card == Card.ACE)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public int handScoring(PlayingCardDeck hand, bool acePlus)
         {
             if (hand.playingCards[0] == null) return -1;
 
@@ -24,9 +56,14 @@ namespace Homework10
                 sum += cardScoring(hand.playingCards[i]);
             }
 
-            if()
-            return sum + 10;
-            return sum;
+            if(acePlus)
+            {
+                return sum + ACE_PLUS;
+            }
+            else
+            {
+                return sum;
+            }
         }
 
         public int cardScoring(PlayingCard playingCard)
@@ -60,6 +97,65 @@ namespace Homework10
             else
             {
                 return -1;
+            }
+        }
+
+        public bool makeDealerDecision(PlayingCardDeck hand)
+        {
+            int score = handScoring(hand, false);
+            int highScore = 0;
+            
+            if (hasHandAce(hand)) highScore = handScoring(hand, true);
+
+            int highScoreDiff = BLACKJACK - highScore;
+            int scoreDiff = BLACKJACK - score;
+
+            if (score < DEALER_THRESHOLD)
+            {
+                return true;
+            }
+            else
+            {
+                if (highScoreDiff == 0 || scoreDiff == 0)
+                {
+                    return false;
+                }
+                
+                if(highScoreDiff > scoreDiff)
+                {
+                    if(highScoreDiff < 3)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if(scoreDiff > 5)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        public bool isBurst(PlayingCardDeck hand)
+        {
+            int score = handScoring(hand, false);
+            if(score > BLACKJACK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

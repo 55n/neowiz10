@@ -26,11 +26,78 @@ namespace Homework10
             this.suit = suit;
             this.card = card;
         }
+
+        public void showCard()
+        {
+            string suit = "";
+            string card = "";
+
+            switch (this.suit)
+            {
+                case Suit.SPADE:
+                    suit = "SPADE";
+                    break;
+                case Suit.DIAMOND:
+                    suit = "DIAMOND";
+                    break;
+                case Suit.HEART:
+                    suit = "HEART";
+                    break;
+                case Suit.CLOVER:
+                    suit = "CLOVER";
+                    break;
+            }
+
+            switch (this.card)
+            {
+                case Card.ACE:
+                    card = "ACE";
+                    break;
+                case Card.TWO:
+                    card = "2";
+                    break;
+                case Card.THREE:
+                    card = "3";
+                    break;
+                case Card.FOUR:
+                    card = "4";
+                    break;
+                case Card.FIVE:
+                    card = "5";
+                    break;
+                case Card.SIX:
+                    card = "6";
+                    break;
+                case Card.SEVEN:
+                    card = "7";
+                    break;
+                case Card.EIGHT:
+                    card = "8";
+                    break;
+                case Card.NINE:
+                    card = "9";
+                    break;
+                case Card.TEN:
+                    card = "10";
+                    break;
+                case Card.JACK:
+                    card = "J";
+                    break;
+                case Card.QUEEN:
+                    card = "Q";
+                    break;
+                case Card.KING:
+                    card = "K";
+                    break;
+            }
+
+            Console.WriteLine($"{suit} {card}");
+        }
     }
 
     class PlayingCardDeck // 나중에 스택 관련 메서드들을 따로 분리할 것
     {
-        public PlayingCard[] playingCards { get; }
+        public PlayingCard[] playingCards { get; private set; }
 
         public void createDeck()
         {
@@ -121,6 +188,27 @@ namespace Homework10
                 playingCards[index] = null;
                 return tmp;
             }
+        }
+
+        public void makeEmpty()
+        {
+            int count = getLastIndex() + 1;
+            for (int i = 0; i < count; i++)
+            {
+                playingCards[i] = null;
+            }
+        }
+
+
+        public void showAllCards()
+        {
+            int count = getLastIndex() + 1;
+            Console.WriteLine("=================");
+            for(int i = 0; i < count; i++)
+            {
+                playingCards[i].showCard();
+            }
+            Console.WriteLine("=================");
         }
     }
 }

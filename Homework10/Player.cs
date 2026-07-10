@@ -9,8 +9,8 @@ namespace Homework10
     class Player
     {
         public PlayingCardDeck hand { get; private set; }
-        protected int stake;
-        protected string name;
+        public int stake { get; private set; }
+        public string name { get; private set; }
 
         public Player(string name, int stake)
         {
@@ -24,7 +24,7 @@ namespace Homework10
         {
             if (bettingCost > stake)
             {
-                Console.WriteLine($"소지금이 적어서 베팅을 못 함");
+                Console.WriteLine($"소지금이 적어서 베팅을 못 함 (소지금:{this.stake})");
                 return 0;
             }
 
@@ -39,6 +39,11 @@ namespace Homework10
         {
             hand.pushCardIntoDeck(deck.popCardFromDeck());
             Console.WriteLine($"{name} 님 카드 뽑음");
+        }
+
+        public void plusStake(int plus)
+        {
+            this.stake += plus;
         }
     }
 }
