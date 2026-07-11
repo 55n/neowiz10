@@ -144,7 +144,7 @@ namespace Homework10
                     continue;
                 }
 
-                // 6. 패 공개하고 21에 가까운 쪽이 베팅 금액을 가져감. 비기면 베팅한 금액은 돌려받음.
+                // 6. 패 공개하고 21에 가까운 쪽이 베팅 금액을 가져감. 비기면 베팅한 금액은 돌려받음. (Roundmanager에 들어갈 부분임)
                 Console.WriteLine("이제 공개할 시간");
 
                 int playerScoreDiff = 0;

@@ -7,19 +7,19 @@
       "RelativeMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|c:\\projects\\course\\homework11\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|C:\\projects\\course\\Homework11\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|solutionrelative:inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|c:\\projects\\course\\homework11\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|C:\\projects\\course\\Homework11\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|solutionrelative:item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|c:\\projects\\course\\homework11\\forge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|C:\\projects\\course\\Homework11\\forge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|solutionrelative:forge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|c:\\projects\\course\\homework11\\upgradeable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|C:\\projects\\course\\Homework11\\upgradeable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6A64646-8FFF-489C-939B-62C4BF4BBDCD}|Homework11.csproj|solutionrelative:upgradeable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -42,8 +42,7 @@
               "RelativeToolTip": "Forge.cs",
               "ViewState": "AgIAAC0AAAAAAAAAAAAMwE4AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T10:17:44.895Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-09T10:17:44.895Z"
             },
             {
               "$type": "Document",
@@ -55,8 +54,7 @@
               "RelativeToolTip": "Item.cs",
               "ViewState": "AgIAAIABAAAAAAAAAAAewJsBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T10:44:59.528Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-09T10:44:59.528Z"
             },
             {
               "$type": "Document",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "Inventory.cs",
               "ViewState": "AgIAACkAAAAAAAAAAAAMwBAAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T11:02:52.489Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-09T11:02:52.489Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,7 @@
               "RelativeToolTip": "Upgradeable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T10:14:21.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-09T10:14:21.245Z"
             }
           ]
         }
