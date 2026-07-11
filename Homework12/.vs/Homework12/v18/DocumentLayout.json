@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\project\\neowiz10\\Homework12\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|c:\\project\\neowiz10\\homework12\\validation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|solutionrelative:validation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|C:\\project\\neowiz10\\Homework12\\playingcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|solutionrelative:playingcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|C:\\project\\neowiz10\\Homework12\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{70CF17A2-8608-499C-AAEA-2CA696FDA698}|Homework12.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Validation.cs",
+              "DocumentMoniker": "C:\\project\\neowiz10\\Homework12\\Validation.cs",
+              "RelativeDocumentMoniker": "Validation.cs",
+              "ToolTip": "C:\\project\\neowiz10\\Homework12\\Validation.cs",
+              "RelativeToolTip": "Validation.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAABkAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-11T04:43:57.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayingCard.cs",
+              "DocumentMoniker": "C:\\project\\neowiz10\\Homework12\\PlayingCard.cs",
+              "RelativeDocumentMoniker": "PlayingCard.cs",
+              "ToolTip": "C:\\project\\neowiz10\\Homework12\\PlayingCard.cs",
+              "RelativeToolTip": "PlayingCard.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAArwEIAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-11T01:14:35.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\project\\neowiz10\\Homework12\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\project\\neowiz10\\Homework12\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAwwC8AAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-11T01:14:34.028Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
