@@ -1,0 +1,15 @@
+C:\projects\course\Composite\bin\Debug\net8.0\Composite.exe
+C:\projects\course\Composite\bin\Debug\net8.0\Composite.deps.json
+C:\projects\course\Composite\bin\Debug\net8.0\Composite.runtimeconfig.json
+C:\projects\course\Composite\bin\Debug\net8.0\Composite.dll
+C:\projects\course\Composite\bin\Debug\net8.0\Composite.pdb
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.AssemblyInfoInputs.cache
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.AssemblyInfo.cs
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.csproj.CoreCompileInputs.cache
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.sourcelink.json
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.dll
+C:\projects\course\Composite\obj\Debug\net8.0\refint\Composite.dll
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.pdb
+C:\projects\course\Composite\obj\Debug\net8.0\Composite.genruntimeconfig.cache
+C:\projects\course\Composite\obj\Debug\net8.0\ref\Composite.dll

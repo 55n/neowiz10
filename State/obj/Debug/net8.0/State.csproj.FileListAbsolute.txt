@@ -1,0 +1,15 @@
+C:\projects\course\State\bin\Debug\net8.0\State.exe
+C:\projects\course\State\bin\Debug\net8.0\State.deps.json
+C:\projects\course\State\bin\Debug\net8.0\State.runtimeconfig.json
+C:\projects\course\State\bin\Debug\net8.0\State.dll
+C:\projects\course\State\bin\Debug\net8.0\State.pdb
+C:\projects\course\State\obj\Debug\net8.0\State.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\course\State\obj\Debug\net8.0\State.AssemblyInfoInputs.cache
+C:\projects\course\State\obj\Debug\net8.0\State.AssemblyInfo.cs
+C:\projects\course\State\obj\Debug\net8.0\State.csproj.CoreCompileInputs.cache
+C:\projects\course\State\obj\Debug\net8.0\State.sourcelink.json
+C:\projects\course\State\obj\Debug\net8.0\State.dll
+C:\projects\course\State\obj\Debug\net8.0\refint\State.dll
+C:\projects\course\State\obj\Debug\net8.0\State.pdb
+C:\projects\course\State\obj\Debug\net8.0\State.genruntimeconfig.cache
+C:\projects\course\State\obj\Debug\net8.0\ref\State.dll

@@ -1,7 +1,0 @@
-C:\course\projects\DesignPatternPractice\bin\Debug\DesignPatternPractice.exe.config
-C:\course\projects\DesignPatternPractice\bin\Debug\DesignPatternPractice.exe
-C:\course\projects\DesignPatternPractice\bin\Debug\DesignPatternPractice.pdb
-C:\course\projects\DesignPatternPractice\obj\Debug\DesignPatternPractice.csproj.AssemblyReference.cache
-C:\course\projects\DesignPatternPractice\obj\Debug\DesignPatternPractice.csproj.CoreCompileInputs.cache
-C:\course\projects\DesignPatternPractice\obj\Debug\DesignPatternPractice.exe
-C:\course\projects\DesignPatternPractice\obj\Debug\DesignPatternPractice.pdb

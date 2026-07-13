@@ -6,128 +6,223 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace Homework10
+    enum Suit
     {
-        enum Suit
+        SPADE, DIAMOND, HEART, CLOVER
+    }
+
+    enum Rank
+    {
+        ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
+    }
+
+    class Card
+    {
+        public Suit suit { get; }
+        public Rank rank { get; }
+
+        public Card(Suit suit, Rank rank)
         {
-            SPADE, DIAMOND, HEART, CLOVER
+            this.suit = suit;
+            this.rank = rank;
         }
+    }
 
-        enum Rank
+    class CardFigure
+    {
+        private Dictionary<Suit, Dictionary<Rank, string>> cardMap;
+
+        public CardFigure()
         {
-            ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
-        }
+            cardMap = new Dictionary<Suit, Dictionary<Rank, string>>();
 
-        class Card
-        {
-            public Suit suit { get; }
-            public Rank rank { get; }
-
-            public Card(Suit suit, Rank rank)
+            foreach(Suit suit in Enum.GetValues(typeof(Suit)))
             {
-                this.suit = suit;
-                this.rank = rank;
+                cardMap[suit]  = new Dictionary<Rank, string>();
+            }
+
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            {
+                foreach (Rank rank in Enum.GetValues(typeof(Rank)))
+                {
+                    string suitSymbol = "";
+                    string rankText = "";
+
+                    // 문양 결정
+                    switch (suit)
+                    {
+                        case Suit.SPADE:
+                            suitSymbol = "♠";
+                            break;
+
+                        case Suit.HEART:
+                            suitSymbol = "♥";
+                            break;
+
+                        case Suit.DIAMOND:
+                            suitSymbol = "♦";
+                            break;
+
+                        case Suit.CLOVER:
+                            suitSymbol = "♣";
+                            break;
+                    }
+
+                    // 숫자/그림 결정
+                    switch (rank)
+                    {
+                        case Rank.ACE:
+                            rankText = "A";
+                            break;
+
+                        case Rank.TWO:
+                            rankText = "2";
+                            break;
+
+                        case Rank.THREE:
+                            rankText = "3";
+                            break;
+
+                        case Rank.FOUR:
+                            rankText = "4";
+                            break;
+
+                        case Rank.FIVE:
+                            rankText = "5";
+                            break;
+
+                        case Rank.SIX:
+                            rankText = "6";
+                            break;
+
+                        case Rank.SEVEN:
+                            rankText = "7";
+                            break;
+
+                        case Rank.EIGHT:
+                            rankText = "8";
+                            break;
+
+                        case Rank.NINE:
+                            rankText = "9";
+                            break;
+
+                        case Rank.TEN:
+                            rankText = "10";
+                            break;
+
+                        case Rank.JACK:
+                            rankText = "J";
+                            break;
+
+                        case Rank.QUEEN:
+                            rankText = "Q";
+                            break;
+
+                        case Rank.KING:
+                            rankText = "K";
+                            break;
+                    }
+
+                    cardMap[suit][rank] =
+                        "┏━━━━━━━━┓\n" +
+                        "┃" + rankText.PadRight(2) + "      ┃\n" +
+                        "┃        ┃\n" +
+                        "┃   " + suitSymbol + "    ┃\n" +
+                        "┃        ┃\n" +
+                        "┃      " + rankText.PadLeft(2) + "┃\n" +
+                        "┗━━━━━━━━┛";
+                }
             }
         }
 
-        class CardFigure // 싱글턴으로 만들 것
+        public Dictionary<Suit, Dictionary<Rank, string>> getCardFigure()
         {
-            private Dictionary<Suit, Dictionary<Rank, string>> cardMap;
+            return cardMap;
+        }
+    }
 
-            public CardFigure()
+    class CardDeck
+    {
+        public List<Card> deck { get; private set; }
+        public Dictionary<Suit, Dictionary<Rank, string>> cardFigure;
+
+        public CardDeck()
+        {
+            cardFigure = new CardFigure().getCardFigure();
+            deck = new List<Card>();
+        }
+
+        public void createCompleteDeck()
+        {
+            foreach (int suit in Enum.GetValues(typeof(Suit)))
             {
-                cardMap = new Dictionary<Suit, Dictionary<Rank, string>>();
-
-                foreach(Suit suit in Enum.GetValues(typeof(Suit)))
+                foreach (int rank in Enum.GetValues(typeof(Rank)))
                 {
-                    cardMap[suit]  = new Dictionary<Rank, string>();
+                    deck.Add(new Card((Suit)suit, (Rank)rank));
+                }
+            }
+        }
 
-                    foreach(Rank rank in Enum.GetValues(typeof(Rank)))
+        public void push(Card card)
+        {
+            deck.Add(card);
+        }
+
+        public Card pop()
+        {
+            Card tmp = deck[deck.Count - 1];
+            deck.RemoveAt(deck.Count - 1);
+            return tmp;
+        }
+
+        public void shuffle(Random random, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                int destIndex = random.Next() % deck.Count;
+                int sourIndex = random.Next() % deck.Count;
+                Card tmp = deck[destIndex];
+                deck[destIndex] = deck[sourIndex];
+                deck[sourIndex] = tmp;
+            }
+        }
+
+        private void PrintCards(params string[] cards)
+        {
+            string[][] cardLines = new string[cards.Length][];
+
+            for (int i = 0; i < cards.Length; i++)
+            {
+                cardLines[i] = cards[i].Split('\n');
+            }
+
+            for (int line = 0; line < cardLines[0].Length; line++)
+            {
+                for (int card = 0; card < cardLines.Length; card++)
+                {
+                    Console.Write(cardLines[card][line]);
+
+                    if (card != cardLines.Length - 1)
                     {
-                        cardMap[suit][rank] = $"{Enum.GetName(typeof (Suit), suit)} {Enum.GetName(typeof (Rank), rank)}";
+                        Console.Write("  ");
                     }
                 }
-            }
 
-            public Dictionary<Suit, Dictionary<Rank, string>> getCardFigure()
-            {
-                return this.cardMap;
+                Console.WriteLine();
             }
         }
 
-        class CardDeck
+        public void showAllCards()
         {
-            public List<Card> deck { get; private set; }
-            public Dictionary<Suit, Dictionary<Rank, string>> cardFigure;
+            string[] cards = new string[deck.Count];
 
-            public CardDeck()
+            for (int i = 0; i < deck.Count; i++)
             {
-                cardFigure = new CardFigure().getCardFigure();
-                deck = new List<Card>();
+                cards[i] = cardFigure[deck[i].suit][deck[i].rank];
             }
 
-            public void createCompleteDeck()
-            {
-                int index = 0;
-
-                foreach (int suit in Enum.GetValues(typeof(Suit)))
-                {
-                    foreach (int rank in Enum.GetValues(typeof(Rank)))
-                    {
-                        deck[index] = new Card((Suit)suit, (Rank)rank);
-                    }
-                }
-            }
-
-            public void push(Card card)
-            {
-                deck.Add(card);
-            }
-
-            public Card pop()
-            {
-                Card tmp = deck[deck.Count - 1];
-                deck.RemoveAt(deck.Count - 1);
-                return tmp;
-            }
-
-            public int getCount()
-            {
-                return deck.Count;
-            }
-
-            public void shuffle()
-            {
-                Random random = new Random();
-
-                for (int i = 0; i < deck.Count; i++)
-                {
-                    int destIndex = random.Next() % deck.Count;
-                    int sourIndex = random.Next() % deck.Count;
-                    Card tmp = deck[destIndex];
-                    deck[destIndex] = deck[sourIndex];
-                    deck[sourIndex] = tmp;
-                }
-            }
-
-            public void showAllCards()
-            {
-                int count = deck.Count;
-
-                Console.WriteLine("======================================================================================");
-                for (int i = 0; i < count; i++)
-                {
-                    Console.Write($"| {cardFigure[deck[i].suit][deck[i].rank]} |");
-                }
-                Console.WriteLine("=======================================================================================");
-            }
+            PrintCards(cards);
         }
     }
 
