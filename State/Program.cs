@@ -69,6 +69,12 @@ class Zombie // 상태 변경 트리거
     }
 }
 
+
+/*
+ * 상태를 객체로 만들었다.
+ * 추상 팩토리 메서드 패턴과 결합할 경우 확장성이 늘어남
+ */
+
 class Program
 {
     static void Main()
