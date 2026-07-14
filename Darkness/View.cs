@@ -17,13 +17,13 @@ namespace Darkness
                 left: 0,
                 top: 0,
                 width: width,
-                height: height - 6);
+                height: 11);
 
             Message = new Viewport(
                 left: 0,
-                top: height - 6,
+                top: 11,
                 width: width,
-                height: 6);
+                height: 11);
         }
 
         public static readonly Viewport Canvas;
@@ -70,6 +70,7 @@ namespace Darkness
                 string line = lines[i];
 
                 //if (line.Length > Width);
+                Utility.WriteLine(line);
             }
         }
     }

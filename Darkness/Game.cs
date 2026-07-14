@@ -21,16 +21,13 @@ namespace Darkness
         public void GameLoop()
         {
             Config();
-            //new Ui.Narrative().DrawIntroImage();
-            //Utility.WriteLine("야");
-            //Utility.WriteLine("야");
-            //Utility.WriteLine("야");
+            new Ui.Narrative().DrawIntroImage();
 
             //View.Canvas.Draw(caveArt);
             string[] s = new string[]{
-                "어둠 속으로 떨어졌다.",
-                "",
-                "[Enter]"
+                "야",
+                "야",
+                "야"
             };
 
             View.Message.Draw(s);
