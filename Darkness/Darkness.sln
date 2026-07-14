@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37327.17
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Darkness", "Darkness.csproj", "{6FA4AD31-ECEB-4E26-9F59-44808A69710A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FA4AD31-ECEB-4E26-9F59-44808A69710A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA4AD31-ECEB-4E26-9F59-44808A69710A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA4AD31-ECEB-4E26-9F59-44808A69710A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA4AD31-ECEB-4E26-9F59-44808A69710A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB2C5A7F-7006-47F7-B7D8-92F8F5134993}
+	EndGlobalSection
+EndGlobal
