@@ -65,18 +65,18 @@ namespace Homework12
             cardCount();
 
             if (RoyalStraightFlush()) return HandRank.ROYAL_STRAIGHT_FLUSH;
-            else if (BackStraightFlush()) return HandRank.BACK_STRAIGHT_FLUSH;
-            else if (StraightFlush()) return HandRank.STRAIGHT_FLUSH;
-            else if (FourCard()) return HandRank.FOUR_CARD;
-            else if (FullHouse()) return HandRank.FULL_HOUSE;
-            else if (Flush()) return HandRank.FLUSH;
-            else if (Mountain()) return HandRank.MOUNTAIN;
-            else if (BackStraight()) return HandRank.BACK_STRAIGHT;
-            else if (Straight()) return HandRank.STRAIGHT;
-            else if (Triple()) return HandRank.TRIPLE;
-            else if (TwoPair()) return HandRank.TWO_PAIR;
-            else if (OnePair()) return HandRank.ONE_PAIR;
-            else return HandRank.NO_PAIR;
+            if (BackStraightFlush()) return HandRank.BACK_STRAIGHT_FLUSH;
+            if (StraightFlush()) return HandRank.STRAIGHT_FLUSH;
+            if (FourCard()) return HandRank.FOUR_CARD;
+            if (FullHouse()) return HandRank.FULL_HOUSE;
+            if (Flush()) return HandRank.FLUSH;
+            if (Mountain()) return HandRank.MOUNTAIN;
+            if (BackStraight()) return HandRank.BACK_STRAIGHT;
+            if (Straight()) return HandRank.STRAIGHT;
+            if (Triple()) return HandRank.TRIPLE;
+            if (TwoPair()) return HandRank.TWO_PAIR;
+            if (OnePair()) return HandRank.ONE_PAIR;
+            return HandRank.NO_PAIR;
         }
 
         private void cardCount()

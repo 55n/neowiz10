@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6FA4AD31-ECEB-4E26-9F59-44808A69710A}</ProjectGuid>
+    <ProjectGuid>{22963D54-E454-4879-AE9E-CBCEE566D11E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Darkness</RootNamespace>
-    <AssemblyName>Darkness</AssemblyName>
+    <RootNamespace>Class12</RootNamespace>
+    <AssemblyName>Class12</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,18 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Creature.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="Monster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Narrative.cs" />
-    <Compile Include="View.cs" />
-    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,7 @@
+C:\course\projects\Class12\bin\Debug\Class12.exe.config
+C:\course\projects\Class12\bin\Debug\Class12.exe
+C:\course\projects\Class12\bin\Debug\Class12.pdb
+C:\course\projects\Class12\obj\Debug\Class12.csproj.AssemblyReference.cache
+C:\course\projects\Class12\obj\Debug\Class12.csproj.CoreCompileInputs.cache
+C:\course\projects\Class12\obj\Debug\Class12.exe
+C:\course\projects\Class12\obj\Debug\Class12.pdb

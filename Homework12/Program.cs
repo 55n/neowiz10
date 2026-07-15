@@ -41,7 +41,7 @@ namespace Homework12
                 deck.shuffle(random, 1000);
 
                 // 2. 패 뽑기
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     hand.push(deck.pop());
                 }
