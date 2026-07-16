@@ -1,20 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Darkness.Ui
+
+namespace Darkness
 {
-    class Narrative
+    public static class Narrative
     {
-        public void DrawIntroImage()
+        public static string[] IntroImage()
         {
-            string[] cave =
+            return new string[]
             {
                 "                  ▄▄████████████▄▄                  ",
                 "               ▄██████▓▓▓▓▓▓▓▓▓██████▄              ",
-                "             ▄████▓▓▓▒▒▒▒▒▒▒▓▓████▄            ",
+                "             ▄████▓▓▓▒▒▒▒▒▒▒▒▒▒▒▓▓████▄            ",
                 "           ▄███▓▓▒▒░           ░░▒▒▓▓███▄          ",
                 "          ███▓▒▒░░   ▄▄██████▄▄   ░░▒▒▓███          ",
                 "        ▄██▓▒░░   ▄██████████████▄   ░░▒▓██▄        ",
@@ -23,32 +24,237 @@ namespace Darkness.Ui
                 "     ███▓▒░   ████▀                ▀████   ░▒▓███     ",
                 "    ███▓▒░   ████                    ████   ░▒▓███    ",
             };
-
-            int artWidth = cave.Max(x => x.Length);
-            int artHeight = cave.Length;
-
-            int left = Math.Max(0, (Console.WindowWidth - artWidth) / 2);
-            //int top = Math.Max(0, (Console.WindowHeight - artHeight) / 2);
-
-            // 위쪽 가운데
-            Console.SetCursorPosition(left, 0);
-            Console.WriteLine();
-            foreach (string line in cave)
-            {
-                Console.SetCursorPosition(left, Console.CursorTop);
-                Console.WriteLine(line);
-            }
         }
 
-        public string[] IntroNarration()
+        public static string[] IntroNarration()
         {
             string[] script = {
-                "평범한 모험가인 당신은 연 때와 같이 던전에 들어갔다",
+                "노련한 모험가인 당신은 여느 때와 같이 던전에 들어갔다",
                 "온갖 몬스터와 함정들을 당신은 묵묵히 헤쳐 나갔다.",
                 "그러던 중 운 나쁘게 발동된 발 밑의 함정. 꺼지는 바닥.",
                 "그렇게 당신은"
             };
             return script;
+        }
+
+        public static string[] Instruction()
+        {
+            return new string[] { "[방향키와 엔터키로 진행합니다]" };
+        }
+
+        public static string[] Title()
+        {
+            return new string[] { "[어둠 속으로 떨어졌다]", ""};
+        }
+
+        public static string[] MainMenu()
+        {
+            return new string[]
+            {
+                "게임 시작",
+                "게임 종료"
+            };
+        }
+
+        public static string[] EndNarration()
+        {
+            return new string[]
+            {
+                "...라고 생각했지만 재빠르게 탈출했다.",
+                "[끝]"
+            };
+        }
+
+        public static string FallMarker()
+        {
+            return ".";
+        }
+
+        public static string FallImpact()
+        {
+            return "쿵!!!";
+        }
+
+        public static string ExplorationStarted()
+        {
+            return "탐색 페이즈로 넘어감";
+        }
+
+        public static string DamageTaken(string enemy, string damage)
+        {
+            return $"[{enemy}]에게 {damage}의 데미지를 받았습니다";
+        }
+
+        public static string SkillActivated(string skill)
+        {
+            return $"[{skill}] 스킬이 발동됩니다.";
+        }
+
+        public static string[] FirstRoomScript()
+        {
+            return new string[]
+            {
+                "아무것도 보이지 않는다",
+                "장비가 어딘가로 날아간 것 같다",
+                "소지품이 부서진 것 같다",
+                "당신은 숨을 죽이고 주변을 살피려고 했다",
+                "어둠에 시야가 적응하도록 기다린다",
+                "여전히 아무것도 보이지 않는다",
+                "당신은 손을 더듬어 바닥을 살핀다",
+                "무언가가 손에 잡혔다!",
+            };
+        }
+
+        public static string EquipmentBroken(string equipment)
+        {
+            return $"[{equipment}] 이(가) 파손되었습니다";
+        }
+
+        public static string GetItem(string item)
+        {
+            return $"[{item}] 을(를) 얻었습니다";
+        }
+
+        public static string DefaultRoomEnterMessage()
+        {
+            return "적막만이 맴돌고 있다";
+        }
+
+        public static string[] SecondRoomEnterMessages()
+        {
+            return new string[]
+            {
+                "기척이 느껴진다",
+                "무언가가 긁는 소리를 낸다"
+            };
+        }
+
+        public static string MonsterAction()
+        {
+            return "??? 은(는) 크르륵 거린다";
+        }
+
+        public static string[] RoomActions()
+        {
+            return RoomActions(false);
+        }
+
+        public static string[] RoomActions(bool canMove)
+        {
+            return RoomActions(canMove, true);
+        }
+
+        public static string[] RoomActions(bool canMove, bool canExplore)
+        {
+            if (canMove && canExplore)
+            {
+                return new string[]
+                {
+                    "상태창",
+                    "소지품",
+                    "탐색",
+                    "이동"
+                };
+            }
+
+            if (canMove)
+            {
+                return new string[]
+                {
+                    "상태창",
+                    "소지품",
+                    "이동"
+                };
+            }
+
+            if (!canExplore)
+            {
+                return new string[]
+                {
+                    "상태창",
+                    "소지품"
+                };
+            }
+
+            return new string[]
+            {
+                "상태창",
+                "소지품",
+                "탐색"
+            };
+        }
+
+        public static string[] EncounterActions()
+        {
+            return new string[]
+            {
+                "뒤로가기",
+                "손을 뻗어 더듬는다"
+            };
+        }
+
+        public static string[] MonsterEncounterActions()
+        {
+            return new string[]
+            {
+                "기척에 집중한다",
+                "기다린다",
+                "대상에게 다가간다",
+                "소리를 낸다",
+                "소지품을 사용한다",
+                "손을 뻗어 더듬는다",
+                "공격한다",
+                "돌아간다"
+            };
+        }
+
+        public static string[] InventoryActions()
+        {
+            return new string[]
+            {
+                "선택 취소",
+                "사용하기",
+                "던지기"
+            };
+        }
+
+        public static string[] EquipmentActions()
+        {
+            return new string[]
+            {
+                "선택 취소",
+                "장비하기",
+                "던지기"
+            };
+        }
+
+        public static string BackAction()
+        {
+            return "뒤로가기";
+        }
+
+        public static string[] MoveActions()
+        {
+            return new string[]
+            {
+                "방에 머문다",
+                "앞으로 간다"
+            };
+        }
+
+        public static string Door()
+        {
+            return "문";
+        }
+
+        public static string EmptySlotFound()
+        {
+            return "아무것도 없다";
+        }
+
+        public static string DoorFound()
+        {
+            return "문을 발견했다";
         }
     }
 }

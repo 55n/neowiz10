@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +8,44 @@ namespace Darkness
 {
     public static class Utility
     {
-        public static void WriteLine(string output = "")
+        public static ConsoleKey ReadInput()
         {
-            Console.WriteLine(output);
-            ConsoleKeyInfo input = Console.ReadKey(true);
-
-            while(input.Key != ConsoleKey.Enter)
+            while (true)
             {
-                input = Console.ReadKey(true);
+                ConsoleKey key = Console.ReadKey(true).Key;
+                if (key == ConsoleKey.UpArrow ||
+                    key == ConsoleKey.DownArrow ||
+                    key == ConsoleKey.LeftArrow ||
+                    key == ConsoleKey.RightArrow ||
+                    key == ConsoleKey.Enter)
+                {
+                    return key;
+                }
             }
         }
+
+        public static void WaitForEnter()
+        {
+            while (ReadInput() != ConsoleKey.Enter)
+            {
+            }
+        }
+
+        public static void PlayMessages(string[] messages)
+        {
+            View.Message.Clear();
+
+            for (int i = 0; i < messages.Length; i++)
+            {
+                View.Message.DrawLine(i, messages[i]);
+                Utility.WaitForEnter();
+            }
+        }
+
+        public static void PlayMessage(string message)
+        {
+            PlayMessages(new string[] { message });
+        }
+
     }
 }

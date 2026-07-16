@@ -1,7 +1,10 @@
 C:\course\projects\Darkness\bin\Debug\Darkness.exe.config
 C:\course\projects\Darkness\bin\Debug\Darkness.exe
 C:\course\projects\Darkness\bin\Debug\Darkness.pdb
-C:\course\projects\Darkness\obj\Debug\Darkness.csproj.AssemblyReference.cache
-C:\course\projects\Darkness\obj\Debug\Darkness.csproj.CoreCompileInputs.cache
 C:\course\projects\Darkness\obj\Debug\Darkness.exe
 C:\course\projects\Darkness\obj\Debug\Darkness.pdb
+C:\course\projects\Darkness\bin\Verify\Darkness.exe.config
+C:\course\projects\Darkness\bin\Verify\Darkness.exe
+C:\course\projects\Darkness\bin\Verify\Darkness.pdb
+C:\course\projects\Darkness\obj\Debug\Darkness.csproj.CoreCompileInputs.cache
+C:\course\projects\Darkness\obj\Debug\Darkness.csproj.AssemblyReference.cache

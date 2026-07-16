@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,13 @@ namespace Darkness
 {
     class Game
     {
+        private GameManager gm;
+
+        public Game()
+        {
+            gm = new GameManager();
+        }
+
         void Config()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -15,22 +22,16 @@ namespace Darkness
 
         void Initialize()
         {
-
+            View.Initialize();
         }
 
-        public void GameLoop()
+        public void Start()
         {
             Config();
-            new Ui.Narrative().DrawIntroImage();
-
-            //View.Canvas.Draw(caveArt);
-            string[] s = new string[]{
-                "야",
-                "야",
-                "야"
-            };
-
-            View.Message.Draw(s);
+            Initialize();
+            gm.Run();
         }
+
+        
     }
 }

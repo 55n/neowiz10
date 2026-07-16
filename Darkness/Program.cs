@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace Darkness
         static void Main(string[] args)
         {
             Game game = new Game();
-            game.GameLoop();
+            game.Start();
         }
     }
 }
