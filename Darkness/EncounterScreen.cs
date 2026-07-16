@@ -16,7 +16,26 @@ namespace Darkness
             string[] slotContents,
             bool[] revealedSlots)
         {
-            int selected = Array.FindIndex(revealedSlots, revealed => !revealed);
+            return ChooseSlot(view, slotContents, revealedSlots, true);
+        }
+
+        public static int ChooseAnySlot(
+            Viewport view,
+            string[] slotContents,
+            bool[] revealedSlots)
+        {
+            return ChooseSlot(view, slotContents, revealedSlots, false);
+        }
+
+        private static int ChooseSlot(
+            Viewport view,
+            string[] slotContents,
+            bool[] revealedSlots,
+            bool skipRevealedSlots)
+        {
+            int selected = skipRevealedSlots
+                ? Array.FindIndex(revealedSlots, revealed => !revealed)
+                : 0;
 
             DrawSlots(view, slotContents, revealedSlots);
             DrawSelector(view, selected);
@@ -32,7 +51,7 @@ namespace Darkness
                     {
                         selected = (selected - 1 + SlotCount) % SlotCount;
                     }
-                    while (revealedSlots[selected]);
+                    while (skipRevealedSlots && revealedSlots[selected]);
                 }
                 else if (input == ConsoleKey.RightArrow)
                 {
@@ -40,7 +59,7 @@ namespace Darkness
                     {
                         selected = (selected + 1) % SlotCount;
                     }
-                    while (revealedSlots[selected]);
+                    while (skipRevealedSlots && revealedSlots[selected]);
                 }
                 else if (input == ConsoleKey.Enter)
                 {

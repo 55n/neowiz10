@@ -102,7 +102,12 @@ namespace Darkness
         }
         public GameState? Action()
         {
-            _gamePhase.Exploration();
+            GameSignal gameSignal = _gamePhase.Exploration();
+            if (gameSignal == GameSignal.EXIT_GAME)
+            {
+                return GameState.STOP;
+            }
+
             return null;
         }
         public void Exit()

@@ -3,14 +3,32 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
+    public enum InventoryOutcome
+    {
+        None,
+        Used,
+        Thrown
+    }
+
     public static class InventoryScreen
     {
         private const int InnerWidth = 28;
 
-        public static void Show(
+        public static InventoryOutcome Show(
             Viewport view,
             List<string> itemStacks,
             int slotCount)
+        {
+            return Show(view, itemStacks, slotCount, null, null, null);
+        }
+
+        public static InventoryOutcome Show(
+            Viewport view,
+            List<string> itemStacks,
+            int slotCount,
+            Viewport targetView,
+            string[] targetSlots,
+            bool[] revealedTargetSlots)
         {
             int selected = 0;
             Draw(view, itemStacks, slotCount, selected);
@@ -33,7 +51,7 @@ namespace Darkness
                 {
                     if (selected == slotCount)
                     {
-                        return;
+                        return InventoryOutcome.None;
                     }
 
                     if (selected >= itemStacks.Count)
@@ -51,7 +69,36 @@ namespace Darkness
                         continue;
                     }
 
-                    return;
+                    if (selectedAction == 2)
+                    {
+                        string itemStack = itemStacks[selected];
+                        view.Draw(Narrative.ThrowItemPrompt(itemStack));
+                        int selectedThrowAction = Selection.ChooseLeft(
+                            view,
+                            Narrative.ThrowItemActions(),
+                            1);
+
+                        if (selectedThrowAction == 0)
+                        {
+                            if (targetView != null &&
+                                targetSlots != null &&
+                                revealedTargetSlots != null)
+                            {
+                                EncounterScreen.ChooseAnySlot(
+                                    targetView,
+                                    targetSlots,
+                                    revealedTargetSlots);
+                            }
+
+                            Utility.PlayMessage(Narrative.ItemThrown(itemStack));
+                            return InventoryOutcome.Thrown;
+                        }
+
+                        Draw(view, itemStacks, slotCount, selected);
+                        continue;
+                    }
+
+                    return InventoryOutcome.Used;
                 }
 
                 if (previous != selected)

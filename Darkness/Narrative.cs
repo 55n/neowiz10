@@ -44,7 +44,7 @@ namespace Darkness
 
         public static string[] Title()
         {
-            return new string[] { "[어둠 속으로 떨어졌다]", ""};
+            return new string[] { "[어둠 속으로 떨어졌다]", "" };
         }
 
         public static string[] MainMenu()
@@ -98,7 +98,7 @@ namespace Darkness
                 "장비가 어딘가로 날아간 것 같다",
                 "소지품이 부서진 것 같다",
                 "당신은 숨을 죽이고 주변을 살피려고 했다",
-                "어둠에 시야가 적응하도록 기다린다",
+                "어둠에 시야가 적응하도록 기다렸다",
                 "여전히 아무것도 보이지 않는다",
                 "당신은 손을 더듬어 바닥을 살핀다",
                 "무언가가 손에 잡혔다!",
@@ -117,7 +117,7 @@ namespace Darkness
 
         public static string DefaultRoomEnterMessage()
         {
-            return "적막만이 맴돌고 있다";
+            return "적막 만이 맴돌고 있다";
         }
 
         public static string[] SecondRoomEnterMessages()
@@ -134,54 +134,59 @@ namespace Darkness
             return "??? 은(는) 크르륵 거린다";
         }
 
-        public static string[] RoomActions()
+        public static string Goblin()
         {
-            return RoomActions(false);
+            return "고블린";
         }
 
-        public static string[] RoomActions(bool canMove)
+        public static string MonsterAttackStarted()
         {
-            return RoomActions(canMove, true);
+            return "어둠 속의 정체가 드러났다. 고블린이 달려든다";
         }
 
-        public static string[] RoomActions(bool canMove, bool canExplore)
+        public static string PlayerDodged()
         {
-            if (canMove && canExplore)
-            {
-                return new string[]
-                {
-                    "상태창",
-                    "소지품",
-                    "탐색",
-                    "이동"
-                };
-            }
+            return "당신은 가까스로 공격을 피했다";
+        }
 
-            if (canMove)
-            {
-                return new string[]
-                {
-                    "상태창",
-                    "소지품",
-                    "이동"
-                };
-            }
+        public static string PlayerHit(string monster, int damage)
+        {
+            return $"{monster}의 공격이 스쳤다. 생명력 {damage}을(를) 잃었다";
+        }
 
-            if (!canExplore)
-            {
-                return new string[]
-                {
-                    "상태창",
-                    "소지품"
-                };
-            }
+        public static string PlayerDied()
+        {
+            return "당신은 어둠 속에서 쓰러졌다";
+        }
 
-            return new string[]
+        public static string MonsterReaction(int selectedEncounterAction, bool itemThrown)
+        {
+            switch (selectedEncounterAction)
             {
-                "상태창",
-                "소지품",
-                "탐색"
-            };
+                case 0:
+                    return "긁는 소리가 잠깐 멎는다. 놈도 당신의 숨을 듣고 있다";
+                case 1:
+                    return "어둠 속의 무언가가 바닥을 긁으며 한 칸 가까워진 듯하다";
+                case 2:
+                    return "당신이 다가서자 거친 숨소리가 낮게 깔리고, 날카로운 것이 바닥을 찍는다";
+                case 3:
+                    return "소리에 반응해 ??? 이(가) 고개를 튼 듯 긁는 방향이 바뀐다";
+                case 4:
+                    if (itemThrown)
+                    {
+                        return "던져진 물건이 부딪히자 ??? 이(가) 그쪽으로 짧게 달려든다";
+                    }
+
+                    return "소지품을 뒤적이는 소리에 ??? 이(가) 신경질적으로 긁어댄다";
+                case 5:
+                    return "벽을 더듬는 소리에 맞춰 ??? 이(가) 조심스럽게 위치를 바꾼다";
+                case 6:
+                    return "당신의 공격 의도를 느낀 듯 ??? 이(가) 먼저 튀어나올 준비를 한다";
+                case 7:
+                    return "물러나는 기척을 따라 ??? 이(가) 느리게 추적해 온다";
+                default:
+                    return MonsterAction();
+            }
         }
 
         public static string[] EncounterActions()
@@ -203,9 +208,55 @@ namespace Darkness
                 "소리를 낸다",
                 "소지품을 사용한다",
                 "손을 뻗어 더듬는다",
-                "공격한다",
+                "전투준비",
                 "돌아간다"
             };
+        }
+
+        public static string[] CombatActions()
+        {
+            return new string[]
+            {
+                "돌아가기",
+                "공격하기",
+                "방어하기",
+                "스킬사용"
+            };
+        }
+
+        public static string NormalAttackResult(string monster, int damage)
+        {
+            return $"당신은 {monster} 을(를) 공격해 {damage}의 데미지를 주었다";
+        }
+
+        public static string SkillAttackResult(string skill, string monster, int damage)
+        {
+            return $"당신은 {skill} 을(를) 사용해 {monster} 에게 {damage}의 데미지를 주었다";
+        }
+
+        public static string MonsterDefeated(string monster)
+        {
+            return $"{monster} 이(가) 쓰러졌다";
+        }
+
+        public static string DoorBehindGoblinFound()
+        {
+            return "고블린이 쓰러지자 그 뒤에 가려져 있던 문이 드러났다";
+        }
+
+        public static string LootTaken(string item)
+        {
+            return $"{item} 을(를) 얻었다";
+        }
+
+        public static string NothingToLoot()
+        {
+            return "더 얻을 것은 없다";
+        }
+
+        public static string NotImplementedYet()
+        {
+            return "아직 구현되지 않았다";
         }
 
         public static string[] InventoryActions()
@@ -218,12 +269,34 @@ namespace Darkness
             };
         }
 
+        public static string[] ThrowItemPrompt(string item)
+        {
+            return new string[]
+            {
+                $"{item} 을(를) 던집니까?"
+            };
+        }
+
+        public static string[] ThrowItemActions()
+        {
+            return new string[]
+            {
+                "던진다",
+                "도로 집어넣는다"
+            };
+        }
+
+        public static string ItemThrown(string item)
+        {
+            return $"당신은 {item} 을(를) 던졌다";
+        }
+
         public static string[] EquipmentActions()
         {
             return new string[]
             {
                 "선택 취소",
-                "장비하기",
+                "장비",
                 "던지기"
             };
         }
@@ -242,6 +315,17 @@ namespace Darkness
             };
         }
 
+        public static string[] BranchMoveActions()
+        {
+            return new string[]
+            {
+                "방에 머문다",
+                "앞으로 간다",
+                "왼쪽으로 간다",
+                "오른쪽으로 간다"
+            };
+        }
+
         public static string Door()
         {
             return "문";
@@ -255,6 +339,26 @@ namespace Darkness
         public static string DoorFound()
         {
             return "문을 발견했다";
+        }
+
+        public static string[] RestImage()
+        {
+            return new string[]
+            {
+
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢠⢪⡪⡢⡂⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⢠⢔⣖⢖⣕⢗⢗⢗⣝⢮⣳⣳⣳⡳⣜⢜⢎⢣⢣⡣⣥⣀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⡹⣕⣗⢗⣗⣽⡹⣕⣗⢗⣗⣳⡳⣝⢮⡻⣦⡳⣽⡺⣮⡺⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⢜⡧⡯⣗⣗⣗⣯⡳⣯⣻⣺⣺⢝⡾⡵⣝⡷⡝⠾⡝⡇⢯⠀⠀⠀⠀⠀",
+                "⠀⠀⡰⣕⣝⢝⣗⣗⣗⡷⣝⡷⣽⣺⣺⢕⡯⣯⠪⣩⢪⢑⠪⣞⣞⠀⠀⠀⠀⠀",
+                "⠀⠀⡯⡮⣪⡳⣕⢗⢗⡯⣗⢽⣳⣳⢯⣳⢯⢷⢽⢽⡢⡣⡣⠵⡽⡀⠀⠀⠀⠀",
+                "⠀⠀⠉⡚⠘⠸⣪⡫⡳⣝⡷⣽⣺⣺⡳⣽⢽⡽⡽⣝⣧⢑⢐⠌⣟⡆⠀⠀⠀⠀",
+                "⠀⢠⣸⢀⠠⠐⠈⠘⣹⣺⡳⣳⣳⢷⢝⡷⣽⣺⢽⡺⡾⡜⡐⠌⢺⣺⡀⠀⠀⠀",
+                "⠈⠑⠉⠁⠀⠐⠀⠄⢳⢷⢝⣗⢯⠯⠳⠫⠳⠯⢳⢽⣫⣗⠅⡅⠕⠓⠝⠆⠄⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢌⠢⡁⠂⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠈⠀⠀⠀⠀⠀"
+            };
         }
     }
 }
