@@ -5,7 +5,13 @@ namespace Darkness
 {
     public static class StatusScreen
     {
-        private const int InnerWidth = 48;
+        private const int InnerWidth = 46;
+        private static readonly string[] EquipmentSlotNames =
+        {
+            "무기",
+            "방어구",
+            "장신구"
+        };
 
         public static void Show(
             Viewport view,
@@ -14,7 +20,9 @@ namespace Darkness
             int focus,
             int maxFocus,
             string[] statusEffects,
-            string[] equipment)
+            string[] equipment,
+            List<string> itemStacks,
+            Dictionary<string, int> equipmentSlots)
         {
             List<string> contents = new List<string>();
             contents.Add($"[생명력]: {health}/{maxHealth}");
@@ -35,6 +43,7 @@ namespace Darkness
             {
                 lines[equipmentStartRow + i] = BuildEquipmentLine(
                     equipment[i],
+                    i,
                     i == 0);
             }
 
@@ -75,10 +84,50 @@ namespace Darkness
                         {
                             lines[equipmentStartRow + i] = BuildEquipmentLine(
                                 equipment[i],
+                                i,
                                 i == selected);
                         }
                         lines[backRow] = BuildBackLine(selected == equipment.Length);
 
+                        view.Draw(lines);
+                        continue;
+                    }
+
+                    if (selectedAction == 1)
+                    {
+                        List<int> compatibleItemIndexes = new List<int>();
+                        List<string> compatibleEquipment = new List<string>();
+                        for (int i = 0; i < itemStacks.Count; i++)
+                        {
+                            int equipmentSlot;
+                            if (equipmentSlots.TryGetValue(itemStacks[i], out equipmentSlot) &&
+                                equipmentSlot == selected)
+                            {
+                                compatibleItemIndexes.Add(i);
+                                compatibleEquipment.Add(itemStacks[i]);
+                            }
+                        }
+
+                        compatibleEquipment.Add(Narrative.BackAction());
+                        int selectedEquipment = Selection.ChooseLeft(
+                            view,
+                            compatibleEquipment.ToArray());
+
+                        if (selectedEquipment < compatibleItemIndexes.Count)
+                        {
+                            int itemIndex = compatibleItemIndexes[selectedEquipment];
+                            string previousEquipment = equipment[selected];
+                            equipment[selected] = itemStacks[itemIndex];
+                            itemStacks[itemIndex] = previousEquipment;
+                        }
+
+                        for (int i = 0; i < equipment.Length; i++)
+                        {
+                            lines[equipmentStartRow + i] = BuildEquipmentLine(
+                                equipment[i],
+                                i,
+                                i == selected);
+                        }
                         view.Draw(lines);
                         continue;
                     }
@@ -122,7 +171,10 @@ namespace Darkness
 
             view.DrawLine(
                 equipmentStartRow + selection,
-                BuildEquipmentLine(equipment[selection], selected));
+                BuildEquipmentLine(
+                    equipment[selection],
+                    selection,
+                    selected));
         }
 
         private static string BuildBackLine(bool selected)
@@ -130,9 +182,13 @@ namespace Darkness
             return (selected ? "▶ " : "  ") + Narrative.BackAction();
         }
 
-        private static string BuildEquipmentLine(string equipment, bool selected)
+        private static string BuildEquipmentLine(
+            string equipment,
+            int equipmentSlot,
+            bool selected)
         {
-            return BuildContentLine((selected ? "▶ " : "  ") + equipment);
+            string content = $"[{EquipmentSlotNames[equipmentSlot]}]: {equipment}";
+            return BuildContentLine((selected ? "▶ " : "  ") + content);
         }
 
         private static string BuildContentLine(string content)

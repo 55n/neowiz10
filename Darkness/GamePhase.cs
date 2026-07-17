@@ -13,7 +13,22 @@ namespace Darkness
         private readonly bool[] _revealedSlots = new bool[5];
         private readonly List<string> _itemStacks = new List<string>
         {
-            "깨진 약병 x2"
+            "깨진 약병 x2",
+            "녹슨 단검(3/5)"
+        };
+        private readonly string[] _equipment = new string[]
+        {
+            "평범한 한손검(2/5)",
+            "평범한 갑옷(1/5)",
+            "금이 간 수호의 부적"
+        };
+        private readonly Dictionary<string, int> _equipmentSlots =
+            new Dictionary<string, int>
+        {
+            { "평범한 한손검(2/5)", 0 },
+            { "녹슨 단검(3/5)", 0 },
+            { "평범한 갑옷(1/5)", 1 },
+            { "금이 간 수호의 부적", 2 }
         };
         private readonly Random _random = new Random();
         private const int MaxHealth = 10;
@@ -107,15 +122,16 @@ namespace Darkness
             const int lootAction = 3;
             const int moveAction = 4;
             const int returnAction = 5;
-            const int backAction = 0;
-            const int searchAction = 1;
             const int stayInRoomAction = 0;
             const int moveForwardAction = 1;
             const int moveLeftAction = 2;
             const int moveRightAction = 3;
-            const int useInventoryAction = 4;
-            const int findPathAction = 5;
-            const int combatPreparationAction = 6;
+            const int useInventoryAction = -1;
+            const int findPathAction = 4;
+            const int combatPreparationAction = 5;
+            const int encounterReturnAction = 6;
+            const int restMoveAction = 3;
+            const int restReturnAction = 4;
             bool restUsed = false;
             string[] armorSpiritSlots = new string[5];
             bool[] revealedArmorSpiritSlots = new bool[5];
@@ -125,8 +141,10 @@ namespace Darkness
             waterGhostSlots[2] = "???";
 
         FirstRoom:
+            View.Display.Clear();
+            string[] roomMessage = Narrative.DefaultRoomEnterMessage();
+            Utility.PlayMessages(roomMessage);
             EncounterScreen.DrawSlots(View.Display, _roomSlots, _revealedSlots);
-            string roomMessage = Narrative.DefaultRoomEnterMessage();
 
             while (true)
             {
@@ -136,8 +154,8 @@ namespace Darkness
                 int selectedRoomAction = Selection.ChooseLeft(
                     View.Message,
                     BuildRoomActions(canExplore, false, canMove, false),
-                    1,
-                    0);
+                    2,
+                    1);
 
                 if (selectedRoomAction == statusAction)
                 {
@@ -148,12 +166,9 @@ namespace Darkness
                         _focus,
                         MaxFocus,
                         new string[0],
-                        new string[]
-                        {
-                            "[무기]: 평범한 한손검(2/5)",
-                            "[방어구]: 평범한 갑옷(1/5)",
-                            "[장신구]: 금이 간 수호의 부적"
-                        });
+                        _equipment,
+                        _itemStacks,
+                        _equipmentSlots);
                     continue;
                 }
 
@@ -195,32 +210,32 @@ namespace Darkness
                     _revealedSlots);
                 int selectedEncounterAction = Selection.ChooseLeft(
                     View.Message,
-                    Narrative.EncounterActions());
+                    Narrative.MonsterEncounterActions());
 
-                if (selectedEncounterAction == backAction)
-                {
-                    EncounterScreen.DrawSlots(View.Display, _roomSlots, _revealedSlots);
-                    continue;
-                }
-
-                if (selectedEncounterAction == searchAction)
+                if (selectedEncounterAction == findPathAction)
                 {
                     _revealedSlots[selectedSlot] = true;
                     if (selectedSlot == 2)
                     {
                         _roomSlots[selectedSlot] = Narrative.Door();
-                        roomMessage = Narrative.DoorFound();
+                        roomMessage = new string[] { Narrative.DoorFound() };
                     }
                     else
                     {
-                        roomMessage = Narrative.EmptySlotFound();
+                        roomMessage = new string[] { Narrative.EmptySlotFound() };
                     }
 
                     EncounterScreen.DrawSlots(View.Display, _roomSlots, _revealedSlots);
                     continue;
                 }
 
-                return GameSignal.EXIT_GAME;
+                if (selectedEncounterAction == combatPreparationAction)
+                {
+                    Utility.PlayMessage(Narrative.NotImplementedYet());
+                }
+
+                EncounterScreen.DrawSlots(View.Display, _roomSlots, _revealedSlots);
+                continue;
             }
 
             string[] secondRoomSlots = new string[5];
@@ -249,8 +264,8 @@ namespace Darkness
                         goblinDefeated && !_goblinLooted,
                         goblinDefeated,
                         true),
-                    secondRoomMessages.Length,
-                    0);
+                    secondRoomMessages.Length + 1,
+                    secondRoomMessages.Length);
 
                 if (selectedRoomAction == statusAction)
                 {
@@ -261,12 +276,9 @@ namespace Darkness
                         _focus,
                         MaxFocus,
                         new string[0],
-                        new string[]
-                        {
-                            "[무기]: 평범한 한손검(2/5)",
-                            "[방어구]: 평범한 갑옷(1/5)",
-                            "[장신구]: 금이 간 수호의 부적"
-                        });
+                        _equipment,
+                        _itemStacks,
+                        _equipmentSlots);
                     continue;
                 }
 
@@ -351,40 +363,7 @@ namespace Darkness
                     View.Message,
                     Narrative.MonsterEncounterActions());
 
-                if (selectedEncounterAction == useInventoryAction)
-                {
-                    InventoryOutcome inventoryOutcome = InventoryScreen.Show(
-                        View.Message,
-                        _itemStacks,
-                        4,
-                        View.Display,
-                        secondRoomSlots,
-                        revealedSecondRoomSlots);
-                    if (inventoryOutcome == InventoryOutcome.None)
-                    {
-                        EncounterScreen.DrawSlots(
-                            View.Display,
-                            secondRoomSlots,
-                            revealedSecondRoomSlots);
-                        continue;
-                    }
-
-                    EncounterScreen.DrawSlots(
-                        View.Display,
-                        secondRoomSlots,
-                        revealedSecondRoomSlots);
-                    GameSignal? gameSignal = ResolveMonsterTurn(
-                        selectedEncounterAction,
-                        inventoryOutcome == InventoryOutcome.Thrown,
-                        secondRoomSlots,
-                        revealedSecondRoomSlots);
-                    if (gameSignal.HasValue)
-                    {
-                        return gameSignal.Value;
-                    }
-                    continue;
-                }
-                else if (selectedEncounterAction == combatPreparationAction)
+                if (selectedEncounterAction == combatPreparationAction)
                 {
                     GameSignal? combatSignal = HandleCombatPreparation(
                         secondRoomSlots,
@@ -449,10 +428,11 @@ namespace Darkness
                         new SelectionOption("상태창", true, ""),
                         new SelectionOption("소지품", true, ""),
                         new SelectionOption("휴식", !restUsed, ""),
+                        new SelectionOption("이동", true, ""),
                         new SelectionOption("되돌아가기", true, "")
                     },
-                    1,
-                    0);
+                    2,
+                    1);
 
                 if (selectedRestAction == statusAction)
                 {
@@ -463,12 +443,9 @@ namespace Darkness
                         _focus,
                         MaxFocus,
                         new string[0],
-                        new string[]
-                        {
-                            "[무기]: 평범한 한손검(2/5)",
-                            "[방어구]: 평범한 갑옷(1/5)",
-                            "[장신구]: 금이 간 수호의 부적"
-                        });
+                        _equipment,
+                        _itemStacks,
+                        _equipmentSlots);
                     View.Display.DrawCentered(Narrative.RestImage());
                     continue;
                 }
@@ -490,8 +467,30 @@ namespace Darkness
                     continue;
                 }
 
-                goto SecondRoomJunction;
+                if (selectedRestAction == restMoveAction)
+                {
+                    int selectedMoveAction = Selection.ChooseLeft(
+                        View.Message,
+                        Narrative.MoveActions());
+
+                    if (selectedMoveAction == stayInRoomAction)
+                    {
+                        continue;
+                    }
+
+                    goto ExitRoom;
+                }
+
+                if (selectedRestAction == restReturnAction)
+                {
+                    goto SecondRoomJunction;
+                }
             }
+
+        ExitRoom:
+            View.Display.DrawCentered(Narrative.ExitImage());
+            Utility.PlayMessage("출구에 도착했다");
+            return GameSignal.EXIT_GAME;
 
         ArmorSpiritRoom:
             View.Display.Clear();
@@ -517,32 +516,6 @@ namespace Darkness
                     Narrative.MonsterEncounterActions(),
                     2);
 
-                if (selectedArmorAction == useInventoryAction)
-                {
-                    InventoryOutcome inventoryOutcome = InventoryScreen.Show(
-                        View.Message,
-                        _itemStacks,
-                        4,
-                        View.Display,
-                        armorSpiritSlots,
-                        revealedArmorSpiritSlots);
-                    EncounterScreen.DrawSlots(
-                        View.Display,
-                        armorSpiritSlots,
-                        revealedArmorSpiritSlots);
-                    if (inventoryOutcome == InventoryOutcome.Thrown)
-                    {
-                        armorSpiritSlots[2] = "갑주령";
-                        revealedArmorSpiritSlots[2] = true;
-                        EncounterScreen.DrawSlots(
-                            View.Display,
-                            armorSpiritSlots,
-                            revealedArmorSpiritSlots);
-                        Utility.PlayMessage("갑주령은 떨어진 물건보다 당신의 마석 주머니에 관심을 둔다");
-                    }
-                    continue;
-                }
-
                 if (selectedArmorAction == combatPreparationAction)
                 {
                     armorSpiritSlots[2] = "갑주령";
@@ -555,7 +528,7 @@ namespace Darkness
                     continue;
                 }
 
-                if (selectedArmorAction == 7)
+                if (selectedArmorAction == encounterReturnAction)
                 {
                     goto SecondRoomJunction;
                 }
@@ -609,27 +582,7 @@ namespace Darkness
                     Narrative.MonsterEncounterActions(),
                     2);
 
-                if (selectedWaterAction == useInventoryAction)
-                {
-                    InventoryOutcome inventoryOutcome = InventoryScreen.Show(
-                        View.Message,
-                        _itemStacks,
-                        4,
-                        View.Display,
-                        waterGhostSlots,
-                        revealedWaterGhostSlots);
-                    EncounterScreen.DrawSlots(
-                        View.Display,
-                        waterGhostSlots,
-                        revealedWaterGhostSlots);
-                    if (inventoryOutcome == InventoryOutcome.Thrown)
-                    {
-                        Utility.PlayMessage("던진 물건이 물을 치자 물귀신의 기척이 그쪽으로 미끄러진다");
-                    }
-                    continue;
-                }
-
-                if (selectedWaterAction == 7)
+                if (selectedWaterAction == encounterReturnAction)
                 {
                     goto SecondRoomJunction;
                 }
@@ -710,7 +663,7 @@ namespace Darkness
                     return null;
                 }
 
-                return ResolveMonsterTurn(6, false, monsterSlots, revealedMonsterSlots);
+                return ResolveMonsterTurn(5, false, monsterSlots, revealedMonsterSlots);
             }
 
             if (selectedCombatAction != skillAction)
@@ -743,7 +696,7 @@ namespace Darkness
                     return null;
                 }
 
-                return ResolveMonsterTurn(6, false, monsterSlots, revealedMonsterSlots);
+                return ResolveMonsterTurn(5, false, monsterSlots, revealedMonsterSlots);
             }
 
             return null;
@@ -894,7 +847,7 @@ namespace Darkness
         private static bool MonsterAttacks(int selectedEncounterAction, bool itemThrown)
         {
             return selectedEncounterAction == 2 ||
-                   selectedEncounterAction == 6 ||
+                   selectedEncounterAction == 5 ||
                    itemThrown;
         }
     }

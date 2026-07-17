@@ -9,8 +9,8 @@ namespace Darkness
 {
     public static class View
     {
-        public const int Width = 50;
-        public const int Height = 25;
+        public const int Width = 80;
+        public const int Height = 30;
 
         public static void Initialize()
         {
@@ -22,20 +22,22 @@ namespace Darkness
             int left = (Console.WindowWidth - Width) / 2;
             int top = (Console.WindowHeight - Height) / 2;
 
+            Console.Clear();
+            Console.CursorVisible = false;
+
             Display = new Viewport(
                 left: left,
                 top: top,
                 width: Width,
-                height: 12);
+                height: 12,
+                drawBorder: false);
 
             Message = new Viewport(
                 left: left,
                 top: top + 13,
                 width: Width,
-                height: 12);
-
-            Console.Clear();
-            Console.CursorVisible = false;
+                height: 15,
+                drawBorder: true);
         }
 
         public static Viewport Display { get; private set; }
@@ -49,12 +51,22 @@ namespace Darkness
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public Viewport(int left, int top, int width, int height)
+        public Viewport(
+            int left,
+            int top,
+            int width,
+            int height,
+            bool drawBorder)
         {
-            Left = left;
-            Top = top;
-            Width = width;
-            Height = height;
+            Left = drawBorder ? left + 1 : left;
+            Top = drawBorder ? top + 1 : top;
+            Width = drawBorder ? width - 2 : width;
+            Height = drawBorder ? height - 2 : height;
+
+            if (drawBorder)
+            {
+                DrawBorder(left, top, width, height);
+            }
         }
 
         public void Clear()
@@ -62,8 +74,26 @@ namespace Darkness
             for (int y = 0; y < Height; y++)
             {
                 Console.SetCursorPosition(Left, Top + y);
-                Console.Write(new string(' ', Width + 3)); // +3 없으면 끝에 남음. 이유는 몰?루
+                Console.Write(new string(' ', Width));
             }
+        }
+
+        private static void DrawBorder(int left, int top, int width, int height)
+        {
+            string horizontal = new string('─', width - 2);
+            Console.SetCursorPosition(left, top);
+            Console.Write("┌" + horizontal + "┐");
+
+            for (int row = 1; row < height - 1; row++)
+            {
+                Console.SetCursorPosition(left, top + row);
+                Console.Write("│");
+                Console.SetCursorPosition(left + width - 1, top + row);
+                Console.Write("│");
+            }
+
+            Console.SetCursorPosition(left, top + height - 1);
+            Console.Write("└" + horizontal + "┘");
         }
 
         public void Draw(string text)

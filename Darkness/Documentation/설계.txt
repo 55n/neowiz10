@@ -1,0 +1,218 @@
+Darkness 책임 분리 설계
+
+1. 목적
+
+현재 프로젝트의 파일을 폴더별로 정리하기 전에 각 클래스의 책임 경계를 먼저 명확히 한다.
+책임이 섞인 상태로 파일만 이동하면 결합 관계가 그대로 남기 때문에, 아래 순서에 따라 설계를 정리한 뒤 폴더 구조를 변경한다.
+
+GamePhase는 현재 프로토타입의 전체 게임 진행을 한곳에서 확인하기 위해 의도적으로 책임을 분리하지 않는다.
+따라서 이 문서에서 GamePhase 자체의 분리는 다루지 않는다.
+
+
+2. 우선 분리가 필요한 책임
+
+2-1. StatusScreen과 장비 관리
+
+현재 StatusScreen은 다음 책임을 동시에 가진다.
+
+- 상태창과 장비 슬롯을 화면에 표시한다.
+- 플레이어 입력을 받아 장비 슬롯과 행동을 선택한다.
+- 소지품에서 장착 가능한 장비를 검색한다.
+- 장비 종류의 호환성을 판정한다.
+- 현재 장비와 소지품 장비를 직접 교체한다.
+
+화면 클래스가 equipment와 itemStacks를 직접 변경하므로 UI와 게임 상태 변경이 결합되어 있다.
+
+분리 방향:
+
+- StatusScreen은 상태를 표시하고 사용자의 선택 결과만 반환한다.
+- PlayerEquipment 또는 EquipmentManager가 장비 호환성 판정과 교체를 담당한다.
+- 장비 선택 결과는 EquipmentSelectionResult와 같은 결과 객체로 전달한다.
+
+필요한 데이터 예시:
+
+- EquipmentSlot: Weapon, Armor, Accessory
+- EquipmentAction: Cancel, Equip, Throw
+- EquipmentSelectionResult: 선택 슬롯, 선택 아이템, 선택 행동
+
+
+2-2. InventoryScreen과 아이템 행동
+
+현재 InventoryScreen은 다음 책임을 동시에 가진다.
+
+- 소지품 슬롯을 표시한다.
+- 사용할 아이템과 행동을 선택한다.
+- EncounterScreen을 호출해 대상 슬롯을 선택한다.
+- 아이템 사용 및 투척 메시지를 출력한다.
+- 행동 결과를 Used 또는 Thrown으로 단순화해 반환한다.
+
+InventoryScreen이 조우 슬롯과 Display까지 전달받기 때문에 인벤토리 UI가 방과 조우 화면의 구조를 알아야 한다.
+또한 현재 반환값만으로는 어떤 아이템을 선택했는지 알 수 없다.
+
+분리 방향:
+
+- InventoryScreen은 아이템과 행동만 선택한다.
+- EncounterScreen은 대상 슬롯 선택만 담당한다.
+- 실제 사용, 투척, 아이템 제거와 대상 적용은 GamePhase가 조합한다.
+- 선택 결과에는 아이템과 행동을 함께 포함한다.
+
+필요한 데이터 예시:
+
+- InventoryAction: Cancel, Use, Throw
+- InventorySelectionResult: 선택 아이템, 선택 행동
+
+
+2-3. Narrative와 몬스터 행동 규칙
+
+Narrative의 일반적인 책임은 대사, 메시지와 ASCII 이미지 같은 콘텐츠를 제공하는 것이다.
+그러나 MonsterReaction은 숫자 행동 코드와 itemThrown 값을 검사해 어떤 몬스터 반응이 발생할지 결정한다.
+이는 콘텐츠 제공이 아니라 게임 규칙에 해당한다.
+
+현재 문제:
+
+- case -1, case 0과 같은 숫자가 실제 행동 의미와 직접 연결되어 있다.
+- 선택지 순서가 변경되면 몬스터 반응 코드도 함께 변경해야 한다.
+- Narrative가 몬스터의 행동 판단을 일부 담당한다.
+
+분리 방향:
+
+- 행동 인덱스를 EncounterAction 열거형으로 교체한다.
+- MonsterBehavior가 플레이어 행동에 대한 몬스터 반응을 결정한다.
+- Narrative는 결정된 결과에 해당하는 문장만 제공한다.
+
+필요한 행동 예시:
+
+- Focus
+- Wait
+- Approach
+- MakeNoise
+- Search
+- PrepareCombat
+- Retreat
+- UseInventory
+
+
+2-4. Utility의 입력과 메시지 재생
+
+현재 Utility는 다음 두 책임을 가진다.
+
+- ReadInput과 WaitForEnter를 통한 콘솔 입력
+- PlayMessage와 PlayMessages를 통한 메시지 출력 및 진행 연출
+
+PlayMessages가 전달받은 화면이 아니라 전역 View.Message를 직접 사용하기 때문에 재사용과 테스트도 어렵다.
+
+분리 방향:
+
+- ConsoleInput은 입력 읽기와 Enter 대기를 담당한다.
+- MessagePlayer는 메시지 순차 출력과 입력 대기를 담당한다.
+- MessagePlayer는 사용할 Viewport를 명시적으로 전달받는다.
+
+
+3. 공통화가 필요한 UI 기능
+
+3-1. 문자열 표시 폭 계산
+
+GetDisplayWidth가 Viewport, EncounterScreen, InventoryScreen, StatusScreen에 각각 구현되어 있다.
+Viewport는 일부 박스 문자를 한 칸으로 계산하지만 다른 화면은 모든 비 ASCII 문자를 두 칸으로 계산해 기준도 일치하지 않는다.
+
+분리 방향:
+
+- ConsoleText 또는 ConsoleLayout에 표시 폭 계산을 한 번만 구현한다.
+- 모든 화면 렌더러가 같은 계산 함수를 사용한다.
+- 한글, ASCII, 박스 문자에 대한 계산 기준을 통일한다.
+
+
+3-2. Viewport의 애니메이션 제어
+
+Viewport.DrawCenteredLineByLine은 화면 출력과 Thread.Sleep을 이용한 시간 제어를 함께 수행한다.
+
+분리 방향:
+
+- Viewport는 즉시 그리는 기능만 담당한다.
+- 시간에 따른 출력은 MessagePlayer 또는 ConsoleAnimation이 담당한다.
+
+현재 사용처가 적으므로 다른 책임 분리보다 우선순위는 낮다.
+
+
+4. 현재 구조를 유지해도 되는 클래스
+
+Program
+
+- 애플리케이션 진입점 역할만 수행하므로 현재 책임이 적절하다.
+
+Game
+
+- 콘솔 설정, 화면 초기화, GameManager 실행을 묶는 구성 루트로 사용할 수 있다.
+
+Selection
+
+- 선택지 렌더링과 입력 처리는 하나의 UI 위젯 책임으로 볼 수 있다.
+- 입력 추상화를 도입할 때 ConsoleInput을 사용하도록 변경할 수 있다.
+
+EncounterScreen
+
+- 슬롯 렌더링과 슬롯 선택은 하나의 조우 화면 컨트롤러 책임으로 허용할 수 있다.
+- 아이템 사용 같은 외부 게임 규칙은 포함하지 않는다.
+
+GameManager
+
+- 한 파일에 상태 열거형, 인터페이스와 상태 클래스가 함께 있지만 각 클래스의 책임은 비교적 명확하다.
+- 폴더 정리 단계에서 파일을 나눌 수 있으나 우선적인 설계 변경 대상은 아니다.
+
+
+5. 권장 적용 순서
+
+1) EncounterAction 열거형을 만들고 숫자 행동 인덱스를 제거한다.
+2) StatusScreen에서 장비 호환성 판정과 장비 교체를 분리한다.
+3) InventoryScreen에서 대상 슬롯 선택과 실제 아이템 처리를 분리한다.
+4) Utility를 ConsoleInput과 MessagePlayer로 분리한다.
+5) 문자열 표시 폭 계산을 ConsoleText 또는 ConsoleLayout으로 공통화한다.
+6) 필요한 경우 Viewport에서 시간 기반 애니메이션을 분리한다.
+7) 책임 경계가 정해진 뒤 파일을 폴더별로 이동한다.
+
+
+6. 책임 분리 후 권장 폴더 구조
+
+Darkness/
+├─ Program.cs
+├─ App.config
+├─ Core/
+│  ├─ Game.cs
+│  ├─ GameManager.cs
+│  ├─ GamePhase.cs
+│  ├─ EquipmentManager.cs
+│  └─ MonsterBehavior.cs
+├─ Models/
+│  ├─ EncounterAction.cs
+│  ├─ EquipmentSlot.cs
+│  ├─ EquipmentSelectionResult.cs
+│  └─ InventorySelectionResult.cs
+├─ UI/
+│  ├─ View.cs
+│  ├─ Viewport.cs
+│  ├─ Selection.cs
+│  ├─ EncounterScreen.cs
+│  ├─ InventoryScreen.cs
+│  ├─ StatusScreen.cs
+│  ├─ ConsoleInput.cs
+│  ├─ MessagePlayer.cs
+│  └─ ConsoleText.cs
+├─ Content/
+│  └─ Narrative.cs
+├─ Assets/
+│  └─ 스틸컷/
+├─ Documentation/
+│  ├─ 설계.txt
+│  ├─ 기능정의서.docx
+│  └─ 몬스터_조우_기획.txt
+└─ Properties/
+   └─ AssemblyInfo.cs
+
+
+7. 범위 원칙
+
+- 책임을 분리할 때 현재 동작을 변경하지 않는다.
+- 한 단계씩 변경하고 매 단계마다 빌드와 기존 게임 흐름을 확인한다.
+- 아직 필요하지 않은 범용 프레임워크나 추상 계층은 만들지 않는다.
+- 폴더와 네임스페이스는 책임 분리가 끝난 뒤 변경한다.
+- GamePhase는 별도 요청이 있기 전까지 현재 구조를 유지한다.

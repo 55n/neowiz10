@@ -16,3 +16,13 @@ C:\projects\course\Darkness\obj\Debug\Darkness.csproj.CoreCompileInputs.cache
 C:\projects\course\Darkness\obj\Debug\Darkness.exe
 C:\projects\course\Darkness\obj\Debug\Darkness.pdb
 C:\projects\course\Darkness\bin\Debug\Darkness.pdb
+C:\project\neowiz10\Darkness\bin\Debug\Darkness.exe.config
+C:\project\neowiz10\Darkness\bin\Debug\Darkness.exe
+C:\project\neowiz10\Darkness\bin\Debug\Darkness.pdb
+C:\project\neowiz10\Darkness\obj\Debug\Darkness.csproj.AssemblyReference.cache
+C:\project\neowiz10\Darkness\obj\Debug\Darkness.csproj.CoreCompileInputs.cache
+C:\project\neowiz10\Darkness\obj\Debug\Darkness.exe
+C:\project\neowiz10\Darkness\obj\Debug\Darkness.pdb
+C:\project\neowiz10\Darkness\bin\CodexVerify\Darkness.exe.config
+C:\project\neowiz10\Darkness\bin\CodexVerify\Darkness.exe
+C:\project\neowiz10\Darkness\bin\CodexVerify\Darkness.pdb

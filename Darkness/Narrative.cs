@@ -115,9 +115,9 @@ namespace Darkness
             return $"[{item}] 을(를) 얻었습니다";
         }
 
-        public static string DefaultRoomEnterMessage()
+        public static string[] DefaultRoomEnterMessage()
         {
-            return "적막 만이 맴돌고 있다";
+            return new string[] { "공간에는 적막이 맴돌고 있다", "당신은 신중하게 탐색을 시작했다" };
         }
 
         public static string[] SecondRoomEnterMessages()
@@ -163,6 +163,13 @@ namespace Darkness
         {
             switch (selectedEncounterAction)
             {
+                case -1:
+                    if (itemThrown)
+                    {
+                        return "던져진 물건이 부딪히자 ??? 이(가) 그쪽으로 짧게 달려든다";
+                    }
+
+                    return "소지품을 뒤적이는 소리에 ??? 이(가) 신경질적으로 긁어댄다";
                 case 0:
                     return "긁는 소리가 잠깐 멎는다. 놈도 당신의 숨을 듣고 있다";
                 case 1:
@@ -172,30 +179,14 @@ namespace Darkness
                 case 3:
                     return "소리에 반응해 ??? 이(가) 고개를 튼 듯 긁는 방향이 바뀐다";
                 case 4:
-                    if (itemThrown)
-                    {
-                        return "던져진 물건이 부딪히자 ??? 이(가) 그쪽으로 짧게 달려든다";
-                    }
-
-                    return "소지품을 뒤적이는 소리에 ??? 이(가) 신경질적으로 긁어댄다";
-                case 5:
                     return "벽을 더듬는 소리에 맞춰 ??? 이(가) 조심스럽게 위치를 바꾼다";
-                case 6:
+                case 5:
                     return "당신의 공격 의도를 느낀 듯 ??? 이(가) 먼저 튀어나올 준비를 한다";
-                case 7:
+                case 6:
                     return "물러나는 기척을 따라 ??? 이(가) 느리게 추적해 온다";
                 default:
                     return MonsterAction();
             }
-        }
-
-        public static string[] EncounterActions()
-        {
-            return new string[]
-            {
-                "뒤로가기",
-                "손을 뻗어 더듬는다"
-            };
         }
 
         public static string[] MonsterEncounterActions()
@@ -204,9 +195,8 @@ namespace Darkness
             {
                 "기척에 집중한다",
                 "기다린다",
-                "대상에게 다가간다",
+                "살짝 다가간다",
                 "소리를 낸다",
-                "소지품을 사용한다",
                 "손을 뻗어 더듬는다",
                 "전투준비",
                 "돌아간다"
@@ -358,6 +348,31 @@ namespace Darkness
                 "⠈⠑⠉⠁⠀⠐⠀⠄⢳⢷⢝⣗⢯⠯⠳⠫⠳⠯⢳⢽⣫⣗⠅⡅⠕⠓⠝⠆⠄⠀",
                 "⠀⠀⠀⠀⠀⠀⠀⠀⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢌⠢⡁⠂⠀⠀⠀⠀",
                 "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠈⠀⠀⠀⠀⠀"
+            };
+        }
+
+        public static string[] ExitImage()
+        {
+            return new string[]
+            {
+                "                 ;============",
+                "      =@@@@@@@@@@@@@@@@@@@@@@@",
+                "      =@------------------@@@@",
+                "      =@~               @@@@@@",
+                "      =@~*             @@@@@@@",
+                "=@@@; =@~*            @@@@@@@@",
+                " *@@@:  ;@~         @@@@@@@@@@",
+                "    ; ;::::~.     =@@@@@@@@@@@",
+                "    #@@@@@=     =@@@@@@@@@@@@@",
+                "  @@@@@@ *@!    =@@@@@@@@@@@@@",
+                "@@     @@,      =@@@@@@@@@@@@@",
+                "     @@@=@      =@@@@@@@@@@@@@",
+                "       @@@.     =@@@@@@@@@@@@ ",
+                ",   @@@~        =@@@@@@@@@@   ",
+                "; @@$@;         =@@@@@@@@     ",
+                ".@@.  @!        =@@@@@@@      ",
+                "!@-    #@##$    =@@@@@        ",
+                "!@,       ,!=$# =@@@          ",
             };
         }
     }
