@@ -9,6 +9,7 @@ namespace Darkness
 {
     public class GamePhase
     {
+        /* Legacy Exploration state retained with the old implementation.
         private readonly string[] _roomSlots = new string[5];
         private readonly bool[] _revealedSlots = new bool[5];
         private readonly List<string> _itemStacks = new List<string>
@@ -44,61 +45,16 @@ namespace Darkness
         {
             "작은 마석"
         };
-
-        public GameSignal Intro()
+        */
+        
+        public GameSignal Exploration()
         {
-            string[] introImage = Narrative.IntroImage();
+            Console.Write("탐험");
 
-            View.Display.DrawCenteredLineByLine(introImage);
-            Utility.PlayMessages(Narrative.Instruction());
-            Utility.PlayMessages(Narrative.IntroNarration());
-
-            string[] title = Narrative.Title();
-            View.Message.DrawCentered(title);
-            Thread.Sleep(700);
-            int selected = Selection.Choose(
-                View.Message,
-                Narrative.MainMenu(),
-                title.Length);
-
-            if (selected == 0)
-            {
-                PlayFallingEffect(introImage.Length);
-                return GameSignal.START_GAME;
-            }
-            else
-            {
-                Utility.PlayMessages(Narrative.EndNarration());
-                return GameSignal.EXIT_GAME;
-            }
-            
+            return GameSignal.EXIT_GAME;
         }
 
-        private void PlayFallingEffect(int imageHeight)
-        {
-            View.Message.Clear();
-
-            for (int markerRow = 0; markerRow < imageHeight; markerRow++)
-            {
-                View.Message.DrawLineCentered(markerRow, Narrative.FallMarker());
-
-                int imageRow = imageHeight - 1 - markerRow * 2;
-                if (imageRow >= 0)
-                {
-                    View.Display.ClearLine(imageRow);
-                    if (imageRow - 1 >= 0)
-                    {
-                        View.Display.ClearLine(imageRow - 1);
-                    }
-                }
-
-                Thread.Sleep(100);
-            }
-
-            View.Message.DrawLineCentered(imageHeight, Narrative.FallImpact());
-            Thread.Sleep(1000);
-        }
-
+        /* Legacy Exploration implementation retained for reference.
         public GameSignal Exploration()
         {
             string enemy = "낙하";
@@ -423,13 +379,13 @@ namespace Darkness
                 View.Message.Draw("차가운 벽에 기대 잠시 숨을 고를 수 있다");
                 int selectedRestAction = Selection.ChooseLeft(
                     View.Message,
-                    new SelectionOption[]
+                    new SelectionOptionTmp[]
                     {
-                        new SelectionOption("상태창", true, ""),
-                        new SelectionOption("소지품", true, ""),
-                        new SelectionOption("휴식", !restUsed, ""),
-                        new SelectionOption("이동", true, ""),
-                        new SelectionOption("되돌아가기", true, "")
+                        new SelectionOptionTmp("상태창", true, ""),
+                        new SelectionOptionTmp("소지품", true, ""),
+                        new SelectionOptionTmp("휴식", !restUsed, ""),
+                        new SelectionOptionTmp("이동", true, ""),
+                        new SelectionOptionTmp("되돌아가기", true, "")
                     },
                     2,
                     1);
@@ -624,7 +580,9 @@ namespace Darkness
                 }
             }
         }
+        */
 
+        /* Legacy Exploration helper methods retained with the old implementation.
         private GameSignal? HandleCombatPreparation(
             string[] monsterSlots,
             bool[] revealedMonsterSlots)
@@ -702,36 +660,36 @@ namespace Darkness
             return null;
         }
 
-        private SelectionOption[] BuildRoomActions(
+        private SelectionOptionTmp[] BuildRoomActions(
             bool canExplore,
             bool canLoot,
             bool canMove,
             bool canReturn)
         {
-            return new SelectionOption[]
+            return new SelectionOptionTmp[]
             {
-                new SelectionOption("상태창", true, ""),
-                new SelectionOption("소지품", true, ""),
-                new SelectionOption("탐색", canExplore, ""),
-                new SelectionOption("루팅", canLoot, ""),
-                new SelectionOption("이동", canMove, ""),
-                new SelectionOption("되돌아가기", canReturn, "")
+                new SelectionOptionTmp("상태창", true, ""),
+                new SelectionOptionTmp("소지품", true, ""),
+                new SelectionOptionTmp("탐색", canExplore, ""),
+                new SelectionOptionTmp("루팅", canLoot, ""),
+                new SelectionOptionTmp("이동", canMove, ""),
+                new SelectionOptionTmp("되돌아가기", canReturn, "")
             };
         }
 
-        private SelectionOption[] BuildSkillOptions()
+        private SelectionOptionTmp[] BuildSkillOptions()
         {
-            return new SelectionOption[]
+            return new SelectionOptionTmp[]
             {
-                new SelectionOption(
+                new SelectionOptionTmp(
                     "돌아가기",
                     true,
                     ""),
-                new SelectionOption(
+                new SelectionOptionTmp(
                     "수호의 가호",
                     false,
                     "죽음에 이르는 데미지를 받았을 때 한번 생명력을 1로 만든다"),
-                new SelectionOption(
+                new SelectionOptionTmp(
                     "기척 추적",
                     _focus >= 1,
                     "집중력 1을 사용해 고블린의 위치를 짚고 강하게 공격한다")
@@ -850,5 +808,6 @@ namespace Darkness
                    selectedEncounterAction == 5 ||
                    itemThrown;
         }
+        */
     }
 }

@@ -133,7 +133,7 @@ namespace Darkness
             string edge = "│";
             if (!string.IsNullOrEmpty(content) && row == SlotHeight / 2)
             {
-                int contentWidth = GetDisplayWidth(content);
+                int contentWidth = Utility.GetDisplayWidth(content);
                 int leftPadding = (SlotWidth - 2 - contentWidth) / 2;
                 int rightPadding = SlotWidth - 2 - contentWidth - leftPadding;
                 return edge + new string(' ', leftPadding) + content +
@@ -146,17 +146,6 @@ namespace Darkness
             }
 
             return edge + new string(' ', SlotWidth - 2) + edge;
-        }
-
-        private static int GetDisplayWidth(string text)
-        {
-            int width = 0;
-            foreach (char character in text)
-            {
-                width += character <= '\u007e' ? 1 : 2;
-            }
-
-            return width;
         }
 
         private static int GetTotalWidth()

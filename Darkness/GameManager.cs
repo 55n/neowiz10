@@ -13,9 +13,9 @@ namespace Darkness
             GamePhase gamePhase = new GamePhase();
 
             _gameStateDictionary = new Dictionary<GameState, IGameState>();
-            _gameStateDictionary.Add(GameState.INTRO, new Intro(gamePhase));
-            _gameStateDictionary.Add(GameState.PLAYING, new Playing(gamePhase));
-            _gameStateDictionary.Add(GameState.STOP, new Stop());
+            _gameStateDictionary.Add(GameState.INTRO, new IntroState(gamePhase));
+            _gameStateDictionary.Add(GameState.PLAYING, new PlayingState(gamePhase));
+            _gameStateDictionary.Add(GameState.STOP, new StopState());
         }
 
         private void ChangeState(GameState gameState)
@@ -28,6 +28,7 @@ namespace Darkness
         public void Run()
         {
             _gameState = GameState.INTRO;
+
             _gameStateDictionary[_gameState].Enter();
 
             while (_gameState != GameState.STOP)
@@ -60,21 +61,14 @@ namespace Darkness
         void Exit();
     }
 
-    class Intro : IGameState
+    class IntroState : IGameState
     {
-        private GamePhase _gamePhase;
-
-        public Intro(GamePhase gamePhase)
-        {
-            _gamePhase = gamePhase;
-        }
-
         public void Enter()
         {
         }
         public GameState? Action()
         {
-            GameSignal gameSignal = _gamePhase.Intro();
+            GameSignal gameSignal = new Intro().Run();
             if (gameSignal == GameSignal.START_GAME)
             {
                 return GameState.PLAYING;
@@ -85,28 +79,20 @@ namespace Darkness
         public void Exit()
         {
         }
-
-       
     }
 
-    class Playing : IGameState
+    class PlayingState : IGameState
     {
-        private GamePhase _gamePhase;
-        public Playing(GamePhase gamePhase)
-        {
-            _gamePhase = gamePhase;
-        }
-
         public void Enter()
         {
         }
         public GameState? Action()
         {
-            GameSignal gameSignal = _gamePhase.Exploration();
+            /*GameSignal gameSignal = _gamePhase.Exploration();
             if (gameSignal == GameSignal.EXIT_GAME)
             {
                 return GameState.STOP;
-            }
+            }*/
 
             return null;
         }
@@ -115,12 +101,8 @@ namespace Darkness
         }
     }
 
-    class Stop : IGameState
+    class StopState : IGameState
     {
-        public Stop()
-        {
-        }
-
         public void Enter()
         {
         }

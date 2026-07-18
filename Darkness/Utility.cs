@@ -8,6 +8,19 @@ namespace Darkness
 {
     public static class Utility
     {
+        public static int GetDisplayWidth(string text)
+        {
+            int width = 0;
+            foreach (char character in text)
+            {
+                bool singleWidth = character <= '\u007e' ||
+                                   (character >= '\u2500' && character <= '\u259f');
+                width += singleWidth ? 1 : 2;
+            }
+
+            return width;
+        }
+
         public static ConsoleKey ReadInput()
         {
             while (true)
