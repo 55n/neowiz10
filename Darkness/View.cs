@@ -73,27 +73,27 @@ namespace Darkness
         {
             for (int y = 0; y < Height; y++)
             {
-                ConsoleHost.Current.SetCursorPosition(Left, Top + y);
-                ConsoleHost.Current.Write(new string(' ', Width));
+                Console.SetCursorPosition(Left, Top + y);
+                Console.Write(new string(' ', Width));
             }
         }
 
         private static void DrawBorder(int left, int top, int width, int height)
         {
             string horizontal = new string('─', width - 2);
-            ConsoleHost.Current.SetCursorPosition(left, top);
-            ConsoleHost.Current.Write("┌" + horizontal + "┐");
+            Console.SetCursorPosition(left, top);
+            Console.Write("┌" + horizontal + "┐");
 
             for (int row = 1; row < height - 1; row++)
             {
-                ConsoleHost.Current.SetCursorPosition(left, top + row);
-                ConsoleHost.Current.Write("│");
-                ConsoleHost.Current.SetCursorPosition(left + width - 1, top + row);
-                ConsoleHost.Current.Write("│");
+                Console.SetCursorPosition(left, top + row);
+                Console.Write("│");
+                Console.SetCursorPosition(left + width - 1, top + row);
+                Console.Write("│");
             }
 
-            ConsoleHost.Current.SetCursorPosition(left, top + height - 1);
-            ConsoleHost.Current.Write("└" + horizontal + "┘");
+            Console.SetCursorPosition(left, top + height - 1);
+            Console.Write("└" + horizontal + "┘");
         }
 
         public void Draw(string text)
@@ -154,8 +154,8 @@ namespace Darkness
                 throw new ArgumentOutOfRangeException("column");
             }
 
-            ConsoleHost.Current.SetCursorPosition(Left + column, Top + row);
-            ConsoleHost.Current.Write(text);
+            Console.SetCursorPosition(Left + column, Top + row);
+            Console.Write(text);
         }
 
         public void DrawLine(int row, string text)
@@ -165,10 +165,10 @@ namespace Darkness
                 throw new ArgumentOutOfRangeException("row");
             }
 
-            ConsoleHost.Current.SetCursorPosition(Left, Top + row);
-            ConsoleHost.Current.Write(new string(' ', Width));
-            ConsoleHost.Current.SetCursorPosition(Left, Top + row);
-            ConsoleHost.Current.Write(text.Length > Width ? text.Substring(0, Width) : text);
+            Console.SetCursorPosition(Left, Top + row);
+            Console.Write(new string(' ', Width));
+            Console.SetCursorPosition(Left, Top + row);
+            Console.Write(text.Length > Width ? text.Substring(0, Width) : text);
         }
 
         public void DrawLineCentered(int row, string text)
@@ -178,13 +178,13 @@ namespace Darkness
                 throw new ArgumentOutOfRangeException("row");
             }
 
-            ConsoleHost.Current.SetCursorPosition(Left, Top + row);
-            ConsoleHost.Current.Write(new string(' ', Width));
+            Console.SetCursorPosition(Left, Top + row);
+            Console.Write(new string(' ', Width));
 
             int textWidth = Utility.GetDisplayWidth(text);
             int offset = Math.Max(0, (Width - textWidth) / 2);
-            ConsoleHost.Current.SetCursorPosition(Left + offset, Top + row);
-            ConsoleHost.Current.Write(text);
+            Console.SetCursorPosition(Left + offset, Top + row);
+            Console.Write(text);
         }
 
     }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Hero : IEffectTarget
+    public class Hero : IDamageable
     {
         public HeroType Type { get; private set; }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int Evasion { get { return Type.Evasion; } }
         public Inventory Inventory { get; private set; }
         public Dictionary<EquipmentSlot, ItemStack> Equipment { get; private set; }
         public HashSet<string> LearnedSkillIds { get; private set; }
@@ -30,19 +31,9 @@ namespace Darkness
             Effects = effects;
         }
 
-        public void TakeDamage(int damage)
+        public void ReceiveDamage(int damage)
         {
-            int appliedDamage = Math.Max(0, damage);
-            ActiveEffect guardian = Effects.Find(effect =>
-                effect.Type.Function == EffectFunction.PreventDeath);
-            if (guardian != null && appliedDamage >= CurrentHealth)
-            {
-                CurrentHealth = 1;
-                RemoveEffect(guardian.Type.Id);
-                return;
-            }
-
-            CurrentHealth = Math.Max(0, CurrentHealth - appliedDamage);
+            CurrentHealth = Math.Max(0, CurrentHealth - Math.Max(0, damage));
         }
 
         public void RestoreHealth(int amount)
@@ -60,32 +51,47 @@ namespace Darkness
             CurrentFocus = Math.Min(Type.MaxFocus, CurrentFocus + Math.Max(0, amount));
         }
 
-        public void Equip(EquipmentSlot slot, ItemStack itemStack)
+        public bool Equip(EquipmentSlot slot, ItemStack itemStack)
         {
             if (itemStack == null || !Inventory.ItemStacks.Contains(itemStack))
             {
-                return;
+                return false;
             }
 
             ItemStack previous;
             Equipment.TryGetValue(slot, out previous);
             Item equippedItem = itemStack.Item;
-            Inventory.Discard(itemStack, 1);
-            Equipment[slot] = new ItemStack(equippedItem, 1);
-            if (previous != null)
+            if (Inventory.Discard(itemStack, 1) != 1)
             {
-                Inventory.Store(previous);
+                return false;
             }
+
+            if (previous != null && Inventory.Store(previous) != 0)
+            {
+                Inventory.Store(new ItemStack(equippedItem, 1));
+                return false;
+            }
+
+            Equipment[slot] = new ItemStack(equippedItem, 1);
+            return true;
         }
 
-        public void Unequip(EquipmentSlot slot)
+        public bool Unequip(EquipmentSlot slot)
         {
             ItemStack equipment;
-            if (Equipment.TryGetValue(slot, out equipment) && equipment != null &&
-                Inventory.Store(equipment) == 0)
+            if (!Equipment.TryGetValue(slot, out equipment) ||
+                equipment == null)
             {
-                Equipment[slot] = null;
+                return false;
             }
+
+            if (Inventory.Store(equipment) != 0)
+            {
+                return false;
+            }
+
+            Equipment[slot] = null;
+            return true;
         }
 
         public void LearnSkill(string skillId)

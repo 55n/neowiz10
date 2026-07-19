@@ -8,18 +8,22 @@ namespace Darkness
 {
     public class Dungeon
     {
+        public const string StartingRoomId = "room-0";
+
         public Dictionary<string, Room> Rooms { get; private set; }
         public Room CurrentRoom { get; private set; }
 
         public Dungeon()
         {
             RoomData roomData = new RoomData();
+            RoomSlotContentFactory contentFactory =
+                new RoomSlotContentFactory();
 
             Rooms = new Dictionary<string, Room>();
 
             foreach (KeyValuePair<string, RoomType> pair in roomData.RoomTypes)
             {
-                Rooms.Add(pair.Key, new Room(pair.Value));
+                Rooms.Add(pair.Key, new Room(pair.Value, contentFactory));
             }
 
             foreach (KeyValuePair<string, RoomType> roomPair in roomData.RoomTypes)
@@ -44,7 +48,12 @@ namespace Darkness
                 }
             }
 
-            CurrentRoom = Rooms["room-0"];
+            CurrentRoom = Rooms[StartingRoomId];
+        }
+
+        public void Move(RoomDirection direction)
+        {
+            CurrentRoom = CurrentRoom.Edges[direction].TargetRoom;
         }
     }
 }

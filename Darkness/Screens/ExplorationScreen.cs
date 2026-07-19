@@ -23,37 +23,62 @@ namespace Darkness
         BACK, FORWARD, LEFT, RIGHT
     }
 
+    public enum SlotState
+    {
+        REVEALED, UNREVEALED, PRESENCE
+    }
+
     public class ExplorationScreen
     {
         private const int SlotCount = 5;
-        private const int SlotWidth = 8;
+        private const int SlotWidth = 10;
         private const int SlotGap = 2;
         private const int SlotHeight = 7;
         private const int Top = 2;
         public MessagePanel explorationPanel { get; private set; }
 
-        public void InitScreen(Room room)
+
+        private Room currentRoom;
+        private SelectionNode explorationNode;
+        private SelectionOption moveOption;
+
+        public ExplorationScreen()
         {
+        }
+
+        public void InitScreen(Room room, Hero hero)
+        {
+            currentRoom = room;
             explorationPanel = new MessagePanel(
                 View.Message,
-                BuildExplorationSelection(),
+                BuildExplorationSelection(hero),
                 0,
                 2);
+
+            RefreshMoveOption();
+            View.Display.Clear();
+            explorationPanel.ClearSelection();
 
             explorationPanel.PlayNarrations(
                 room.Type.EnterMessages);
 
-            DrawSlots(View.Display, room.Type.Slots, );
+            DrawSlots(View.Display, room.Slots);
 
             explorationPanel.OpenSelection(
-                explorationPanel.SelectionMenu.CurrentNode);
+                explorationNode);
         }
 
-        public SelectionMenu BuildExplorationSelection()
+        public SelectionMenu BuildExplorationSelection(Hero hero)
         {
-            SelectionNode explorationNode = new SelectionNode(
+            string roomDescription =
+                currentRoom != null && currentRoom.Type.EnterMessages.Count > 0
+                    ? currentRoom.Type.EnterMessages[
+                        currentRoom.Type.EnterMessages.Count - 1]
+                    : "";
+
+            explorationNode = new SelectionNode(
                 "exploration-node",
-                "",
+                roomDescription,
                 new List<SelectionOption>(),
                 null);
 
@@ -75,23 +100,37 @@ namespace Darkness
                 new List<SelectionOption>(),
                 explorationNode);
 
-            explorationNode.Options.Add(new SelectionOption(
-                "상태창", "", true, null, ExplorationSelectionOptions.STATUS));
-            explorationNode.Options.Add(new SelectionOption(
-                "소지품", "", true, null, ExplorationSelectionOptions.INVENTORY));
+            explorationNode.Options.Add(SelectionOption.DynamicNode(
+                "상태창",
+                "",
+                true,
+                () => StatusScreen.BuildNode(hero, explorationNode)));
+            explorationNode.Options.Add(SelectionOption.DynamicNode(
+                "소지품",
+                "",
+                true,
+                () => InventoryScreen.BuildNode(hero, explorationNode)));
             explorationNode.Options.Add(new SelectionOption(
                 "행동", "", true, encounterNode, ExplorationSelectionOptions.ENCOUNTER));
+            moveOption = new SelectionOption(
+                "이동", "", false, moveNode, ExplorationSelectionOptions.MOVE);
+            explorationNode.Options.Add(moveOption);
             explorationNode.Options.Add(new SelectionOption(
-                "이동", "", true, moveNode, ExplorationSelectionOptions.MOVE));
-            explorationNode.Options.Add(new SelectionOption(
-                "뒤로가기", "", true, null, ExplorationSelectionOptions.BACK));
+                "뒤로가기", "",
+                currentRoom != null &&
+                currentRoom.Type.Id != Dungeon.StartingRoomId,
+                null,
+                ExplorationSelectionOptions.BACK));
 
             encounterNode.Options.Add(new SelectionOption(
                 "기다려본다", "", true, null, EncounterSelectionOptions.WAIT));
             encounterNode.Options.Add(new SelectionOption(
                 "말을 건다", "", true, null, EncounterSelectionOptions.TALK));
-            encounterNode.Options.Add(new SelectionOption(
-                "무언가를 던진다", "", true, null, EncounterSelectionOptions.THROW));
+            encounterNode.Options.Add(SelectionOption.DynamicNode(
+                "무언가를 던진다",
+                "",
+                hero.Inventory.ItemStacks.Count > 0,
+                () => InventoryScreen.BuildThrowNode(hero, encounterNode)));
             encounterNode.Options.Add(new SelectionOption(
                 "손을 뻗어 더듬는다", "", true, null, EncounterSelectionOptions.SEARCH));
             encounterNode.Options.Add(new SelectionOption(
@@ -109,44 +148,116 @@ namespace Darkness
                 "취소", "", true, encounterNode, AttackSelectionOptions.CANCEL));
 
             moveNode.Options.Add(new SelectionOption(
-                "돌아간다", "돌아간다", true, null, MoveSelectionOptions.BACK));
+                "돌아간다", "돌아간다",
+                HasAvailableEdge(RoomDirection.BACK),
+                null,
+                MoveSelectionOptions.BACK));
             moveNode.Options.Add(new SelectionOption(
-                "앞으로 간다", "", true, null, MoveSelectionOptions.FORWARD));
+                "앞으로 간다", "",
+                HasAvailableEdge(RoomDirection.FORWARD),
+                null,
+                MoveSelectionOptions.FORWARD));
             moveNode.Options.Add(new SelectionOption(
-                "왼쪽으로 간다", "", true, null, MoveSelectionOptions.LEFT));
+                "왼쪽으로 간다", "",
+                HasAvailableEdge(RoomDirection.LEFT),
+                null,
+                MoveSelectionOptions.LEFT));
             moveNode.Options.Add(new SelectionOption(
-                "오른쪽으로 간다", "", true, null, MoveSelectionOptions.RIGHT));
+                "오른쪽으로 간다", "",
+                HasAvailableEdge(RoomDirection.RIGHT),
+                null,
+                MoveSelectionOptions.RIGHT));
 
             return new SelectionMenu(explorationNode);
         }
 
-        public static int ChooseSlot(
-            Viewport view,
-            string[] slotContents,
-            bool[] revealedSlots)
+        public void OpenExplorationSelection()
         {
-            return ChooseSlot(view, slotContents, revealedSlots, true);
+            if (explorationNode != null)
+            {
+                explorationPanel.OpenSelection(explorationNode);
+            }
         }
 
-        public static int ChooseAnySlot(
-            Viewport view,
-            string[] slotContents,
-            bool[] revealedSlots)
+        private bool HasAvailableEdge(RoomDirection direction)
         {
-            return ChooseSlot(view, slotContents, revealedSlots, false);
+            if (currentRoom == null)
+            {
+                return false;
+            }
+
+            return currentRoom.Edges.ContainsKey(direction);
         }
 
-        private static int ChooseSlot(
-            Viewport view,
-            string[] slotContents,
-            bool[] revealedSlots,
-            bool skipRevealedSlots)
+        public void SetSlotState(int slotIndex, SlotState state)
         {
-            int selected = skipRevealedSlots
-                ? Array.FindIndex(revealedSlots, revealed => !revealed)
-                : 0;
+            if (currentRoom == null ||
+                slotIndex < 0 || slotIndex >= currentRoom.Slots.Count)
+            {
+                return;
+            }
 
-            DrawSlots(view, slotContents, revealedSlots);
+            currentRoom.Slots[slotIndex].SetState(state);
+            RefreshMoveOption();
+            DrawSlots(View.Display, currentRoom.Slots);
+            explorationPanel.DrawSelection();
+        }
+
+        public void RefreshRoom()
+        {
+            if (currentRoom == null)
+            {
+                return;
+            }
+
+            RefreshMoveOption();
+            DrawSlots(View.Display, currentRoom.Slots);
+            explorationPanel.DrawSelection();
+        }
+
+        private void RefreshMoveOption()
+        {
+            if (moveOption == null || currentRoom == null)
+            {
+                return;
+            }
+
+            moveOption.SetEnabled(CanMove(currentRoom.Slots));
+        }
+
+        private bool CanMove(List<RoomSlot> slots)
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                RoomSlot slot = slots[i];
+                if (slot.Type.HasDoor &&
+                    slot.IsEmpty &&
+                    slot.State == SlotState.REVEALED)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public int ChooseSlot()
+        {
+            if (currentRoom == null)
+            {
+                throw new InvalidOperationException(
+                    "슬롯을 선택할 현재 방이 없습니다.");
+            }
+
+            return ChooseSlot(View.Display, currentRoom.Slots);
+        }
+
+        private int ChooseSlot(
+            Viewport view,
+            List<RoomSlot> slots)
+        {
+            int selected = 0;
+            DrawSlots(view, slots);
             DrawSelector(view, selected);
 
             while (true)
@@ -156,22 +267,15 @@ namespace Darkness
 
                 if (input == ConsoleKey.LeftArrow)
                 {
-                    do
-                    {
-                        selected = (selected - 1 + SlotCount) % SlotCount;
-                    }
-                    while (skipRevealedSlots && revealedSlots[selected]);
+                    selected = (selected - 1 + SlotCount) % SlotCount;
                 }
                 else if (input == ConsoleKey.RightArrow)
                 {
-                    do
-                    {
-                        selected = (selected + 1) % SlotCount;
-                    }
-                    while (skipRevealedSlots && revealedSlots[selected]);
+                    selected = (selected + 1) % SlotCount;
                 }
                 else if (input == ConsoleKey.Enter)
                 {
+                    view.ClearLine(Top + SlotHeight);
                     return selected;
                 }
 
@@ -182,10 +286,9 @@ namespace Darkness
             }
         }
 
-        public static void DrawSlots(
+        public void DrawSlots(
             Viewport view,
-            string[] slotContents,
-            bool[] revealedSlots)
+            List<RoomSlot> slots)
         {
             int left = (view.Width - GetTotalWidth()) / 2;
 
@@ -194,23 +297,23 @@ namespace Darkness
             {
                 view.DrawLine(
                     Top + row,
-                    BuildSlotLine(slotContents, revealedSlots, row, left));
+                    BuildSlotLine(slots, row, left));
             }
         }
 
-        private static void DrawSelector(Viewport view, int selected)
+        private void DrawSelector(Viewport view, int selected)
         {
             int selectorRow = Top + SlotHeight;
             int left = (view.Width - GetTotalWidth()) / 2;
-            int markerColumn = left + selected * (SlotWidth + SlotGap) + 3;
+            int markerColumn = left + selected * (SlotWidth + SlotGap) +
+                               SlotWidth / 2 - 1;
 
             view.ClearLine(selectorRow);
             view.DrawAt(selectorRow, markerColumn, "▲");
         }
 
-        private static string BuildSlotLine(
-            string[] slotContents,
-            bool[] revealedSlots,
+        private string BuildSlotLine(
+            List<RoomSlot> slots,
             int row,
             int left)
         {
@@ -221,45 +324,85 @@ namespace Darkness
                 {
                     line.Append(new string(' ', SlotGap));
                 }
-                line.Append(BuildSlot(slotContents[i], revealedSlots[i], row));
+                line.Append(BuildSlot(slots[i], row));
             }
 
             return line.ToString();
         }
 
-        private static string BuildSlot(string content, bool revealed, int row)
+        private string BuildSlot(RoomSlot slot, int row)
         {
+            SlotState slotState = slot.State;
             if (row == 0)
             {
-                return revealed ? "┌──────┐" : "┌─  ─  ┐";
+                return slotState == SlotState.REVEALED
+                    ? "┌" + new string('─', SlotWidth - 2) + "┐"
+                    : "┌" + BuildHiddenBorder() + "┐";
             }
 
             if (row == SlotHeight - 1)
             {
-                return revealed ? "└──────┘" : "└─  ─  ┘";
+                return slotState == SlotState.REVEALED
+                    ? "└" + new string('─', SlotWidth - 2) + "┘"
+                    : "└" + BuildHiddenBorder() + "┘";
             }
 
             string edge = "│";
-            if (!string.IsNullOrEmpty(content) && row == SlotHeight / 2)
+
+            string contentName = "";
+
+            if (slotState == SlotState.REVEALED)
             {
-                int contentWidth = Utility.GetDisplayWidth(content);
+                if (slot.Content != null)
+                {
+                    contentName = slot.Content.Name;
+                }
+                else if (slot.Type.HasDoor)
+                {
+                    contentName = ExplorationMessages.Door();
+                }
+            }
+            else if (slotState == SlotState.PRESENCE)
+            {
+                contentName = "???";
+            }
+
+            if (row == SlotHeight / 2)
+            {
+                int contentWidth = Utility.GetDisplayWidth(contentName);
                 int leftPadding = (SlotWidth - 2 - contentWidth) / 2;
                 int rightPadding = SlotWidth - 2 - contentWidth - leftPadding;
-                return edge + new string(' ', leftPadding) + content +
+                return edge + new string(' ', leftPadding) + contentName +
                        new string(' ', rightPadding) + edge;
             }
 
-            if (!revealed)
+            if (!(slotState == SlotState.REVEALED))
             {
-                return row % 2 == 1 ? "│      │" : "        ";
+                return row % 2 == 1
+                    ? edge + new string(' ', SlotWidth - 2) + edge
+                    : new string(' ', SlotWidth);
             }
 
             return edge + new string(' ', SlotWidth - 2) + edge;
         }
 
-        private static int GetTotalWidth()
+        private string BuildHiddenBorder()
+        {
+            const string pattern = "─  ";
+            StringBuilder border = new StringBuilder();
+            while (border.Length < SlotWidth - 2)
+            {
+                border.Append(pattern);
+            }
+
+            return border.ToString(0, SlotWidth - 2);
+        }
+
+        private  int GetTotalWidth()
         {
             return SlotCount * SlotWidth + (SlotCount - 1) * SlotGap;
         }
+
+
     }
 }

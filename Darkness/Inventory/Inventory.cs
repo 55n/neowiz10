@@ -66,5 +66,54 @@ namespace Darkness
 
             return removed;
         }
+
+        public int TransferTo(
+            ItemStack itemStack,
+            int count,
+            Inventory target)
+        {
+            if (itemStack == null ||
+                target == null ||
+                ReferenceEquals(this, target) ||
+                !ItemStacks.Contains(itemStack))
+            {
+                return 0;
+            }
+
+            int requested = Math.Min(itemStack.Count, Math.Max(0, count));
+            if (requested == 0)
+            {
+                return 0;
+            }
+
+            int remaining = target.Store(
+                new ItemStack(itemStack.Item, requested));
+            int transferred = requested - remaining;
+            if (transferred > 0)
+            {
+                Discard(itemStack, transferred);
+            }
+
+            return transferred;
+        }
+
+        public void TransferAllTo(Inventory target)
+        {
+            if (target == null || ReferenceEquals(this, target))
+            {
+                return;
+            }
+
+            foreach (ItemStack itemStack in ItemStacks.ToArray())
+            {
+                int originalCount = itemStack.Count;
+                int remaining = target.Store(itemStack);
+                int transferred = originalCount - remaining;
+                if (transferred > 0)
+                {
+                    Discard(itemStack, transferred);
+                }
+            }
+        }
     }
 }

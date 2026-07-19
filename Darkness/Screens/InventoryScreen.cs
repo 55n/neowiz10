@@ -1,18 +1,20 @@
-using System;
 using System.Collections.Generic;
 
 namespace Darkness
 {
-    public enum InventoryOutcome
-    {
-        None,
-        Used,
-        Thrown
-    }
-
     public static class InventoryScreen
     {
-        private const int InnerWidth = 28;
+        private static readonly string[] InventoryActions =
+        {
+            "선택 취소",
+            "사용하기",
+            "던지기"
+        };
+        private static readonly string[] ThrowItemActions =
+        {
+            "던진다",
+            "도로 집어넣는다"
+        };
 
         public static SelectionNode BuildNode(Hero hero, SelectionNode parent)
         {
@@ -40,7 +42,7 @@ namespace Darkness
             }
 
             node.Options.Add(new SelectionOption(
-                Narrative.BackAction(),
+                "뒤로가기",
                 "이전 화면으로 돌아간다.",
                 true,
                 parent,
@@ -79,7 +81,7 @@ namespace Darkness
             }
 
             node.Options.Add(new SelectionOption(
-                Narrative.BackAction(),
+                "뒤로가기",
                 "장비 선택을 취소한다.",
                 true,
                 parent,
@@ -87,16 +89,54 @@ namespace Darkness
             return node;
         }
 
+        public static SelectionNode BuildThrowNode(
+            Hero hero,
+            SelectionNode parent)
+        {
+            SelectionNode node = new SelectionNode(
+                "throw_inventory",
+                "던질 아이템을 선택한다.",
+                new List<SelectionOption>(),
+                parent);
+
+            foreach (ItemStack itemStack in hero.Inventory.ItemStacks)
+            {
+                node.Options.Add(new SelectionOption(
+                    GetItemText(itemStack),
+                    itemStack.Item.Type.Description,
+                    true,
+                    null,
+                    new ScreenSelection(
+                        ScreenAction.ThrowItem,
+                        itemStack,
+                        null)));
+            }
+
+            node.Options.Add(new SelectionOption(
+                "뒤로가기",
+                "아이템 던지기를 취소한다.",
+                true,
+                parent,
+                new ScreenSelection(ScreenAction.Cancel, null, null)));
+            return node;
+        }
+
         private static SelectionOption BuildItemOption(
             ItemStack itemStack,
             SelectionNode parent)
         {
-            string[] actions = Narrative.InventoryActions();
+            string[] actions = InventoryActions;
+            string[] throwActions = ThrowItemActions;
             SelectionNode actionNode = new SelectionNode(
                 "inventory_item_" + itemStack.Item.Type.Id,
                 itemStack.Item.Type.Description,
                 new List<SelectionOption>(),
                 parent);
+            SelectionNode throwNode = new SelectionNode(
+                "inventory_throw_" + itemStack.Item.Type.Id,
+                InventoryMessages.ThrowItemPrompt(itemStack.Item.Type.Name),
+                new List<SelectionOption>(),
+                actionNode);
 
             actionNode.Options.Add(new SelectionOption(
                 actions[0],
@@ -114,8 +154,19 @@ namespace Darkness
                 actions[2],
                 "아이템을 던진다.",
                 true,
+                throwNode));
+
+            throwNode.Options.Add(new SelectionOption(
+                throwActions[0],
+                "아이템을 던진다.",
+                true,
                 null,
                 new ScreenSelection(ScreenAction.ThrowItem, itemStack, null)));
+            throwNode.Options.Add(new SelectionOption(
+                throwActions[1],
+                "아이템을 다시 소지품에 넣는다.",
+                true,
+                actionNode));
 
             return new SelectionOption(
                 GetItemText(itemStack),
@@ -143,163 +194,5 @@ namespace Darkness
                 ? itemStack.Item.Type.Name + " x" + itemStack.Count
                 : itemStack.Item.Type.Name;
         }
-
-        public static InventoryOutcome Show(
-            Viewport view,
-            List<string> itemStacks,
-            int slotCount)
-        {
-            return Show(view, itemStacks, slotCount, null, null, null);
-        }
-
-        public static InventoryOutcome Show(
-            Viewport view,
-            List<string> itemStacks,
-            int slotCount,
-            Viewport targetView,
-            string[] targetSlots,
-            bool[] revealedTargetSlots)
-        {
-            int selected = 0;
-            Draw(view, itemStacks, slotCount, selected);
-
-            while (true)
-            {
-                ConsoleKey input = Utility.ReadInput();
-                int previous = selected;
-                int selectionCount = slotCount + 1;
-
-                if (input == ConsoleKey.UpArrow)
-                {
-                    selected = (selected - 1 + selectionCount) % selectionCount;
-                }
-                else if (input == ConsoleKey.DownArrow)
-                {
-                    selected = (selected + 1) % selectionCount;
-                }
-                else if (input == ConsoleKey.Enter)
-                {
-                    if (selected == slotCount)
-                    {
-                        return InventoryOutcome.None;
-                    }
-
-                    if (selected >= itemStacks.Count)
-                    {
-                        continue;
-                    }
-
-                    int selectedAction = Selection.ChooseLeft(
-                        view,
-                        Narrative.InventoryActions());
-
-                    if (selectedAction == 0)
-                    {
-                        Draw(view, itemStacks, slotCount, selected);
-                        continue;
-                    }
-
-                    if (selectedAction == 2)
-                    {
-                        string itemStack = itemStacks[selected];
-                        view.Draw(Narrative.ThrowItemPrompt(itemStack));
-                        int selectedThrowAction = Selection.ChooseLeft(
-                            view,
-                            Narrative.ThrowItemActions(),
-                            1);
-
-                        if (selectedThrowAction == 0)
-                        {
-                            if (targetView != null &&
-                                targetSlots != null &&
-                                revealedTargetSlots != null)
-                            {
-                                EncounterScreen.ChooseAnySlot(
-                                    targetView,
-                                    targetSlots,
-                                    revealedTargetSlots);
-                            }
-
-                            Utility.PlayMessage(Narrative.ItemThrown(itemStack));
-                            return InventoryOutcome.Thrown;
-                        }
-
-                        Draw(view, itemStacks, slotCount, selected);
-                        continue;
-                    }
-
-                    return InventoryOutcome.Used;
-                }
-
-                if (previous != selected)
-                {
-                    DrawSelectionLine(
-                        view,
-                        itemStacks,
-                        slotCount,
-                        previous,
-                        false);
-                    DrawSelectionLine(
-                        view,
-                        itemStacks,
-                        slotCount,
-                        selected,
-                        true);
-                }
-            }
-        }
-
-        private static void Draw(
-            Viewport view,
-            List<string> itemStacks,
-            int slotCount,
-            int selected)
-        {
-            string[] lines = new string[slotCount + 3];
-            lines[0] = "┌" + new string('─', InnerWidth) + "┐";
-
-            for (int i = 0; i < slotCount; i++)
-            {
-                string itemStack = i < itemStacks.Count ? itemStacks[i] : "";
-                lines[i + 1] = BuildSlotLine(itemStack, i == selected);
-            }
-
-            lines[slotCount + 1] = "└" + new string('─', InnerWidth) + "┘";
-            lines[slotCount + 2] = BuildBackLine(selected == slotCount);
-
-            view.Draw(lines);
-        }
-
-        private static void DrawSelectionLine(
-            Viewport view,
-            List<string> itemStacks,
-            int slotCount,
-            int selection,
-            bool selected)
-        {
-            if (selection == slotCount)
-            {
-                view.DrawLine(slotCount + 2, BuildBackLine(selected));
-                return;
-            }
-
-            string itemStack = selection < itemStacks.Count
-                ? itemStacks[selection]
-                : "";
-            view.DrawLine(selection + 1, BuildSlotLine(itemStack, selected));
-        }
-
-        private static string BuildBackLine(bool selected)
-        {
-            return (selected ? "▶ " : "  ") + Narrative.BackAction();
-        }
-
-        private static string BuildSlotLine(string itemStack, bool selected)
-        {
-            string content = (selected ? "▶ " : "  ") + itemStack;
-            int padding = Math.Max(0, InnerWidth - Utility.GetDisplayWidth(content));
-            return "│" + content + new string(' ', padding) + "│";
-        }
-
     }
 }

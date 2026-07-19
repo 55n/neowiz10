@@ -12,9 +12,11 @@ namespace Darkness
         {
             ItemTypes = new List<ItemType>
             {
+                new ItemType("ordinary_sword", "평범한 한손검", "특별할 것 없는 평범한 한손검이다.", ItemCategory.Weapon, 10, 1, false, 4, 3, 0, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("worn_sword", "닳은 한손검", "추락 후에도 손에 남은 낡은 검이다.", ItemCategory.Weapon, 8, 1, false, 4, 3, 0, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("ordinary_armor", "평범한 갑옷", "여러 번 수선한 흔적이 있는 보통 갑옷이다.", ItemCategory.Armor, 10, 1, false, 7, 0, 2, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("cracked_guardian_charm", "금이 간 수호의 부적", "치명적인 피해를 한 번 막아준다. 마석을 이용해서 충전할 수 있다.", ItemCategory.Accessory, 30, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("guardian_charm", "수호의 부적", "치명적인 피해를 한 번 막아주는 부적이다.", ItemCategory.Accessory, 50, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("cracked_guardian_charm", "금이 간 수호의 부적", "[수호의 가호] 스킬을 사용할 수 있게 해준다.", ItemCategory.Accessory, 30, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("magic_stone", "마석", "몬스터에게서 얻는 응축된 마력이다.", ItemCategory.Consumable, 1, 99, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("monster_bait", "몬스터 미끼", "피와 살점으로 만든 미끼로 강한 먹이 냄새가 난다.", ItemCategory.Consumable, 3, 5, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Lure),
                 new ItemType("troll_oil", "트롤 기름", "체취를 가리거나 다른 위치에 강한 냄새를 남긴다.", ItemCategory.Consumable, 6, 3, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.MaskScent, ItemFunction.CreateScent),

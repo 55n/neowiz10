@@ -15,10 +15,6 @@ namespace Darkness
         public int Speed { get; private set; }
         public int Accuracy { get; private set; }
         public int Evasion { get; private set; }
-        public int InitialSearchTurns { get; private set; }
-        public int MaxSearchTurns { get; private set; }
-        public List<MonsterSense> Senses { get; private set; }
-        public MonsterReactionSet Reactions { get; private set; }
         public List<EffectApplication> AttackEffects { get; private set; }
         public MonsterFunction AttackFunction { get; private set; }
         public List<string> FocusSkillIds { get; private set; }
@@ -34,10 +30,6 @@ namespace Darkness
             int speed,
             int accuracy,
             int evasion,
-            int initialSearchTurns,
-            int maxSearchTurns,
-            List<MonsterSense> senses,
-            MonsterReactionSet reactions,
             List<EffectApplication> attackEffects,
             MonsterFunction attackFunction,
             List<string> focusSkillIds)
@@ -52,10 +44,6 @@ namespace Darkness
             Speed = speed;
             Accuracy = accuracy;
             Evasion = evasion;
-            InitialSearchTurns = initialSearchTurns;
-            MaxSearchTurns = maxSearchTurns;
-            Senses = senses;
-            Reactions = reactions;
             AttackEffects = attackEffects;
             AttackFunction = attackFunction;
             FocusSkillIds = focusSkillIds;

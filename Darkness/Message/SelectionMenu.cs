@@ -31,11 +31,15 @@ namespace Darkness
 
         public void Confirm()
         {
-            if (SelectedOption != null &&
-                SelectedOption.Enabled &&
-                SelectedOption.NextNode != null)
+            if (SelectedOption == null || !SelectedOption.Enabled)
             {
-                Open(SelectedOption.NextNode);
+                return;
+            }
+
+            SelectionNode nextNode = SelectedOption.GetNextNode();
+            if (nextNode != null)
+            {
+                Open(nextNode);
             }
         }
 

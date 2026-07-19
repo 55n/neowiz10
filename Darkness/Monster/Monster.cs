@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Monster : IEffectTarget, IEncounterActor, IActionReactor, IRoomObject
+    public class Monster : IDamageable, ISlotContent
     {
         public MonsterType Type { get; private set; }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int Evasion { get { return Type.Evasion; } }
         public Inventory Inventory { get; private set; }
-        public MonsterAwareness Awareness { get; private set; }
-        public int SearchTurnsRemaining { get; private set; }
         public List<ActiveEffect> Effects { get; private set; }
+        public MonsterState State { get; private set; }
+        public MonsterActionPlan NextAction { get; private set; }
+        public IMonsterBehavior Behavior { get; private set; }
         public bool IsAlive { get { return CurrentHealth > 0; } }
         public bool CanAct { get { return IsAlive; } }
         public string Id { get { return Type.Id; } }
@@ -21,83 +23,27 @@ namespace Darkness
         public Monster(
             MonsterType type,
             Inventory inventory,
-            List<ActiveEffect> effects)
+            List<ActiveEffect> effects,
+            IMonsterBehavior behavior)
         {
+            if (behavior == null)
+            {
+                throw new ArgumentNullException("behavior");
+            }
+
             Type = type;
             CurrentHealth = type.MaxHealth;
             CurrentFocus = type.MaxFocus;
             Inventory = inventory;
             Effects = effects;
-            Awareness = MonsterAwareness.Indifferent;
+            Behavior = behavior;
+            State = MonsterState.Indifferent;
+            NextAction = MonsterActionPlan.None();
         }
 
-        protected Monster(
-            MonsterType type,
-            Inventory inventory,
-            List<ActiveEffect> effects,
-            string expectedTypeId)
-            : this(type, inventory, effects)
-        {
-            if (type == null || type.Id != expectedTypeId)
-            {
-                throw new ArgumentException("Monster type does not match concrete monster class.", "type");
-            }
-        }
-
-        public void React(MonsterReaction reaction)
-        {
-            if (!IsAlive || reaction == null)
-            {
-                return;
-            }
-
-            if (reaction.Type == MonsterReactionType.Attack)
-            {
-                BeginAttack();
-                return;
-            }
-
-            if (Awareness == MonsterAwareness.Indifferent)
-            {
-                if (reaction.AlertChange <= 0)
-                {
-                    return;
-                }
-
-                Awareness = MonsterAwareness.Searching;
-                SearchTurnsRemaining = Type.InitialSearchTurns - reaction.AlertChange;
-            }
-            else if (Awareness == MonsterAwareness.Searching)
-            {
-                SearchTurnsRemaining -= reaction.AlertChange;
-            }
-
-            if (Awareness != MonsterAwareness.Searching)
-            {
-                return;
-            }
-
-            if (SearchTurnsRemaining <= 0)
-            {
-                BeginAttack();
-            }
-            else if (SearchTurnsRemaining > Type.MaxSearchTurns)
-            {
-                Awareness = MonsterAwareness.Indifferent;
-                SearchTurnsRemaining = 0;
-            }
-        }
-
-        public void BeginAttack()
-        {
-            Awareness = MonsterAwareness.Attacking;
-            SearchTurnsRemaining = 0;
-        }
-
-        public bool TakeDamage(int damage)
+        public void ReceiveDamage(int damage)
         {
             CurrentHealth = Math.Max(0, CurrentHealth - Math.Max(0, damage));
-            return !IsAlive;
         }
 
         public void ApplyEffect(ActiveEffect effect)
@@ -125,34 +71,74 @@ namespace Darkness
             Effects.RemoveAll(effect => effect.Type.Id == effectId);
         }
 
-        public virtual void Evaluate(
-            EncounterActionContext context,
-            IList<ReactionResult> results)
+        public virtual SlotInteractionResult React(
+            PlayerActionContext context)
         {
-            MonsterReaction reaction = GetReaction(Type.Reactions, context.Action.Type);
-            if (reaction != null)
+            SlotInteractionResult result = new SlotInteractionResult();
+            if (!IsAlive)
             {
-                results.Add(ReactionResult.React(this, reaction));
+                return result;
             }
+
+            if (context.Action == PlayerActionType.Attack)
+            {
+                result.Attacks.Add(new AttackContext(
+                    context.Actor,
+                    this,
+                    context.Actor.Type.Attack,
+                    context.Actor.Type.Accuracy,
+                    Type.Evasion));
+            }
+
+            return result;
         }
 
-        private static MonsterReaction GetReaction(
-            MonsterReactionSet reactions,
-            EncounterActionType actionType)
+        public MonsterDecision Decide(MonsterPerception perception)
         {
-            switch (actionType)
+            if (!CanAct)
             {
-                case EncounterActionType.Focus: return reactions.Focus;
-                case EncounterActionType.Wait: return reactions.Wait;
-                case EncounterActionType.Approach: return reactions.Approach;
-                case EncounterActionType.MakeNoise: return reactions.MakeNoise;
-                case EncounterActionType.UseItem:
-                case EncounterActionType.ThrowItem:
-                case EncounterActionType.UseSkill: return reactions.UseItem;
-                case EncounterActionType.Search: return reactions.Search;
-                case EncounterActionType.Attack: return reactions.Attack;
-                default: return null;
+                NextAction = MonsterActionPlan.None();
+                return MonsterDecision.None(State);
             }
+
+            MonsterDecision decision = Behavior.Decide(this, perception) ??
+                MonsterDecision.None(State);
+            State = decision.NextState;
+            NextAction = decision.Action;
+            return decision;
         }
+
+        public SlotInteractionResult Act(Hero target)
+        {
+            SlotInteractionResult result = new SlotInteractionResult();
+            MonsterActionPlan action = NextAction;
+            NextAction = MonsterActionPlan.None();
+
+            if (!CanAct || action == null ||
+                action.Type == MonsterActionType.None ||
+                action.Type == MonsterActionType.Wait)
+            {
+                return result;
+            }
+
+            if (action.Type == MonsterActionType.Attack)
+            {
+                result.Attacks.Add(new AttackContext(
+                    this,
+                    target,
+                    Type.Attack,
+                    Type.Accuracy,
+                    target.Type.Evasion));
+            }
+            else if (action.Type == MonsterActionType.Move &&
+                     action.TargetSlot != null)
+            {
+                result.MonsterMoves.Add(
+                    new MonsterMoveRequest(this, action.TargetSlot));
+            }
+
+            return result;
+        }
+
     }
 }

@@ -51,7 +51,10 @@ namespace Darkness
             SelectionNode titleNode = new SelectionNode("title_menu", "시작화면메뉴", titleOptions, null);
             SelectionMenu titleMenu = new SelectionMenu(titleNode);
 
-            MessagePanel titlePanel = new MessagePanel(View.Message, titleMenu, 1, 3);
+            TitleMenuPanel titlePanel = new TitleMenuPanel(
+                View.Message,
+                titleMenu,
+                3);
 
             IntroSelectionOptions selectedOptionValue = (IntroSelectionOptions)titlePanel.ReadSelection();
 

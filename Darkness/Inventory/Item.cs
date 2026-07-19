@@ -10,5 +10,15 @@ namespace Darkness
         {
             Type = type;
         }
+
+        public void Transform(ItemType transformedType)
+        {
+            if (transformedType == null)
+            {
+                throw new ArgumentNullException("transformedType");
+            }
+
+            Type = transformedType;
+        }
     }
 }

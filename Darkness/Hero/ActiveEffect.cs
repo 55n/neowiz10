@@ -5,17 +5,12 @@ namespace Darkness
     public class ActiveEffect
     {
         public EffectType Type { get; private set; }
-        public int RemainingDuration { get; private set; }
         public int StackCount { get; private set; }
 
-        public ActiveEffect(
-            EffectType type,
-            int remainingDuration,
-            int stackCount)
+        public ActiveEffect(EffectType type)
         {
             Type = type;
-            RemainingDuration = remainingDuration;
-            StackCount = Math.Max(1, Math.Min(type.MaxStackCount, stackCount));
+            StackCount = 1;
         }
 
         public void AddStack()
@@ -23,15 +18,25 @@ namespace Darkness
             StackCount = Math.Min(Type.MaxStackCount, StackCount + 1);
         }
 
-        public bool Tick(EffectDurationUnit unit)
+        public virtual bool ModifyOutgoingDamage(DamageContext context)
         {
-            if (Type.DurationScope == EffectDurationScope.Infinite || Type.DurationUnit != unit)
-            {
-                return false;
-            }
-
-            RemainingDuration = Math.Max(0, RemainingDuration - 1);
-            return RemainingDuration == 0;
+            return false;
         }
+
+        public virtual bool ModifyOutgoingAttack(AttackContext context)
+        {
+            return false;
+        }
+
+        public virtual bool ModifyIncomingAttack(AttackContext context)
+        {
+            return false;
+        }
+
+        public virtual bool ModifyIncomingDamage(DamageContext context)
+        {
+            return false;
+        }
+
     }
 }

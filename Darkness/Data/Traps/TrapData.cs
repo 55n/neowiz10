@@ -14,8 +14,9 @@ namespace Darkness
             {
                 new TrapType(
                     "arrow_trap",
-                    "화살 함정",
+                    "화살함정",
                     "공격하거나 손으로 더듬으면 벽에서 화살이 발사된다.",
+                    5,
                     5,
                     85,
                     true,

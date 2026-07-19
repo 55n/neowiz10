@@ -15,6 +15,7 @@ namespace Darkness
                 new List<string>
                 {
                     "어두운 공간에는 적막 만이 흐르고 있다",
+                    "당신은 공간을 탐색하기로 했다",
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -22,11 +23,11 @@ namespace Darkness
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", true),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", true),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
                 });
 
             RoomType room1 = new RoomType(
@@ -40,15 +41,16 @@ namespace Darkness
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
+                    { RoomDirection.BACK, new RoomEdgeType("room-0", false) },
                     { RoomDirection.FORWARD, new RoomEdgeType("room-2", false) }
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Monster, "goblin-0", true),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Monster, "lost_goblin", true),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
                 });
 
             RoomType room2 = new RoomType(
@@ -61,15 +63,16 @@ namespace Darkness
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
+                    { RoomDirection.BACK, new RoomEdgeType("room-1", false) },
                     { RoomDirection.FORWARD, new RoomEdgeType("room-3", false) }
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", true),
-                    new RoomSlotType(RoomObjectType.Trap, "arrow-trap-0", false),
-                    new RoomSlotType(RoomObjectType.TreasureChest, "treasure-chest-0", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", true),
+                    new RoomSlotType(RoomObjectType.Trap, "arrow_trap", false),
+                    new RoomSlotType(RoomObjectType.TreasureChest, "treasure-chest", false),
                 });
 
             RoomType room3 = new RoomType(
@@ -83,15 +86,16 @@ namespace Darkness
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
+                    { RoomDirection.BACK, new RoomEdgeType("room-2", false) },
                     { RoomDirection.FORWARD, new RoomEdgeType(null, false) }
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Monster, "troll-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", true),
-                    new RoomSlotType(RoomObjectType.Trap, "arrow-trap-0", false),
-                    new RoomSlotType(RoomObjectType.TreasureChest, "treasure-chest-0", false),
+                    new RoomSlotType(RoomObjectType.Monster, "hungry_troll", true),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Trap, "arrow_trap", false),
+                    new RoomSlotType(RoomObjectType.TreasureChest, "treasure-chest", false),
                 });
             RoomType room4 = new RoomType(
                 "room-4",
@@ -109,16 +113,20 @@ namespace Darkness
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", true),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty-0", false),
-                    new RoomSlotType(RoomObjectType.Pile, "Pile-0", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", true),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.Pile, "pile", false),
                 });
 
             RoomTypes = new Dictionary<string, RoomType>
             {
-                { room0.Id, room0 }
+                { room0.Id, room0 },
+                { room1.Id, room1 },
+                { room2.Id, room2 },
+                { room3.Id, room3 },
+                { room4.Id, room4 }
             };
         }
     }

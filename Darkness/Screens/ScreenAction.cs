@@ -6,6 +6,7 @@ namespace Darkness
         Cancel,
         UseItem,
         ThrowItem,
-        EquipItem
+        EquipItem,
+        UnequipItem
     }
 }
