@@ -5,6 +5,11 @@ namespace Darkness
         public static SlotInteractionResult Resolve(
             PlayerActionContext context)
         {
+            if (context == null || context.TargetSlot == null)
+            {
+                return new SlotInteractionResult();
+            }
+
             SlotInteractionResult result = ResolveSlot(context);
             if (context.TargetSlot.Content != null)
             {

@@ -30,6 +30,8 @@ namespace Darkness
 
         public GameSignal Run()
         {
+            View.Display.Clear();
+            View.Message.Clear();
             View.Display.DrawCenteredLineByLine(_introImage);
             Utility.PlayMessages(new string[] { "[방향키와 엔터키로 진행합니다]" });
             Utility.PlayMessages(new string[] {

@@ -190,9 +190,13 @@ namespace Darkness
 
         private static string GetItemText(ItemStack itemStack)
         {
-            return itemStack.Count > 1
+            string text = itemStack.Count > 1
                 ? itemStack.Item.Type.Name + " x" + itemStack.Count
                 : itemStack.Item.Type.Name;
+            return itemStack.Item.UsesDurability
+                ? text + " [" + itemStack.Item.CurrentDurability +
+                  "/" + itemStack.Item.Type.MaxDurability + "]"
+                : text;
         }
     }
 }

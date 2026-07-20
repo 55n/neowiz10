@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Darkness
@@ -11,8 +10,10 @@ namespace Darkness
         public SkillCostType CostType { get; private set; }
         public int CostAmount { get; private set; }
         public bool IsPassive { get; private set; }
+        public SkillTargetingType TargetingType { get; private set; }
+        public SkillAttackType AttackType { get; private set; }
         public List<EffectApplication> Effects { get; private set; }
-        public SkillFunction Function { get; private set; }
+        public string ResultMessage { get; private set; }
 
         public SkillType(
             string id,
@@ -22,7 +23,56 @@ namespace Darkness
             int costAmount,
             bool isPassive,
             List<EffectApplication> effects,
-            SkillFunction function)
+            string resultMessage = null)
+            : this(
+                id,
+                name,
+                description,
+                costType,
+                costAmount,
+                isPassive,
+                SkillTargetingType.None,
+                SkillAttackType.None,
+                effects,
+                resultMessage)
+        {
+        }
+
+        public SkillType(
+            string id,
+            string name,
+            string description,
+            SkillCostType costType,
+            int costAmount,
+            bool isPassive,
+            SkillTargetingType targetingType,
+            List<EffectApplication> effects,
+            string resultMessage = null)
+            : this(
+                id,
+                name,
+                description,
+                costType,
+                costAmount,
+                isPassive,
+                targetingType,
+                SkillAttackType.None,
+                effects,
+                resultMessage)
+        {
+        }
+
+        public SkillType(
+            string id,
+            string name,
+            string description,
+            SkillCostType costType,
+            int costAmount,
+            bool isPassive,
+            SkillTargetingType targetingType,
+            SkillAttackType attackType,
+            List<EffectApplication> effects,
+            string resultMessage = null)
         {
             Id = id;
             Name = name;
@@ -30,8 +80,10 @@ namespace Darkness
             CostType = costType;
             CostAmount = costAmount;
             IsPassive = isPassive;
+            TargetingType = targetingType;
+            AttackType = attackType;
             Effects = effects;
-            Function = function;
+            ResultMessage = resultMessage;
         }
     }
 }

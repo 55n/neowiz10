@@ -16,7 +16,7 @@ namespace Darkness
     }
     enum AttackSelectionOptions
     {
-        ATTACK, DEFFENSE, SKILL, CANCEL
+        ATTACK, DEFFENSE, CANCEL
     }
     enum MoveSelectionOptions
     {
@@ -25,7 +25,7 @@ namespace Darkness
 
     public enum SlotState
     {
-        REVEALED, UNREVEALED, PRESENCE
+        REVEALED, UNREVEALED
     }
 
     public class ExplorationScreen
@@ -70,6 +70,7 @@ namespace Darkness
 
         public SelectionMenu BuildExplorationSelection(Hero hero)
         {
+            SkillData skillData = new SkillData();
             string roomDescription =
                 currentRoom != null && currentRoom.Type.EnterMessages.Count > 0
                     ? currentRoom.Type.EnterMessages[
@@ -116,9 +117,8 @@ namespace Darkness
                 "이동", "", false, moveNode, ExplorationSelectionOptions.MOVE);
             explorationNode.Options.Add(moveOption);
             explorationNode.Options.Add(new SelectionOption(
-                "뒤로가기", "",
-                currentRoom != null &&
-                currentRoom.Type.Id != Dungeon.StartingRoomId,
+                "뒤로가기", "이전 방으로 돌아간다",
+                HasAvailableEdge(RoomDirection.BACK),
                 null,
                 ExplorationSelectionOptions.BACK));
 
@@ -142,16 +142,21 @@ namespace Darkness
                 "공격하기", "", true, null, AttackSelectionOptions.ATTACK));
             battleNode.Options.Add(new SelectionOption(
                 "방어 자세", "", true, null, AttackSelectionOptions.DEFFENSE));
-            battleNode.Options.Add(new SelectionOption(
-                "스킬 선택", "", true, null, AttackSelectionOptions.SKILL));
+            battleNode.Options.Add(SelectionOption.DynamicNode(
+                "스킬 선택",
+                "사용할 스킬을 선택한다",
+                hero.LearnedSkillIds.Count > 0,
+                () => SkillScreen.BuildNode(
+                    hero,
+                    skillData,
+                    battleNode)));
             battleNode.Options.Add(new SelectionOption(
                 "취소", "", true, encounterNode, AttackSelectionOptions.CANCEL));
 
             moveNode.Options.Add(new SelectionOption(
-                "돌아간다", "돌아간다",
-                HasAvailableEdge(RoomDirection.BACK),
-                null,
-                MoveSelectionOptions.BACK));
+                "돌아가기", "이전 선택지로 돌아간다",
+                true,
+                explorationNode));
             moveNode.Options.Add(new SelectionOption(
                 "앞으로 간다", "",
                 HasAvailableEdge(RoomDirection.FORWARD),
@@ -362,7 +367,8 @@ namespace Darkness
                     contentName = ExplorationMessages.Door();
                 }
             }
-            else if (slotState == SlotState.PRESENCE)
+            else if (slotState == SlotState.UNREVEALED &&
+                     HasUnrevealedObject(slot))
             {
                 contentName = "???";
             }
@@ -384,6 +390,18 @@ namespace Darkness
             }
 
             return edge + new string(' ', SlotWidth - 2) + edge;
+        }
+
+        private bool HasUnrevealedObject(RoomSlot slot)
+        {
+            if (slot.Content != null)
+            {
+                return true;
+            }
+
+            return slot.Type.ObjectType ==
+                       RoomObjectType.TreasureChest ||
+                   slot.Type.ObjectType == RoomObjectType.Pile;
         }
 
         private string BuildHiddenBorder()

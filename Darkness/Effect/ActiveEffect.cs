@@ -18,6 +18,22 @@ namespace Darkness
             StackCount = Math.Min(Type.MaxStackCount, StackCount + 1);
         }
 
+        public virtual int GetAttackBonus()
+        {
+            return 0;
+        }
+
+        public virtual int GetDefenseBonus()
+        {
+            return 0;
+        }
+
+        public virtual int ModifyWeaponAttackBonus(
+            int weaponAttackBonus)
+        {
+            return weaponAttackBonus;
+        }
+
         public virtual bool ModifyOutgoingDamage(DamageContext context)
         {
             return false;
@@ -37,6 +53,5 @@ namespace Darkness
         {
             return false;
         }
-
     }
 }

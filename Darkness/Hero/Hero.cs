@@ -3,11 +3,34 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Hero : IDamageable
+    public class Hero : IDamageable, ISkillUser, IEffectTarget,
+        IEquipmentUser
     {
         public HeroType Type { get; private set; }
+        public string Name { get { return Type.Name; } }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int Attack
+        {
+            get
+            {
+                return Math.Max(
+                    0,
+                    Type.Attack + GetEquippedAttack() +
+                    GetEffectAttackBonus());
+            }
+        }
+        public int Defense
+        {
+            get
+            {
+                return Math.Max(
+                    0,
+                    Type.Defense + GetEquippedDefense() +
+                    GetEffectDefenseBonus());
+            }
+        }
+        public int Accuracy { get { return Type.Accuracy; } }
         public int Evasion { get { return Type.Evasion; } }
         public Inventory Inventory { get; private set; }
         public Dictionary<EquipmentSlot, ItemStack> Equipment { get; private set; }
@@ -73,6 +96,7 @@ namespace Darkness
             }
 
             Equipment[slot] = new ItemStack(equippedItem, 1);
+            LearnSkill(equippedItem.Type.BoundSkillId);
             return true;
         }
 
@@ -94,12 +118,50 @@ namespace Darkness
             return true;
         }
 
+        public Item GetEquippedItem(EquipmentSlot slot)
+        {
+            ItemStack equipment;
+            return Equipment != null &&
+                   Equipment.TryGetValue(slot, out equipment) &&
+                   equipment != null
+                ? equipment.Item
+                : null;
+        }
+
+        public bool RemoveEquippedItem(Item item)
+        {
+            if (item == null || Equipment == null)
+            {
+                return false;
+            }
+
+            foreach (EquipmentSlot slot in
+                     new List<EquipmentSlot>(Equipment.Keys))
+            {
+                ItemStack equipment = Equipment[slot];
+                if (equipment != null &&
+                    ReferenceEquals(equipment.Item, item))
+                {
+                    Equipment[slot] = null;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void LearnSkill(string skillId)
         {
             if (!string.IsNullOrEmpty(skillId))
             {
                 LearnedSkillIds.Add(skillId);
             }
+        }
+
+        public bool KnowsSkill(string skillId)
+        {
+            return !string.IsNullOrEmpty(skillId) &&
+                   LearnedSkillIds.Contains(skillId);
         }
 
         public void ApplyEffect(ActiveEffect effect)
@@ -125,6 +187,54 @@ namespace Darkness
         public void RemoveEffect(string effectId)
         {
             Effects.RemoveAll(effect => effect.Type != null && effect.Type.Id == effectId);
+        }
+
+        private int GetEquippedAttack()
+        {
+            ItemStack weapon;
+            int weaponAttack = Equipment != null &&
+                   Equipment.TryGetValue(
+                       EquipmentSlot.Weapon,
+                       out weapon) &&
+                   weapon != null && weapon.Item != null
+                ? weapon.Item.Attack
+                : 0;
+
+            return Math.Max(0, weaponAttack);
+        }
+
+        private int GetEquippedDefense()
+        {
+            ItemStack armor;
+            return Equipment != null &&
+                   Equipment.TryGetValue(
+                       EquipmentSlot.Armor,
+                       out armor) &&
+                   armor != null && armor.Item != null
+                ? armor.Item.Type.Defense
+                : 0;
+        }
+
+        private int GetEffectAttackBonus()
+        {
+            int bonus = 0;
+            foreach (ActiveEffect effect in Effects)
+            {
+                bonus += effect.GetAttackBonus();
+            }
+
+            return bonus;
+        }
+
+        private int GetEffectDefenseBonus()
+        {
+            int bonus = 0;
+            foreach (ActiveEffect effect in Effects)
+            {
+                bonus += effect.GetDefenseBonus();
+            }
+
+            return bonus;
         }
 
     }

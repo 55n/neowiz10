@@ -3,17 +3,39 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Monster : IDamageable, ISlotContent
+    public class Monster : IDamageable, ISkillUser, IEffectTarget, ISlotContent
     {
         public MonsterType Type { get; private set; }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int Attack
+        {
+            get
+            {
+                return Math.Max(
+                    0,
+                    Type.Attack + GetEffectAttackBonus());
+            }
+        }
+        public int Defense
+        {
+            get
+            {
+                return Math.Max(
+                    0,
+                    Type.Defense + GetEffectDefenseBonus());
+            }
+        }
+        public int Accuracy { get { return Type.Accuracy; } }
         public int Evasion { get { return Type.Evasion; } }
         public Inventory Inventory { get; private set; }
         public List<ActiveEffect> Effects { get; private set; }
         public MonsterState State { get; private set; }
         public MonsterActionPlan NextAction { get; private set; }
         public IMonsterBehavior Behavior { get; private set; }
+        public int DetectionDelayTurns { get; private set; }
+        public int DetectionTurnsRemaining { get; private set; }
+        public bool WasHitSinceLastAction { get; private set; }
         public bool IsAlive { get { return CurrentHealth > 0; } }
         public bool CanAct { get { return IsAlive; } }
         public string Id { get { return Type.Id; } }
@@ -24,7 +46,8 @@ namespace Darkness
             MonsterType type,
             Inventory inventory,
             List<ActiveEffect> effects,
-            IMonsterBehavior behavior)
+            IMonsterBehavior behavior,
+            int detectionDelayTurns = 0)
         {
             if (behavior == null)
             {
@@ -37,6 +60,8 @@ namespace Darkness
             Inventory = inventory;
             Effects = effects;
             Behavior = behavior;
+            DetectionDelayTurns = Math.Max(0, detectionDelayTurns);
+            DetectionTurnsRemaining = DetectionDelayTurns;
             State = MonsterState.Indifferent;
             NextAction = MonsterActionPlan.None();
         }
@@ -44,6 +69,44 @@ namespace Darkness
         public void ReceiveDamage(int damage)
         {
             CurrentHealth = Math.Max(0, CurrentHealth - Math.Max(0, damage));
+        }
+
+        public void RegisterHit()
+        {
+            WasHitSinceLastAction = true;
+        }
+
+        public void EnterAlert()
+        {
+            DetectionTurnsRemaining = DetectionDelayTurns;
+        }
+
+        public bool AdvanceDetection()
+        {
+            DetectionTurnsRemaining = Math.Max(
+                0,
+                DetectionTurnsRemaining - 1);
+            return DetectionTurnsRemaining == 0;
+        }
+
+        public void SpendFocus(int amount)
+        {
+            CurrentFocus = Math.Max(
+                0,
+                CurrentFocus - Math.Max(0, amount));
+        }
+
+        public void RestoreFocus(int amount)
+        {
+            CurrentFocus = Math.Min(
+                Type.MaxFocus,
+                CurrentFocus + Math.Max(0, amount));
+        }
+
+        public bool KnowsSkill(string skillId)
+        {
+            return !string.IsNullOrEmpty(skillId) &&
+                   Type.FocusSkillIds.Contains(skillId);
         }
 
         public void ApplyEffect(ActiveEffect effect)
@@ -71,6 +134,28 @@ namespace Darkness
             Effects.RemoveAll(effect => effect.Type.Id == effectId);
         }
 
+        private int GetEffectAttackBonus()
+        {
+            int bonus = 0;
+            foreach (ActiveEffect effect in Effects)
+            {
+                bonus += effect.GetAttackBonus();
+            }
+
+            return bonus;
+        }
+
+        private int GetEffectDefenseBonus()
+        {
+            int bonus = 0;
+            foreach (ActiveEffect effect in Effects)
+            {
+                bonus += effect.GetDefenseBonus();
+            }
+
+            return bonus;
+        }
+
         public virtual SlotInteractionResult React(
             PlayerActionContext context)
         {
@@ -82,12 +167,19 @@ namespace Darkness
 
             if (context.Action == PlayerActionType.Attack)
             {
+                Item weapon = context.Actor.GetEquippedItem(
+                    EquipmentSlot.Weapon);
                 result.Attacks.Add(new AttackContext(
                     context.Actor,
                     this,
-                    context.Actor.Type.Attack,
-                    context.Actor.Type.Accuracy,
-                    Type.Evasion));
+                    context.Actor.Attack,
+                    context.Actor.Accuracy,
+                    Type.Evasion,
+                    weapon == null
+                        ? AttackDeliveryType.Natural
+                        : AttackDeliveryType.EquippedWeapon,
+                    weapon,
+                    weapon == null ? 0 : 1));
             }
 
             return result;
@@ -101,6 +193,8 @@ namespace Darkness
                 return MonsterDecision.None(State);
             }
 
+            RemoveEffect("defending");
+
             MonsterDecision decision = Behavior.Decide(this, perception) ??
                 MonsterDecision.None(State);
             State = decision.NextState;
@@ -108,15 +202,13 @@ namespace Darkness
             return decision;
         }
 
-        public SlotInteractionResult Act(Hero target)
+        public SlotInteractionResult Act(Hero target, Room room)
         {
             SlotInteractionResult result = new SlotInteractionResult();
             MonsterActionPlan action = NextAction;
             NextAction = MonsterActionPlan.None();
 
-            if (!CanAct || action == null ||
-                action.Type == MonsterActionType.None ||
-                action.Type == MonsterActionType.Wait)
+            if (!CanAct || action == null)
             {
                 return result;
             }
@@ -126,8 +218,8 @@ namespace Darkness
                 result.Attacks.Add(new AttackContext(
                     this,
                     target,
-                    Type.Attack,
-                    Type.Accuracy,
+                    Attack,
+                    Accuracy,
                     target.Type.Evasion));
             }
             else if (action.Type == MonsterActionType.Move &&
@@ -136,6 +228,34 @@ namespace Darkness
                 result.MonsterMoves.Add(
                     new MonsterMoveRequest(this, action.TargetSlot));
             }
+            else if (action.Type == MonsterActionType.Defend)
+            {
+                EffectType defendingType =
+                    new EffectData().EffectTypes["defending"];
+                ApplyEffect(new DefendingEffect(defendingType));
+            }
+            else if (action.Type == MonsterActionType.UseSkill &&
+                     !string.IsNullOrEmpty(action.SkillId))
+            {
+                SkillType skill;
+                if (new SkillData().SkillTypes.TryGetValue(
+                        action.SkillId,
+                        out skill))
+                {
+                    result.SkillUses.Add(new SkillUseContext(
+                        this,
+                        skill,
+                        room,
+                        new object[] { target }));
+                }
+            }
+
+            if (action.StateAfterAction.HasValue)
+            {
+                State = action.StateAfterAction.Value;
+            }
+
+            WasHitSinceLastAction = false;
 
             return result;
         }

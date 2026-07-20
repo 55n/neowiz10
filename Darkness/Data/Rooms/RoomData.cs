@@ -37,7 +37,6 @@ namespace Darkness
                 new List<string>    
                 {
                     "기척이 느껴진다",
-                    "무언가가 긁는 소리를 내고 있다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -48,7 +47,7 @@ namespace Darkness
                 {
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
-                    new RoomSlotType(RoomObjectType.Monster, "lost_goblin", true),
+                    new RoomSlotType(RoomObjectType.Monster, "room1_lost_goblin", true),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                 });
@@ -91,7 +90,7 @@ namespace Darkness
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Monster, "hungry_troll", true),
+                    new RoomSlotType(RoomObjectType.Monster, "room3_hungry_troll", true),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Trap, "arrow_trap", false),

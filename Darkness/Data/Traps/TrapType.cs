@@ -9,6 +9,7 @@ namespace Darkness
         public string Name { get; private set; }
         public string Description { get; private set; }
         public int MaxHealth { get; private set; }
+        public int Defense { get; private set; }
         public int Damage { get; private set; }
         public int Accuracy { get; private set; }
         public bool IsSingleUse { get; private set; }
@@ -19,6 +20,7 @@ namespace Darkness
             string name,
             string description,
             int maxHealth,
+            int defense,
             int damage,
             int accuracy,
             bool isSingleUse,
@@ -28,6 +30,7 @@ namespace Darkness
             Name = name;
             Description = description;
             MaxHealth = maxHealth;
+            Defense = defense;
             Damage = damage;
             Accuracy = accuracy;
             IsSingleUse = isSingleUse;

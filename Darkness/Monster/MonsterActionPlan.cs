@@ -4,33 +4,59 @@ namespace Darkness
     {
         public MonsterActionType Type { get; private set; }
         public RoomSlot TargetSlot { get; private set; }
+        public string SkillId { get; private set; }
+        public MonsterState? StateAfterAction { get; private set; }
 
         private MonsterActionPlan(
             MonsterActionType type,
-            RoomSlot targetSlot)
+            RoomSlot targetSlot,
+            string skillId,
+            MonsterState? stateAfterAction)
         {
             Type = type;
             TargetSlot = targetSlot;
+            SkillId = skillId;
+            StateAfterAction = stateAfterAction;
         }
 
         public static MonsterActionPlan None()
         {
-            return new MonsterActionPlan(MonsterActionType.None, null);
+            return new MonsterActionPlan(
+                MonsterActionType.None, null, null, null);
         }
 
         public static MonsterActionPlan Wait()
         {
-            return new MonsterActionPlan(MonsterActionType.Wait, null);
+            return new MonsterActionPlan(
+                MonsterActionType.Wait, null, null, null);
         }
 
-        public static MonsterActionPlan Attack()
+        public static MonsterActionPlan Attack(
+            MonsterState? stateAfterAction = null)
         {
-            return new MonsterActionPlan(MonsterActionType.Attack, null);
+            return new MonsterActionPlan(
+                MonsterActionType.Attack,
+                null,
+                null,
+                stateAfterAction);
         }
 
         public static MonsterActionPlan MoveTo(RoomSlot targetSlot)
         {
-            return new MonsterActionPlan(MonsterActionType.Move, targetSlot);
+            return new MonsterActionPlan(
+                MonsterActionType.Move, targetSlot, null, null);
+        }
+
+        public static MonsterActionPlan Defend()
+        {
+            return new MonsterActionPlan(
+                MonsterActionType.Defend, null, null, null);
+        }
+
+        public static MonsterActionPlan UseSkill(string skillId)
+        {
+            return new MonsterActionPlan(
+                MonsterActionType.UseSkill, null, skillId, null);
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Darkness
     {
         Self,
         Target,
-        AllTargets
+        AllTargets,
+        AllRoomSlots,
+        EquippedWeapon
     }
 }

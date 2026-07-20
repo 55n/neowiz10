@@ -39,6 +39,18 @@ namespace Darkness
                 true,
                 null));
 
+            node.Options.Add(new SelectionOption(
+                "[공격력]: " + hero.Attack,
+                "기본 공격력과 무기 및 Effect 보너스를 합한 수치다.",
+                true,
+                null));
+
+            node.Options.Add(new SelectionOption(
+                "[방어력]: " + hero.Defense,
+                "기본 방어력과 방어구 및 Effect 보너스를 합한 수치다.",
+                true,
+                null));
+
             foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
             {
                 AddEquipmentOption(hero, node, slot);
@@ -80,6 +92,11 @@ namespace Darkness
                 equipment);
             string description = equipped ? equipment.Item.Type.Description : "장비가 장착되어 있지 않다.";
             string name = equipped ? equipment.Item.Type.Name : "비어 있음";
+            if (equipped && equipment.Item.UsesDurability)
+            {
+                name += " [" + equipment.Item.CurrentDurability +
+                        "/" + equipment.Item.Type.MaxDurability + "]";
+            }
 
             statusNode.Options.Add(new SelectionOption(
                 "[" + GetSlotName(slot) + "]: " + name,

@@ -7,6 +7,19 @@ namespace Darkness
     {
         public TrapType Type { get; private set; }
         public int CurrentHealth { get; private set; }
+        public int Defense
+        {
+            get
+            {
+                int bonus = 0;
+                foreach (ActiveEffect effect in Effects)
+                {
+                    bonus += effect.GetDefenseBonus();
+                }
+
+                return Math.Max(0, Type.Defense + bonus);
+            }
+        }
         public int Evasion { get { return 0; } }
         public List<ActiveEffect> Effects { get; private set; }
         public bool IsActive { get; private set; }
@@ -44,12 +57,19 @@ namespace Darkness
 
             if (context.Action == PlayerActionType.Attack)
             {
+                Item weapon = context.Actor.GetEquippedItem(
+                    EquipmentSlot.Weapon);
                 result.Attacks.Add(new AttackContext(
                     context.Actor,
                     this,
-                    context.Actor.Type.Attack,
-                    context.Actor.Type.Accuracy,
-                    0));
+                    context.Actor.Attack,
+                    context.Actor.Accuracy,
+                    0,
+                    weapon == null
+                        ? AttackDeliveryType.Natural
+                        : AttackDeliveryType.EquippedWeapon,
+                    weapon,
+                    weapon == null ? 0 : 1));
             }
 
             if (!IsActive ||
@@ -59,14 +79,16 @@ namespace Darkness
                 return result;
             }
 
-            result.RevealSlot = true;
             result.Messages.Add(Type.Description);
             result.Attacks.Add(new AttackContext(
                 this,
                 context.Actor,
                 Type.Damage,
                 Type.Accuracy,
-                context.Actor.Type.Evasion));
+                context.Actor.Type.Evasion,
+                AttackDeliveryType.Trap,
+                null,
+                0));
 
             if (Type.IsSingleUse)
             {

@@ -67,6 +67,18 @@ namespace Darkness
             return removed;
         }
 
+        public bool RemoveItem(Item item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            ItemStack itemStack = ItemStacks.Find(
+                stack => ReferenceEquals(stack.Item, item));
+            return itemStack != null && Discard(itemStack, 1) == 1;
+        }
+
         public int TransferTo(
             ItemStack itemStack,
             int count,

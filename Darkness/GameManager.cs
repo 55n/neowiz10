@@ -83,14 +83,26 @@ namespace Darkness
 
     class PlayingState : IGameState
     {
-        private readonly Exploration _exploration;
+        private Exploration _exploration;
 
         public PlayingState()
         {
+        }
+
+        public void Enter()
+        {
             HeroType heroType = new HeroData().HeroTypes["hero"];
-            ItemType guardianCharmType = new ItemData().ItemTypes["guardian_charm"];
+            ItemData itemData = new ItemData();
+            ItemType guardianCharmType =
+                itemData.ItemTypes["guardian_charm"];
+            ItemType magicStoneType =
+                itemData.ItemTypes["magic_stone"];
             EffectType guardianBlessingType =
                 new EffectData().EffectTypes["guardian_blessing"];
+            Inventory inventory = new Inventory(4);
+            inventory.Store(new ItemStack(
+                new Item(magicStoneType),
+                2));
             Dictionary<EquipmentSlot, ItemStack> equipment =
                 new Dictionary<EquipmentSlot, ItemStack>
                 {
@@ -101,9 +113,15 @@ namespace Darkness
                 };
             Hero hero = new Hero(
                 heroType,
-                new Inventory(4),
+                inventory,
                 equipment,
-                new HashSet<string>(),
+                new HashSet<string>
+                {
+                    "guardian_blessing",
+                    "last_focus",
+                    "power_strike",
+                    "sword_last_day"
+                },
                 new List<ActiveEffect>
                 {
                     new GuardianBlessingEffect(guardianBlessingType)
@@ -112,9 +130,6 @@ namespace Darkness
             _exploration = new Exploration(hero, new Dungeon());
         }
 
-        public void Enter()
-        {
-        }
         public GameState? Action()
         {
             GameSignal gameSignal = _exploration.Run();
@@ -139,12 +154,16 @@ namespace Darkness
     {
         public void Enter()
         {
-            Utility.PlayMessage(CombatMessages.PlayerDied());
+            Utility.PlayMessages(new[]
+            {
+                CombatMessages.PlayerDied(),
+                CombatMessages.GameOver()
+            });
         }
 
         public GameState? Action()
         {
-            return GameState.STOP;
+            return GameState.INTRO;
         }
 
         public void Exit()

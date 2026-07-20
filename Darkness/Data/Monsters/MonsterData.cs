@@ -14,7 +14,7 @@ namespace Darkness
                 Monster("fall", "낙하", "끝을 알 수 없는 높이에서 바닥으로 추락한다.",
                     1, 0, 999999, 0, 0, 999999, 0),
                 Monster("lost_goblin", "고블린", "어둠에 적응하지 못한 작고 겁 많은 잡식성 생물이다.",
-                    6, 2, 2, 0, 4, 70, 20,
+                    5, 2, 2, 0, 4, 70, 20,
                     Effects(), MonsterFunction.Damage, Skills("goblin_rush")),
                 Monster("hungry_troll", "굶은트롤", "후각으로 먹이를 추적하며 상처가 빠르게 아물어 가는 대형 포식자다.",
                     24, 3, 6, 3, 1, 75, 5,

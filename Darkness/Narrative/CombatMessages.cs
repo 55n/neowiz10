@@ -2,6 +2,21 @@ namespace Darkness
 {
     public static class CombatMessages
     {
+        public static string AttackStarted(string attacker, string target)
+        {
+            return attacker + " 이(가) " + target + " 을(를) 공격했다";
+        }
+
+        public static string DamageReceived(string target, int damage)
+        {
+            return target + " 이(가) " + damage + " 의 피해를 입었다";
+        }
+
+        public static string DamageEvaded(string target)
+        {
+            return target + " 이(가) 피해를 회피했다";
+        }
+
         public static string DamageTaken(string enemy, string damage)
         {
             return "[" + enemy + "]에게 " + damage + "의 데미지를 받았습니다";
@@ -30,6 +45,11 @@ namespace Darkness
         public static string PlayerDied()
         {
             return "당신은 어둠 속에서 쓰러졌다";
+        }
+
+        public static string GameOver()
+        {
+            return "[게임 오버]";
         }
 
         public static string NormalAttackResult(string monster, int damage)

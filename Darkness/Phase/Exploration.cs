@@ -13,6 +13,7 @@ namespace Darkness
         private readonly ExplorationScreen screen;
         private readonly ItemData itemData;
         private readonly MonsterData monsterData;
+        private readonly SkillData skillData;
         private readonly TurnManager turnManager;
         private bool openingEventCompleted;
 
@@ -23,6 +24,7 @@ namespace Darkness
             screen = new ExplorationScreen();
             itemData = new ItemData();
             monsterData = new MonsterData();
+            skillData = new SkillData();
             turnManager = new TurnManager();
         }
 
@@ -39,6 +41,22 @@ namespace Darkness
             while (true)
             {
                 object value = screen.explorationPanel.ReadSelection();
+
+                SkillSelection skillSelection = value as SkillSelection;
+                if (skillSelection != null)
+                {
+                    TurnResult skillResult =
+                        HandleSkillSelection(skillSelection);
+                    if (skillResult != null)
+                    {
+                        ApplyTurnResult(skillResult);
+                        if (skillResult.HeroDied)
+                        {
+                            return GameSignal.GAME_OVER;
+                        }
+                    }
+                    continue;
+                }
 
                 ScreenSelection selection = value as ScreenSelection;
                 if (selection != null)
@@ -87,14 +105,22 @@ namespace Darkness
 
         private TurnResult ResolvePlayerAction(
             PlayerActionType action,
-            ItemStack itemStack)
+            ItemStack itemStack,
+            EquipmentSlot? itemSourceEquipmentSlot = null)
         {
-            int slotIndex = screen.ChooseSlot();
-            RoomSlot slot = dungeon.CurrentRoom.Slots[slotIndex];
+            RoomSlot slot = null;
+            if (PlayerActionRules.RequiresTargetSlot(action))
+            {
+                int slotIndex = screen.ChooseSlot();
+                slot = dungeon.CurrentRoom.Slots[slotIndex];
+            }
+
             PlayerTurnCommand command = new PlayerTurnCommand(
                 action,
                 slot,
                 itemStack,
+                null,
+                itemSourceEquipmentSlot,
                 true);
             return turnManager.Resolve(
                 command,
@@ -131,6 +157,14 @@ namespace Darkness
             object value,
             out RoomDirection direction)
         {
+            if (value is ExplorationSelectionOptions &&
+                (ExplorationSelectionOptions)value ==
+                    ExplorationSelectionOptions.BACK)
+            {
+                direction = RoomDirection.BACK;
+                return true;
+            }
+
             if (value is MoveSelectionOptions)
             {
                 switch ((MoveSelectionOptions)value)
@@ -198,11 +232,6 @@ namespace Darkness
                     action = PlayerActionType.Defend;
                     return true;
                 }
-                if (option == AttackSelectionOptions.SKILL)
-                {
-                    action = PlayerActionType.UseSkill;
-                    return true;
-                }
             }
 
             action = default(PlayerActionType);
@@ -218,12 +247,22 @@ namespace Darkness
                 new List<ActiveEffect>(),
                 new DefaultMonsterBehavior());
 
-            AttackResolver.Resolve(new AttackContext(
+            AttackContext fallAttack = new AttackContext(
                 fall,
                 hero,
                 fallType.Attack,
                 fallType.Accuracy,
-                hero.Type.Evasion));
+                hero.Type.Evasion,
+                AttackDeliveryType.Trap,
+                null,
+                0);
+            AttackResult fallResult = AttackResolver.Resolve(fallAttack);
+            DurabilityResolveResult durabilityResult =
+                new DurabilityResolver().ResolveAttack(
+                    fallAttack,
+                    fallResult,
+                    dungeon.CurrentRoom);
+            Utility.PlayMessages(durabilityResult.Messages.ToArray());
 
             Utility.PlayMessage(CombatMessages.DamageTaken(
                 fallType.Name,
@@ -252,7 +291,7 @@ namespace Darkness
 
         private void GiveAndEquipSword()
         {
-            ItemType swordType = itemData.ItemTypes["ordinary_sword"];
+            ItemType swordType = itemData.ItemTypes["worn_sword"];
             hero.Inventory.Store(new ItemStack(new Item(swordType), 1));
 
             ItemStack sword = hero.Inventory.ItemStacks.Find(
@@ -297,44 +336,67 @@ namespace Darkness
             }
             else if (selection.Action == ScreenAction.ThrowItem)
             {
-                ItemStack thrownItem = TakeThrownItem(selection);
-                if (thrownItem != null)
+                if (selection.ItemStack != null &&
+                    selection.ItemStack.Count > 0)
                 {
                     return ResolvePlayerAction(
                         PlayerActionType.ThrowItem,
-                        thrownItem);
+                        selection.ItemStack,
+                        selection.EquipmentSlot);
                 }
             }
 
             return null;
         }
 
-        private ItemStack TakeThrownItem(ScreenSelection selection)
+        private TurnResult HandleSkillSelection(SkillSelection selection)
         {
-            ItemStack source = selection.ItemStack;
-            if (source == null || source.Count <= 0)
+            SkillType skill;
+            if (selection == null ||
+                !skillData.SkillTypes.TryGetValue(
+                    selection.SkillId,
+                    out skill))
             {
+                screen.OpenExplorationSelection();
                 return null;
             }
 
-            ItemStack thrownItem = new ItemStack(source.Item, 1);
-            if (selection.EquipmentSlot.HasValue)
+            RoomSlot targetSlot = null;
+            IEnumerable<object> selectedTargets = null;
+            if (skill.TargetingType == SkillTargetingType.SingleSlot)
             {
-                EquipmentSlot slot = selection.EquipmentSlot.Value;
-                ItemStack equipped;
-                if (!hero.Equipment.TryGetValue(slot, out equipped) ||
-                    !ReferenceEquals(equipped, source))
+                int slotIndex = screen.ChooseSlot();
+                targetSlot = dungeon.CurrentRoom.Slots[slotIndex];
+                if (targetSlot.Content != null)
                 {
-                    return null;
+                    selectedTargets = new object[]
+                    {
+                        targetSlot.Content
+                    };
                 }
-
-                hero.Equipment[slot] = null;
-                return thrownItem;
+            }
+            else if (skill.TargetingType != SkillTargetingType.None)
+            {
+                screen.OpenExplorationSelection();
+                return null;
             }
 
-            return hero.Inventory.Discard(source, 1) == 1
-                ? thrownItem
-                : null;
+            SkillUseContext skillUse = new SkillUseContext(
+                hero,
+                skill,
+                dungeon.CurrentRoom,
+                selectedTargets);
+            PlayerTurnCommand command = new PlayerTurnCommand(
+                PlayerActionType.UseSkill,
+                targetSlot,
+                null,
+                skillUse,
+                true);
+            return turnManager.Resolve(
+                command,
+                hero,
+                dungeon.CurrentRoom);
         }
+
     }
 }

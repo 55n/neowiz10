@@ -23,8 +23,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Alert,
                     MonsterActionPlan.MoveTo(action.TargetSlot),
-                    monster.Name + "이(가) 미끼 냄새를 맡고 움직인다.",
-                    false);
+                    monster.Name + "이(가) 미끼 냄새를 맡고 움직인다.");
             }
 
             return defaultBehavior.Decide(monster, perception);

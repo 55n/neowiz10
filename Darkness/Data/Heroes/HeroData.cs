@@ -10,13 +10,13 @@ namespace Darkness
         {
             HeroType explorer = new HeroType(
                 "hero",
-                "탐험가",
+                "당신",
                 "어둠 속을 헤매는 탐험가다.",
                 20,
                 8,
                 5,
                 2,
-                80,
+                90,
                 15);
             HeroTypes = new Dictionary<string, HeroType>
             {
