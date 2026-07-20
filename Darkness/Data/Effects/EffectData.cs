@@ -36,6 +36,13 @@ namespace Darkness
                 1,
                 false,
                 1);
+            EffectType trapMisfire = new EffectType(
+                "trap_misfire",
+                "오작동",
+                "투척물에 의해 잘못 발동해 다음 공격이 빗나간다.",
+                null,
+                false,
+                1);
             EffectType weaponEmpowerment = new EffectType(
                 "weapon_empowerment",
                 "무기 강화",
@@ -50,6 +57,7 @@ namespace Darkness
                 { hasty.Id, hasty },
                 { perfectFocus.Id, perfectFocus },
                 { defending.Id, defending },
+                { trapMisfire.Id, trapMisfire },
                 { weaponEmpowerment.Id, weaponEmpowerment }
             };
         }

@@ -41,10 +41,15 @@ namespace Darkness
                 stateAfterAction);
         }
 
-        public static MonsterActionPlan MoveTo(RoomSlot targetSlot)
+        public static MonsterActionPlan MoveTo(
+            RoomSlot targetSlot,
+            MonsterState? stateAfterAction = null)
         {
             return new MonsterActionPlan(
-                MonsterActionType.Move, targetSlot, null, null);
+                MonsterActionType.Move,
+                targetSlot,
+                null,
+                stateAfterAction);
         }
 
         public static MonsterActionPlan Defend()

@@ -33,6 +33,7 @@ namespace Darkness
         public MonsterState State { get; private set; }
         public MonsterActionPlan NextAction { get; private set; }
         public IMonsterBehavior Behavior { get; private set; }
+        public List<string> EncounterMessages { get; private set; }
         public int DetectionDelayTurns { get; private set; }
         public int DetectionTurnsRemaining { get; private set; }
         public bool WasHitSinceLastAction { get; private set; }
@@ -47,6 +48,7 @@ namespace Darkness
             Inventory inventory,
             List<ActiveEffect> effects,
             IMonsterBehavior behavior,
+            List<string> encounterMessages,
             int detectionDelayTurns = 0)
         {
             if (behavior == null)
@@ -60,6 +62,7 @@ namespace Darkness
             Inventory = inventory;
             Effects = effects;
             Behavior = behavior;
+            EncounterMessages = encounterMessages;
             DetectionDelayTurns = Math.Max(0, detectionDelayTurns);
             DetectionTurnsRemaining = DetectionDelayTurns;
             State = MonsterState.Indifferent;
@@ -226,7 +229,10 @@ namespace Darkness
                      action.TargetSlot != null)
             {
                 result.MonsterMoves.Add(
-                    new MonsterMoveRequest(this, action.TargetSlot));
+                    new MonsterMoveRequest(
+                        this,
+                        action.TargetSlot,
+                        action.StateAfterAction));
             }
             else if (action.Type == MonsterActionType.Defend)
             {
@@ -250,7 +256,8 @@ namespace Darkness
                 }
             }
 
-            if (action.StateAfterAction.HasValue)
+            if (action.Type != MonsterActionType.Move &&
+                action.StateAfterAction.HasValue)
             {
                 State = action.StateAfterAction.Value;
             }
@@ -258,6 +265,14 @@ namespace Darkness
             WasHitSinceLastAction = false;
 
             return result;
+        }
+
+        public void CompleteMove(MonsterState? stateAfterMove)
+        {
+            if (stateAfterMove.HasValue)
+            {
+                State = stateAfterMove.Value;
+            }
         }
 
     }

@@ -55,5 +55,18 @@ namespace Darkness
         {
             CurrentRoom = CurrentRoom.Edges[direction].TargetRoom;
         }
+
+        public bool MoveTo(string roomId)
+        {
+            Room room;
+            if (string.IsNullOrEmpty(roomId) ||
+                !Rooms.TryGetValue(roomId, out room))
+            {
+                return false;
+            }
+
+            CurrentRoom = room;
+            return true;
+        }
     }
 }

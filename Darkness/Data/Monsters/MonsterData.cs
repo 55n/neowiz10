@@ -19,7 +19,7 @@ namespace Darkness
                 Monster("hungry_troll", "굶은트롤", "후각으로 먹이를 추적하며 상처가 빠르게 아물어 가는 대형 포식자다.",
                     24, 3, 6, 3, 1, 75, 5,
                     Effects(), MonsterFunction.Damage, Skills("troll_regeneration")),
-                Monster("bound_armor_spirit", "속박갑주", "갑옷과 방에 속박되어 마석으로 기억과 영혼을 유지하는 옛 탐험가다.",
+                Monster("bound_armor_spirit", "갑주령", "갑옷과 방에 속박되어 마석으로 기억과 영혼을 유지하는 옛 탐험가다.",
                     30, 5, 7, 6, 2, 85, 10,
                     Effects(Target("bind", 40), Target("bind", 40)), MonsterFunction.Damage, Skills("armor_chain_bind")),
                 Monster("blind_cave_wolf", "동굴늑대", "후각과 무리 신호가 발달한 미궁의 육식동물이다.",

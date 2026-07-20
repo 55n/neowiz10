@@ -12,6 +12,7 @@ namespace Darkness
         {
             SkillTypes = new List<SkillType>
             {
+                new SkillType("cowardly_leap", "비겁한 도약", "마석을 소모해 출구로 도망친다.", SkillCostType.MagicStone, 4, false, Effects()),
                 new SkillType("presence_tracking", "기척 추적", "다음 행동까지 정확도가 30 증가한다.", SkillCostType.Focus, 1, false, Effects(Self("focused_accuracy"), Self("focused_accuracy"), Self("focused_accuracy"))),
                 new SkillType("deflect", "받아흘리기", "다음 자신의 턴까지 회피율이 40 증가한다.", SkillCostType.Focus, 2, false, Effects(Self("deflecting"), Self("deflecting"), Self("deflecting"), Self("deflecting"))),
                 new SkillType("desperate_counter", "결사 반격", "다음 피해를 받으면 실제 공격자에게 반격한다.", SkillCostType.Focus, 3, false, Effects(Self("counter_stance"))),

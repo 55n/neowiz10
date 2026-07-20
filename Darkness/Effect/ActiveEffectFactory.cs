@@ -30,6 +30,8 @@ namespace Darkness
                     return new PerfectFocusEffect(effectType);
                 case "defending":
                     return new DefendingEffect(effectType);
+                case "trap_misfire":
+                    return new TrapMisfireEffect(effectType);
                 case "weapon_empowerment":
                     return new WeaponEmpowermentEffect(effectType);
                 default:

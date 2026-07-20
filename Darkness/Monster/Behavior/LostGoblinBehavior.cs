@@ -41,7 +41,7 @@ namespace Darkness
             PlayerActionContext action = perception.PlayerAction;
             if (action.Action == PlayerActionType.ThrowItem)
             {
-                return MonsterDecision.None(monster.State);
+                return ReactToThrownItem(monster, perception);
             }
 
             if (IsHostileTargetedAction(perception))
@@ -83,7 +83,7 @@ namespace Darkness
             if (perception.PlayerAction.Action ==
                 PlayerActionType.ThrowItem)
             {
-                return MonsterDecision.None(monster.State);
+                return ReactToThrownItem(monster, perception);
             }
 
             if (IsHostileTargetedAction(perception))
@@ -158,6 +158,103 @@ namespace Darkness
                 announceDetection
                     ? monster.Name + "은(는) 당신을 발견했다!"
                     : null);
+        }
+
+        private static MonsterDecision ReactToThrownItem(
+            Monster monster,
+            MonsterPerception perception)
+        {
+            monster.EnterAlert();
+
+            PlayerActionContext action = perception.PlayerAction;
+            bool isBait = action.Item != null &&
+                action.Item.Item != null &&
+                action.Item.Item.Type.ThrowFunction == ItemFunction.Lure;
+            if (!isBait)
+            {
+                return new MonsterDecision(
+                    MonsterState.Alert,
+                    MonsterActionPlan.Wait(),
+                    monster.Name +
+                    "은(는) 물건이 떨어지는 소리에 경계한다.");
+            }
+
+            if (ReferenceEquals(
+                action.TargetSlot,
+                perception.CurrentSlot))
+            {
+                return new MonsterDecision(
+                    MonsterState.Indifferent,
+                    MonsterActionPlan.Wait(),
+                    monster.Name +
+                    "은(는) 미끼에 정신이 팔렸다.");
+            }
+
+            RoomSlot destination = FindBaitDestination(
+                perception.CurrentRoom,
+                perception.CurrentSlot,
+                action.TargetSlot);
+            if (destination == null)
+            {
+                return new MonsterDecision(
+                    MonsterState.Alert,
+                    MonsterActionPlan.Wait(),
+                    monster.Name +
+                    "은(는) 미끼 냄새가 나는 방향을 살핀다.");
+            }
+
+            return new MonsterDecision(
+                MonsterState.Alert,
+                MonsterActionPlan.MoveTo(
+                    destination,
+                    MonsterState.Indifferent),
+                monster.Name +
+                "은(는) 미끼 냄새를 따라 움직인다.");
+        }
+
+        private static RoomSlot FindBaitDestination(
+            Room room,
+            RoomSlot currentSlot,
+            RoomSlot baitSlot)
+        {
+            if (room == null || baitSlot == null ||
+                ReferenceEquals(currentSlot, baitSlot))
+            {
+                return null;
+            }
+
+            if (baitSlot.IsEmpty)
+            {
+                return baitSlot;
+            }
+
+            int baitIndex = room.Slots.IndexOf(baitSlot);
+            int currentIndex = room.Slots.IndexOf(currentSlot);
+            RoomSlot nearestSlot = null;
+            int nearestBaitDistance = int.MaxValue;
+            int nearestGoblinDistance = int.MaxValue;
+
+            for (int i = 0; i < room.Slots.Count; i++)
+            {
+                RoomSlot candidate = room.Slots[i];
+                if (!candidate.IsEmpty)
+                {
+                    continue;
+                }
+
+                int baitDistance = Math.Abs(i - baitIndex);
+                int goblinDistance = Math.Abs(i - currentIndex);
+                if (baitDistance < nearestBaitDistance ||
+                    baitDistance == nearestBaitDistance &&
+                    goblinDistance < nearestGoblinDistance)
+                {
+                    nearestSlot = candidate;
+                    nearestBaitDistance = baitDistance;
+                    nearestGoblinDistance = goblinDistance;
+                }
+            }
+
+            return nearestSlot;
         }
 
         private static bool IsDirectDiscoveryAction(

@@ -55,6 +55,26 @@ namespace Darkness
             return "문을 발견했다";
         }
 
+        public static string TreasureChestFound()
+        {
+            return "상자를 발견했다.";
+        }
+
+        public static string TreasureChestEmpty()
+        {
+            return "보물 상자는 비어 있다.";
+        }
+
+        public static string NoResponse()
+        {
+            return "아무 반응이 없다.";
+        }
+
+        public static string PileEmpty()
+        {
+            return "물건 더미는 비어 있다.";
+        }
+
         public static string NothingHappened()
         {
             return "아무 일도 일어나지 않는다.";

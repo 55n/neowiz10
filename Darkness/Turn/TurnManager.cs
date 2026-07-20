@@ -74,6 +74,8 @@ namespace Darkness
                 hero.ApplyEffect(
                     new DefendingEffect(
                         defendingEffectType));
+                turnResult.Messages.Add(
+                    CombatMessages.DefenseStanceTaken());
             }
 
             PlayerActionContext playerAction = new PlayerActionContext(
@@ -83,7 +85,10 @@ namespace Darkness
                 command.Item,
                 command.SkillUse,
                 command.ItemSourceEquipmentSlot);
-            ApplyPlayerAction(room, playerAction, turnResult);
+            bool loudEventOccurred = ApplyPlayerAction(
+                room,
+                playerAction,
+                turnResult);
 
             List<MonsterTurnEntry> monsters = SnapshotMonsters(room);
 
@@ -92,6 +97,7 @@ namespace Darkness
                 room,
                 playerAction,
                 monsters,
+                loudEventOccurred,
                 turnResult);
 
             Phase = TurnPhase.MonsterAction;
@@ -143,6 +149,7 @@ namespace Darkness
                 room,
                 playerAction,
                 monsters,
+                false,
                 turnResult);
 
             Phase = TurnPhase.MonsterAction;
@@ -164,7 +171,7 @@ namespace Darkness
             return turnResult;
         }
 
-        private void ApplyPlayerAction(
+        private bool ApplyPlayerAction(
             Room room,
             PlayerActionContext context,
             TurnResult turnResult)
@@ -179,7 +186,7 @@ namespace Darkness
                     context.TargetSlot,
                     result,
                     turnResult);
-                return;
+                return result.LoudEventOccurred;
             }
 
             if (context.Action == PlayerActionType.ThrowItem)
@@ -197,6 +204,7 @@ namespace Darkness
                 context.TargetSlot,
                 result,
                 turnResult);
+            return result.LoudEventOccurred;
         }
 
         private static void ValidateTarget(
@@ -282,6 +290,7 @@ namespace Darkness
             Room room,
             PlayerActionContext playerAction,
             List<MonsterTurnEntry> monsters,
+            bool loudEventOccurred,
             TurnResult turnResult)
         {
             foreach (MonsterTurnEntry entry in monsters)
@@ -295,7 +304,8 @@ namespace Darkness
                     new MonsterPerception(
                         playerAction,
                         room,
-                        entry.Slot));
+                        entry.Slot,
+                        loudEventOccurred));
                 if (!string.IsNullOrEmpty(decision.Message))
                 {
                     turnResult.Messages.Add(
@@ -410,6 +420,21 @@ namespace Darkness
                 AddChangedSlot(room, slot, turnResult);
             }
 
+            TreasureChest destroyedChest = slot == null
+                ? null
+                : slot.Content as TreasureChest;
+            string destroyedChestName =
+                destroyedChest != null && destroyedChest.IsDestroyed
+                    ? GetVisibleName(room, destroyedChest)
+                    : null;
+            if (RemoveDestroyedTreasureChest(slot))
+            {
+                turnResult.Messages.Add(
+                    CombatMessages.ObjectDestroyed(
+                        destroyedChestName));
+                AddChangedSlot(room, slot, turnResult);
+            }
+
             foreach (MonsterMoveRequest move in result.MonsterMoves)
             {
                 ApplyMonsterMove(room, move, turnResult);
@@ -420,6 +445,8 @@ namespace Darkness
                 slot.Reveal();
                 AddChangedSlot(room, slot, turnResult);
             }
+
+            AddDoorDiscoveryMessage(slot, turnResult);
         }
 
         private void ResolveItemThrow(
@@ -594,6 +621,25 @@ namespace Darkness
             return true;
         }
 
+        private static bool RemoveDestroyedTreasureChest(
+            RoomSlot slot)
+        {
+            if (slot == null)
+            {
+                return false;
+            }
+
+            TreasureChest chest =
+                slot.Content as TreasureChest;
+            if (chest == null || !chest.IsDestroyed)
+            {
+                return false;
+            }
+
+            slot.ClearContent();
+            return true;
+        }
+
         private void ApplyMonsterMove(
             Room room,
             MonsterMoveRequest request,
@@ -620,8 +666,21 @@ namespace Darkness
 
             sourceSlot.TakeContent();
             request.TargetSlot.SetContent(request.Monster);
+            request.Monster.CompleteMove(request.StateAfterMove);
             turnResult.ChangedSlotIndexes.Add(sourceIndex);
             turnResult.ChangedSlotIndexes.Add(targetIndex);
+            AddDoorDiscoveryMessage(sourceSlot, turnResult);
+        }
+
+        private static void AddDoorDiscoveryMessage(
+            RoomSlot slot,
+            TurnResult turnResult)
+        {
+            if (slot != null && slot.TryDiscoverDoor())
+            {
+                turnResult.Messages.Add(
+                    ExplorationMessages.DoorFound());
+            }
         }
 
         private void AddChangedSlot(

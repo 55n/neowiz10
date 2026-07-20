@@ -36,6 +36,7 @@ namespace Darkness
                 openingEventCompleted = true;
             }
 
+            ApplyRoomEntryEffect(dungeon.CurrentRoom);
             screen.InitScreen(dungeon.CurrentRoom, hero);
 
             while (true)
@@ -143,6 +144,7 @@ namespace Darkness
 
             if (result.RoomChanged && !result.HeroDied)
             {
+                ApplyRoomEntryEffect(dungeon.CurrentRoom);
                 screen.InitScreen(dungeon.CurrentRoom, hero);
                 return;
             }
@@ -245,7 +247,8 @@ namespace Darkness
                 fallType,
                 new Inventory(0),
                 new List<ActiveEffect>(),
-                new DefaultMonsterBehavior());
+                new DefaultMonsterBehavior(),
+                new List<string>());
 
             AttackContext fallAttack = new AttackContext(
                 fall,
@@ -361,6 +364,11 @@ namespace Darkness
                 return null;
             }
 
+            if (skill.Id == "cowardly_leap")
+            {
+                return ResolveCowardlyLeap(skill);
+            }
+
             RoomSlot targetSlot = null;
             IEnumerable<object> selectedTargets = null;
             if (skill.TargetingType == SkillTargetingType.SingleSlot)
@@ -396,6 +404,36 @@ namespace Darkness
                 command,
                 hero,
                 dungeon.CurrentRoom);
+        }
+
+        private TurnResult ResolveCowardlyLeap(SkillType skill)
+        {
+            TurnResult result = new TurnResult();
+            if (!dungeon.Rooms.ContainsKey("room-28") ||
+                !SkillCostResolver.TryPay(hero, skill))
+            {
+                result.Messages.Add(
+                    SkillMessages.CannotUse(skill.Name));
+                return result;
+            }
+
+            dungeon.MoveTo("room-28");
+            result.Messages.Add(
+                SkillMessages.Used(hero.Name, skill.Name));
+            result.RoomChanged = true;
+            result.TurnCompleted = true;
+            return result;
+        }
+
+        private void ApplyRoomEntryEffect(Room room)
+        {
+            if (room == null || room.Type.Id != "room-4")
+            {
+                return;
+            }
+
+            hero.RestoreHealth(hero.Type.MaxHealth);
+            hero.RestoreFocus(hero.Type.MaxFocus);
         }
 
     }

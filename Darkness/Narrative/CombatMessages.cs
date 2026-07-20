@@ -7,6 +7,16 @@ namespace Darkness
             return attacker + " 이(가) " + target + " 을(를) 공격했다";
         }
 
+        public static string DefenseStanceTaken()
+        {
+            return "당신은 방어 자세를 취했다.";
+        }
+
+        public static string ObjectDestroyed(string target)
+        {
+            return target + "이(가) 부서졌다.";
+        }
+
         public static string DamageReceived(string target, int damage)
         {
             return target + " 이(가) " + damage + " 의 피해를 입었다";

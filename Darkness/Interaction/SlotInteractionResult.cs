@@ -17,6 +17,7 @@ namespace Darkness
         public List<MonsterMoveRequest> MonsterMoves { get; private set; }
         public bool RevealSlot { get; set; }
         public bool RemoveContent { get; set; }
+        public bool LoudEventOccurred { get; set; }
 
         public SlotInteractionResult()
         {
@@ -46,6 +47,8 @@ namespace Darkness
             MonsterMoves.AddRange(other.MonsterMoves);
             RevealSlot = RevealSlot || other.RevealSlot;
             RemoveContent = RemoveContent || other.RemoveContent;
+            LoudEventOccurred =
+                LoudEventOccurred || other.LoudEventOccurred;
         }
     }
 }

@@ -3,120 +3,40 @@
   "WorkspaceRootPath": "C:\\projects\\course\\Darkness\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\skills\\skilldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\skills\\skilldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\effects\\effectdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\effects\\effectdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\effects\\effectapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\effects\\effectapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\screens\\explorationscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:screens\\explorationscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\phase\\exploration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:phase\\exploration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\phase\\intro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:phase\\intro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\inventory\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:inventory\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\items\\itemdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\items\\itemdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\monsters\\monsterdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\monsters\\monsterdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\monsters\\monsterdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\monsters\\monsterfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\monsters\\monsterfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\rooms\\roomdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\rooms\\roomdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\rooms\\roomdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\monster\\monster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\monster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\items\\itemdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\items\\itemdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\monster\\monsteractiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\monsteractiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\monster\\behavior\\hungrytrollbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\behavior\\hungrytrollbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\interaction\\islotcontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:interaction\\islotcontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\skills\\skilldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\skills\\skilldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\monster\\behavior\\lostgoblinbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\behavior\\lostgoblinbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\world\\roomslotcontentfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:world\\roomslotcontentfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\narrative\\combatmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:narrative\\combatmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\world\\roomslot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:world\\roomslot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\narrative.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:narrative.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\screens\\inventoryscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:screens\\inventoryscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\hero\\hero.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:hero\\hero.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\screens\\screenselection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:screens\\screenselection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\screens\\statusscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:screens\\statusscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\effects\\effecttarget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\effects\\effecttarget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\items\\itemcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\items\\itemcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\hero\\activeeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:hero\\activeeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\data\\effects\\effecttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\effects\\effecttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\hero\\guardianblessingeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:hero\\guardianblessingeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\screens\\screenaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:screens\\screenaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\projects\\course\\darkness\\data\\monsters\\monsterinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:data\\monsters\\monsterinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|C:\\projects\\course\\Darkness\\monster\\monster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\monster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -131,358 +51,112 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SkillData.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Skills\\SkillData.cs",
-              "RelativeDocumentMoniker": "Data\\Skills\\SkillData.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Skills\\SkillData.cs",
-              "RelativeToolTip": "Data\\Skills\\SkillData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T16:17:07.514Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EffectData.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectData.cs",
-              "RelativeDocumentMoniker": "Data\\Effects\\EffectData.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectData.cs",
-              "RelativeToolTip": "Data\\Effects\\EffectData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T16:17:48.933Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Inventory.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Inventory\\Inventory.cs",
-              "RelativeDocumentMoniker": "Inventory\\Inventory.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Inventory\\Inventory.cs",
-              "RelativeToolTip": "Inventory\\Inventory.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAAAFEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T15:38:07.856Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "MonsterFunction.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterFunction.cs",
-              "RelativeDocumentMoniker": "Data\\Monsters\\MonsterFunction.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterFunction.cs",
-              "RelativeToolTip": "Data\\Monsters\\MonsterFunction.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T11:14:47.545Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
               "Title": "MonsterData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterData.cs",
               "RelativeDocumentMoniker": "Data\\Monsters\\MonsterData.cs",
               "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterData.cs",
               "RelativeToolTip": "Data\\Monsters\\MonsterData.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAywEkAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T10:55:23.736Z"
+              "WhenOpened": "2026-07-20T14:22:03.797Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "MonsterActionType.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\MonsterActionType.cs",
-              "RelativeDocumentMoniker": "Monster\\MonsterActionType.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\MonsterActionType.cs",
-              "RelativeToolTip": "Monster\\MonsterActionType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T10:52:24.533Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "MonsterInteraction.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterInteraction.cs",
-              "RelativeDocumentMoniker": "Data\\Monsters\\MonsterInteraction.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterInteraction.cs",
-              "RelativeToolTip": "Data\\Monsters\\MonsterInteraction.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T10:52:06.05Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Monster.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Monster.cs",
-              "RelativeDocumentMoniker": "Monster\\Monster.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\Monster.cs*",
-              "RelativeToolTip": "Monster\\Monster.cs*",
-              "ViewState": "AgIAACUAAAAAAAAAAAA1wEAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T10:22:21.36Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "ISlotContent.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Interaction\\ISlotContent.cs",
-              "RelativeDocumentMoniker": "Interaction\\ISlotContent.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Interaction\\ISlotContent.cs",
-              "RelativeToolTip": "Interaction\\ISlotContent.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T09:24:33.71Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "CombatMessages.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative\\CombatMessages.cs",
-              "RelativeDocumentMoniker": "Narrative\\CombatMessages.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Narrative\\CombatMessages.cs",
-              "RelativeToolTip": "Narrative\\CombatMessages.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAuwCIAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T09:24:30.86Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "RoomSlot.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\World\\RoomSlot.cs",
-              "RelativeDocumentMoniker": "World\\RoomSlot.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\World\\RoomSlot.cs",
-              "RelativeToolTip": "World\\RoomSlot.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T09:11:30.197Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "ItemCategory.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Items\\ItemCategory.cs",
-              "RelativeDocumentMoniker": "Data\\Items\\ItemCategory.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Items\\ItemCategory.cs",
-              "RelativeToolTip": "Data\\Items\\ItemCategory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T08:20:10.438Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "ItemData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Items\\ItemData.cs",
               "RelativeDocumentMoniker": "Data\\Items\\ItemData.cs",
               "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Items\\ItemData.cs",
               "RelativeToolTip": "Data\\Items\\ItemData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T08:07:02.744Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "ActiveEffect.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Hero\\ActiveEffect.cs",
-              "RelativeDocumentMoniker": "Hero\\ActiveEffect.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Hero\\ActiveEffect.cs",
-              "RelativeToolTip": "Hero\\ActiveEffect.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T07:46:49.357Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "GuardianBlessingEffect.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Hero\\GuardianBlessingEffect.cs",
-              "RelativeDocumentMoniker": "Hero\\GuardianBlessingEffect.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Hero\\GuardianBlessingEffect.cs",
-              "RelativeToolTip": "Hero\\GuardianBlessingEffect.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T07:46:42.487Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "EffectType.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectType.cs",
-              "RelativeDocumentMoniker": "Data\\Effects\\EffectType.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectType.cs",
-              "RelativeToolTip": "Data\\Effects\\EffectType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T07:00:33.172Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "EffectTarget.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectTarget.cs",
-              "RelativeDocumentMoniker": "Data\\Effects\\EffectTarget.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectTarget.cs",
-              "RelativeToolTip": "Data\\Effects\\EffectTarget.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T07:00:28.68Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EffectApplication.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectApplication.cs",
-              "RelativeDocumentMoniker": "Data\\Effects\\EffectApplication.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Effects\\EffectApplication.cs",
-              "RelativeToolTip": "Data\\Effects\\EffectApplication.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T07:00:23.404Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "Narrative.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative.cs",
-              "RelativeDocumentMoniker": "Narrative.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Narrative.cs",
-              "RelativeToolTip": "Narrative.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAYwC0AAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T06:58:03.391Z"
+              "WhenOpened": "2026-07-20T13:24:21.582Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Intro.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Phase\\Intro.cs",
-              "RelativeDocumentMoniker": "Phase\\Intro.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Phase\\Intro.cs",
-              "RelativeToolTip": "Phase\\Intro.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAywD4AAAA2AAAAAAAAAA==",
+              "Title": "LostGoblinBehavior.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\LostGoblinBehavior.cs",
+              "RelativeDocumentMoniker": "Monster\\Behavior\\LostGoblinBehavior.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\LostGoblinBehavior.cs*",
+              "RelativeToolTip": "Monster\\Behavior\\LostGoblinBehavior.cs*",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAiwJoAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T06:57:42.932Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-20T12:29:44.281Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "GameManager.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\GameManager.cs",
-              "RelativeDocumentMoniker": "GameManager.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\GameManager.cs",
-              "RelativeToolTip": "GameManager.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAhwE4AAAAJAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "CombatMessages.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative\\CombatMessages.cs",
+              "RelativeDocumentMoniker": "Narrative\\CombatMessages.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Narrative\\CombatMessages.cs*",
+              "RelativeToolTip": "Narrative\\CombatMessages.cs*",
+              "ViewState": "AgIAABwAAAAAAAAAAAAIwCkAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T06:39:10.256Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Exploration.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Phase\\Exploration.cs",
-              "RelativeDocumentMoniker": "Phase\\Exploration.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Phase\\Exploration.cs",
-              "RelativeToolTip": "Phase\\Exploration.cs",
-              "ViewState": "AgIAAMsAAAAAAAAAAAAlwOUAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T06:34:39.88Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "Hero.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Hero\\Hero.cs",
-              "RelativeDocumentMoniker": "Hero\\Hero.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Hero\\Hero.cs",
-              "RelativeToolTip": "Hero\\Hero.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T06:30:15.12Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "RoomData.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs",
-              "RelativeDocumentMoniker": "Data\\Rooms\\RoomData.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs",
-              "RelativeToolTip": "Data\\Rooms\\RoomData.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAywFoAAABTAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T05:30:25.734Z"
+              "WhenOpened": "2026-07-20T12:29:36.874Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ExplorationScreen.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Screens\\ExplorationScreen.cs",
-              "RelativeDocumentMoniker": "Screens\\ExplorationScreen.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Screens\\ExplorationScreen.cs",
-              "RelativeToolTip": "Screens\\ExplorationScreen.cs",
-              "ViewState": "AgIAAGEBAAAAAAAAAAAuwHoBAAAzAAAAAAAAAA==",
+              "Title": "HungryTrollBehavior.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\HungryTrollBehavior.cs",
+              "RelativeDocumentMoniker": "Monster\\Behavior\\HungryTrollBehavior.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\HungryTrollBehavior.cs",
+              "RelativeToolTip": "Monster\\Behavior\\HungryTrollBehavior.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAowCkAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T05:26:11.167Z",
+              "WhenOpened": "2026-07-20T12:18:38.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RoomData.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs",
+              "RelativeDocumentMoniker": "Data\\Rooms\\RoomData.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs*",
+              "RelativeToolTip": "Data\\Rooms\\RoomData.cs*",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAAALIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-20T10:37:43.06Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "ScreenAction.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Screens\\ScreenAction.cs",
-              "RelativeDocumentMoniker": "Screens\\ScreenAction.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Screens\\ScreenAction.cs",
-              "RelativeToolTip": "Screens\\ScreenAction.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "RoomSlotContentFactory.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\World\\RoomSlotContentFactory.cs",
+              "RelativeDocumentMoniker": "World\\RoomSlotContentFactory.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\World\\RoomSlotContentFactory.cs",
+              "RelativeToolTip": "World\\RoomSlotContentFactory.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAywDAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T05:26:10.104Z"
+              "WhenOpened": "2026-07-20T10:15:00.316Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "ScreenSelection.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Screens\\ScreenSelection.cs",
-              "RelativeDocumentMoniker": "Screens\\ScreenSelection.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Screens\\ScreenSelection.cs",
-              "RelativeToolTip": "Screens\\ScreenSelection.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "Monster.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Monster.cs",
+              "RelativeDocumentMoniker": "Monster\\Monster.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\Monster.cs",
+              "RelativeToolTip": "Monster\\Monster.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T05:26:09.402Z"
+              "WhenOpened": "2026-07-20T10:14:49.109Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "InventoryScreen.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Screens\\InventoryScreen.cs",
-              "RelativeDocumentMoniker": "Screens\\InventoryScreen.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Screens\\InventoryScreen.cs",
-              "RelativeToolTip": "Screens\\InventoryScreen.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAYwFQAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "SkillData.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Skills\\SkillData.cs",
+              "RelativeDocumentMoniker": "Data\\Skills\\SkillData.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Skills\\SkillData.cs",
+              "RelativeToolTip": "Data\\Skills\\SkillData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-18T11:33:40.864Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "StatusScreen.cs",
-              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Screens\\StatusScreen.cs",
-              "RelativeDocumentMoniker": "Screens\\StatusScreen.cs",
-              "ToolTip": "C:\\projects\\course\\Darkness\\Screens\\StatusScreen.cs",
-              "RelativeToolTip": "Screens\\StatusScreen.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAowDgAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-19T04:35:39.268Z"
+              "WhenOpened": "2026-07-19T16:17:07.514Z"
             }
           ]
         }

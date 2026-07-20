@@ -71,6 +71,7 @@
     <Compile Include="Effect\Effects\DefendingEffect.cs" />
     <Compile Include="Effect\Effects\HastyEffect.cs" />
     <Compile Include="Effect\Effects\PerfectFocusEffect.cs" />
+    <Compile Include="Effect\Effects\TrapMisfireEffect.cs" />
     <Compile Include="Effect\Effects\WeaponEmpowermentEffect.cs" />
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Interaction\ISlotContent.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Interaction\SlotInteractionResult.cs" />
     <Compile Include="Phase\Exploration.cs" />
     <Compile Include="Phase\Intro.cs" />
+    <Compile Include="Pile\Pile.cs" />
     <Compile Include="Screens\InventoryScreen.cs" />
     <Compile Include="Screens\ExplorationScreen.cs" />
     <Compile Include="Screens\SkillScreen.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Turn\TurnPhase.cs" />
     <Compile Include="Turn\TurnResult.cs" />
     <Compile Include="Trap\Trap.cs" />
+    <Compile Include="TreasureChest\TreasureChest.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="World\Dungeon.cs" />

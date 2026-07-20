@@ -25,7 +25,6 @@ C:\projects\course\Darkness\bin\Debug\Darkness.exe
 C:\projects\course\Darkness\bin\Debug\Darkness.pdb
 C:\projects\course\Darkness\obj\Debug\Darkness.exe
 C:\projects\course\Darkness\obj\Debug\Darkness.pdb
-C:\projects\course\Darkness\obj\Debug\Darkness.exe.config
 C:\course\projects\Darkness\bin\CodexVerify\Darkness.exe.config
 C:\course\projects\Darkness\bin\CodexVerify\Darkness.exe
 C:\course\projects\Darkness\bin\CodexVerify\Darkness.pdb
@@ -35,3 +34,7 @@ C:\course\projects\Darkness\bin\CodexFinalVerify\Darkness.pdb
 C:\course\projects\Darkness\bin\CodexVerify2\Darkness.exe.config
 C:\course\projects\Darkness\bin\CodexVerify2\Darkness.exe
 C:\course\projects\Darkness\bin\CodexVerify2\Darkness.pdb
+C:\projects\course\Darkness\bin\CodexVerify\Darkness.exe.config
+C:\projects\course\Darkness\bin\CodexVerify\Darkness.exe
+C:\projects\course\Darkness\bin\CodexVerify\Darkness.pdb
+C:\projects\course\Darkness\obj\Debug\Darkness.exe.config

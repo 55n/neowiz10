@@ -59,8 +59,14 @@ namespace Darkness
             View.Display.Clear();
             explorationPanel.ClearSelection();
 
-            explorationPanel.PlayNarrations(
-                room.Type.EnterMessages);
+            if (!room.HasBeenEntered)
+            {
+                explorationPanel.PlayNarrations(
+                    room.Type.EnterMessages);
+                room.MarkAsEntered();
+            }
+
+            PlayMonsterEncounterMessages(room);
 
             DrawSlots(View.Display, room.Slots);
 
@@ -68,14 +74,25 @@ namespace Darkness
                 explorationNode);
         }
 
+        private void PlayMonsterEncounterMessages(Room room)
+        {
+            foreach (RoomSlot slot in room.Slots)
+            {
+                Monster monster = slot.Content as Monster;
+                if (monster != null && monster.IsAlive)
+                {
+                    explorationPanel.PlayNarrations(
+                        monster.EncounterMessages);
+                }
+            }
+        }
+
         public SelectionMenu BuildExplorationSelection(Hero hero)
         {
             SkillData skillData = new SkillData();
-            string roomDescription =
-                currentRoom != null && currentRoom.Type.EnterMessages.Count > 0
-                    ? currentRoom.Type.EnterMessages[
-                        currentRoom.Type.EnterMessages.Count - 1]
-                    : "";
+            string roomDescription = currentRoom == null
+                ? ""
+                : currentRoom.Type.Description;
 
             explorationNode = new SelectionNode(
                 "exploration-node",

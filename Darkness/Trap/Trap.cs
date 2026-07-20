@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Trap : IDamageable, ISlotContent
+    public class Trap : IDamageable, IEffectTarget, ISlotContent
     {
         public TrapType Type { get; private set; }
         public int CurrentHealth { get; private set; }
@@ -50,6 +50,32 @@ namespace Darkness
             }
         }
 
+        public void ApplyEffect(ActiveEffect effect)
+        {
+            if (effect == null)
+            {
+                return;
+            }
+
+            ActiveEffect existing = Effects.Find(
+                active => active.Type.Id == effect.Type.Id);
+            if (existing != null && existing.Type.IsStackable)
+            {
+                existing.AddStack();
+                return;
+            }
+
+            if (existing == null)
+            {
+                Effects.Add(effect);
+            }
+        }
+
+        public void RemoveEffect(string effectId)
+        {
+            Effects.RemoveAll(effect => effect.Type.Id == effectId);
+        }
+
         public virtual SlotInteractionResult React(
             PlayerActionContext context)
         {
@@ -74,11 +100,19 @@ namespace Darkness
 
             if (!IsActive ||
                 (context.Action != PlayerActionType.Search &&
-                 context.Action != PlayerActionType.Attack))
+                 context.Action != PlayerActionType.Attack &&
+                 context.Action != PlayerActionType.ThrowItem))
             {
                 return result;
             }
 
+            if (context.Action == PlayerActionType.ThrowItem)
+            {
+                ApplyEffect(
+                    new ActiveEffectFactory().Create("trap_misfire"));
+            }
+
+            result.LoudEventOccurred = true;
             result.Messages.Add(Type.Description);
             result.Attacks.Add(new AttackContext(
                 this,
