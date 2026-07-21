@@ -123,7 +123,8 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Combat,
                     MonsterActionPlan.UseSkill(RushSkillId),
-                    message);
+                    monster.Name +
+                    "은(는) 공격에 겁먹고 당신을 향해 무작정 돌진한다.");
             }
 
             return new MonsterDecision(
@@ -139,7 +140,8 @@ namespace Darkness
             return new MonsterDecision(
                 MonsterState.Detected,
                 MonsterActionPlan.Attack(MonsterState.Combat),
-                monster.Name + "은(는) 당신을 발견했다!");
+                monster.Name +
+                "은(는) 당신을 발견하고 곧장 달려든다!");
         }
 
         private static MonsterDecision EnterCombat(
@@ -147,17 +149,23 @@ namespace Darkness
             bool announceDetection)
         {
             SkillType rush = new SkillData().SkillTypes[RushSkillId];
-            MonsterActionPlan action =
-                monster.WasHitSinceLastAction &&
-                SkillCostResolver.CanPay(monster, rush)
-                    ? MonsterActionPlan.UseSkill(RushSkillId)
-                    : MonsterActionPlan.Defend();
+            bool willRush = monster.WasHitSinceLastAction &&
+                SkillCostResolver.CanPay(monster, rush);
+            MonsterActionPlan action = willRush
+                ? MonsterActionPlan.UseSkill(RushSkillId)
+                : MonsterActionPlan.Defend();
+            string actionMessage = willRush
+                ? monster.Name +
+                  "은(는) 겁에 질려 당신을 향해 무작정 돌진한다."
+                : monster.Name +
+                  "은(는) 몸을 웅크려 당신의 공격에 대비한다.";
             return new MonsterDecision(
                 MonsterState.Combat,
                 action,
                 announceDetection
-                    ? monster.Name + "은(는) 당신을 발견했다!"
-                    : null);
+                    ? monster.Name + "은(는) 당신을 발견했다! " +
+                      actionMessage
+                    : actionMessage);
         }
 
         private static MonsterDecision ReactToThrownItem(

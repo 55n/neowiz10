@@ -20,6 +20,8 @@ namespace Darkness
                 new ItemType("cracked_guardian_charm", "금이 간 수호의 부적", "[수호의 가호] 스킬을 사용할 수 있게 해준다.", ItemCategory.Accessory, 30, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("magic_stone", "마석", "몬스터에게서 얻는 응축된 마력이다.", ItemCategory.Consumable, 1, 99, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("monster_bait", "몬스터 미끼", "피와 살점으로 만든 미끼로 강한 먹이 냄새가 난다.", ItemCategory.Consumable, 3, 5, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Lure),
+                new ItemType("pocket", "주머니", "가방에 달아 소지품 칸 수를 2 늘린다.", ItemCategory.Consumable, 8, 1, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.ExpandInventory, ItemFunction.None),
+                new ItemType("rag_armor", "넝마", "여러 겹의 천 조각을 엮어 만든 조악한 방어구다.", ItemCategory.Armor, 3, 1, false, 2, 0, 1, 3, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("troll_oil", "트롤 기름", "체취를 가리거나 다른 위치에 강한 냄새를 남긴다.", ItemCategory.Consumable, 6, 3, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.MaskScent, ItemFunction.CreateScent),
                 new ItemType("troll_blood", "트롤 피", "재생력이 남은 희귀한 피로 체력을 크게 회복한다.", ItemCategory.Consumable, 12, 2, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.HealHealth, ItemFunction.HealHealth),
                 new ItemType("vibration_shell", "진동벌레 허물", "바닥에 부딪히면 길고 복잡한 진동을 만든다.", ItemCategory.Consumable, 5, 3, false, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.CreateVibration),

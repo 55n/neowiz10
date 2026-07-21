@@ -6,6 +6,13 @@ namespace Darkness
         Monster,
         TreasureChest,
         Trap,
-        Pile
+        Pile,
+        Coffin,
+        Body,
+        Water,
+        Echo,
+        Sand,
+        Prey,
+        Egg
     }
 }

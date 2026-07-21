@@ -107,6 +107,7 @@
     <Compile Include="Message\SelectionOption.cs" />
     <Compile Include="Monster\Monster.cs" />
     <Compile Include="Monster\Behavior\DefaultMonsterBehavior.cs" />
+    <Compile Include="Monster\Behavior\ConfidentGoblinBehavior.cs" />
     <Compile Include="Monster\Behavior\HungryTrollBehavior.cs" />
     <Compile Include="Monster\Behavior\LostGoblinBehavior.cs" />
     <Compile Include="Monster\Behavior\IMonsterBehavior.cs" />
@@ -130,7 +131,10 @@
     <Compile Include="Narrative\CombatMessages.cs" />
     <Compile Include="Narrative\EquipmentMessages.cs" />
     <Compile Include="Narrative\ExplorationMessages.cs" />
+    <Compile Include="Narrative\HeroActionMessages.cs" />
+    <Compile Include="Narrative\HeroStateMessages.cs" />
     <Compile Include="Narrative\InventoryMessages.cs" />
+    <Compile Include="Narrative\MonsterActionMessages.cs" />
     <Compile Include="Narrative\SkillMessages.cs" />
     <Compile Include="Narrative\SystemMessages.cs" />
     <Compile Include="Data\Skills\SkillCostType.cs" />
@@ -165,6 +169,9 @@
     <Compile Include="World\Room.cs" />
     <Compile Include="World\RoomSlot.cs" />
     <Compile Include="World\RoomSlotContentFactory.cs" />
+    <Compile Include="World\SlotContentChangeRequest.cs" />
+    <Compile Include="World\SlotContentChangeType.cs" />
+    <Compile Include="World\SlotStateChangeRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

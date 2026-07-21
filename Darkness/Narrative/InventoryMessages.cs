@@ -27,6 +27,16 @@ namespace Darkness
             return "당신은 " + item + " 을(를) 던졌다";
         }
 
+        public static string InventoryExpanded(int amount)
+        {
+            return "소지품 칸 수가 " + amount + " 늘어났습니다";
+        }
+
+        public static string CannotUseItem(string item)
+        {
+            return item + " 을(를) 사용할 수 없습니다";
+        }
+
         public static string ThrowItemPrompt(string item)
         {
             return item + " 을(를) 던집니까?";

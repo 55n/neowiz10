@@ -11,6 +11,7 @@ namespace Darkness
         private readonly Dictionary<RoomObjectType, Func<RoomSlotType, int, ISlotContent>> factories;
         private readonly Dictionary<string, Func<Monster>> monsterFactories;
         private readonly Dictionary<string, Func<TreasureChest>> treasureChestFactories;
+        private readonly Dictionary<string, string> trapTypeIds;
 
         public RoomSlotContentFactory()
         {
@@ -20,7 +21,9 @@ namespace Darkness
             monsterFactories = new Dictionary<string, Func<Monster>>
             {
                 { "room1_lost_goblin", CreateRoom1LostGoblin },
-                { "room3_hungry_troll", CreateRoom3HungryTroll }
+                { "room3_hungry_troll", CreateRoom3HungryTroll },
+                { "room5_goblin_1", CreateRoom5BaitGoblin },
+                { "room5_goblin_2", CreateRoom5RagGoblin }
             };
             treasureChestFactories =
                 new Dictionary<string, Func<TreasureChest>>
@@ -28,6 +31,10 @@ namespace Darkness
                     { "room2_treasure_chest", CreateRoom2TreasureChest },
                     { "room3_treasure_chest", CreateRoom3TreasureChest }
                 };
+            trapTypeIds = new Dictionary<string, string>
+            {
+                { "room2_arrow_trap", "arrow_trap" }
+            };
             factories = new Dictionary<RoomObjectType, Func<RoomSlotType, int, ISlotContent>>
             {
                 { RoomObjectType.Monster, CreateMonster },
@@ -141,8 +148,51 @@ namespace Darkness
 
         private ISlotContent CreateTrap(RoomSlotType slotType, int slotIndex)
         {
-            TrapType trapType = trapData.TrapTypes[slotType.ObjectTypeId];
+            string trapTypeId;
+            if (!trapTypeIds.TryGetValue(
+                    slotType.ObjectTypeId,
+                    out trapTypeId))
+            {
+                throw new InvalidOperationException(
+                    "Unknown trap instance: " +
+                    slotType.ObjectTypeId);
+            }
+
+            TrapType trapType = trapData.TrapTypes[trapTypeId];
             return new Trap(trapType);
+        }
+
+        private Monster CreateRoom5BaitGoblin()
+        {
+            Inventory inventory = new Inventory(1);
+            StoreItem(inventory, "monster_bait", 1);
+            return CreateRoom5Goblin(
+                inventory,
+                new List<string>
+                {
+                    "어둠 속에서 두 개의 작은 그림자가 움직인다."
+                });
+        }
+
+        private Monster CreateRoom5RagGoblin()
+        {
+            Inventory inventory = new Inventory(1);
+            StoreItem(inventory, "rag_armor", 1);
+            return CreateRoom5Goblin(
+                inventory,
+                new List<string>());
+        }
+
+        private Monster CreateRoom5Goblin(
+            Inventory inventory,
+            List<string> encounterMessages)
+        {
+            return CreateMonster(
+                "lost_goblin",
+                inventory,
+                new ConfidentGoblinBehavior(),
+                encounterMessages,
+                3);
         }
 
         private ISlotContent CreateTreasureChest(
@@ -181,16 +231,24 @@ namespace Darkness
             RoomSlotType slotType,
             int slotIndex)
         {
-            if (slotType.ObjectTypeId != "room4_loser_mark_pile")
+            Inventory inventory;
+            if (slotType.ObjectTypeId == "room4_loser_mark_pile")
             {
-                throw new InvalidOperationException(
-                    "Unknown pile instance: " +
-                    slotType.ObjectTypeId);
+                inventory = new Inventory(1);
+                StoreItem(inventory, "loser_mark", 1);
+                return new Pile(inventory);
             }
 
-            Inventory inventory = new Inventory(1);
-            StoreItem(inventory, "loser_mark", 1);
-            return new Pile(inventory);
+            if (slotType.ObjectTypeId == "room5_supply_pile")
+            {
+                inventory = new Inventory(1);
+                StoreItem(inventory, "pocket", 1);
+                return new Pile(inventory);
+            }
+
+            throw new InvalidOperationException(
+                "Unknown pile instance: " +
+                slotType.ObjectTypeId);
         }
     }
 }

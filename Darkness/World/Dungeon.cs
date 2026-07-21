@@ -35,12 +35,14 @@ namespace Darkness
                 {
                     RoomEdgeType edgeType = edgePair.Value;
 
-                    if (edgeType.TargetRoomId == null)
+                    Room targetRoom;
+                    if (edgeType.TargetRoomId == null ||
+                        !Rooms.TryGetValue(
+                            edgeType.TargetRoomId,
+                            out targetRoom))
                     {
                         continue;
                     }
-
-                    Room targetRoom = Rooms[edgeType.TargetRoomId];
 
                     room.Edges.Add(
                         edgePair.Key,

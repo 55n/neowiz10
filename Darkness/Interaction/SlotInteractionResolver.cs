@@ -38,12 +38,13 @@ namespace Darkness
 
             RoomSlot slot = context.TargetSlot;
             bool isFirstReveal = slot.State != SlotState.REVEALED;
-            result.RevealSlot = true;
+            result.SlotStateChanges.Add(
+                SlotStateChangeRequest.Reveal(slot));
             bool foundSomething = false;
             bool inventoryFull = false;
 
             if (isFirstReveal &&
-                slot.Type.ObjectType == RoomObjectType.TreasureChest)
+                slot.Content is TreasureChest)
             {
                 result.LoudEventOccurred = true;
                 result.Messages.Add(

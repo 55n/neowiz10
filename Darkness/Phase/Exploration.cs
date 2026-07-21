@@ -8,6 +8,8 @@ namespace Darkness
 {
     class Exploration
     {
+        private const string CowardlyLeapDestinationRoomId = "room-17";
+
         private readonly Hero hero;
         private readonly Dungeon dungeon;
         private readonly ExplorationScreen screen;
@@ -36,8 +38,13 @@ namespace Darkness
                 openingEventCompleted = true;
             }
 
-            ApplyRoomEntryEffect(dungeon.CurrentRoom);
+            string entryStateMessage =
+                ApplyRoomEntryEffect(dungeon.CurrentRoom);
             screen.InitScreen(dungeon.CurrentRoom, hero);
+            if (!string.IsNullOrEmpty(entryStateMessage))
+            {
+                Utility.PlayMessage(entryStateMessage);
+            }
 
             while (true)
             {
@@ -144,8 +151,13 @@ namespace Darkness
 
             if (result.RoomChanged && !result.HeroDied)
             {
-                ApplyRoomEntryEffect(dungeon.CurrentRoom);
+                string entryStateMessage =
+                    ApplyRoomEntryEffect(dungeon.CurrentRoom);
                 screen.InitScreen(dungeon.CurrentRoom, hero);
+                if (!string.IsNullOrEmpty(entryStateMessage))
+                {
+                    Utility.PlayMessage(entryStateMessage);
+                }
                 return;
             }
 
@@ -348,8 +360,38 @@ namespace Darkness
                         selection.EquipmentSlot);
                 }
             }
+            else if (selection.Action == ScreenAction.UseItem)
+            {
+                UseItem(selection.ItemStack);
+                screen.OpenExplorationSelection();
+                return null;
+            }
 
             return null;
+        }
+
+        private void UseItem(ItemStack itemStack)
+        {
+            if (itemStack == null || itemStack.Count <= 0 ||
+                !hero.Inventory.ItemStacks.Contains(itemStack))
+            {
+                return;
+            }
+
+            ItemType itemType = itemStack.Item.Type;
+            if (itemType.UseFunction == ItemFunction.ExpandInventory &&
+                hero.Inventory.Discard(itemStack, 1) == 1)
+            {
+                const int pocketCapacityBonus = 2;
+                hero.Inventory.ExpandCapacity(pocketCapacityBonus);
+                Utility.PlayMessage(
+                    InventoryMessages.InventoryExpanded(
+                        pocketCapacityBonus));
+                return;
+            }
+
+            Utility.PlayMessage(
+                InventoryMessages.CannotUseItem(itemType.Name));
         }
 
         private TurnResult HandleSkillSelection(SkillSelection selection)
@@ -409,7 +451,8 @@ namespace Darkness
         private TurnResult ResolveCowardlyLeap(SkillType skill)
         {
             TurnResult result = new TurnResult();
-            if (!dungeon.Rooms.ContainsKey("room-28") ||
+            if (!dungeon.Rooms.ContainsKey(
+                    CowardlyLeapDestinationRoomId) ||
                 !SkillCostResolver.TryPay(hero, skill))
             {
                 result.Messages.Add(
@@ -417,7 +460,7 @@ namespace Darkness
                 return result;
             }
 
-            dungeon.MoveTo("room-28");
+            dungeon.MoveTo(CowardlyLeapDestinationRoomId);
             result.Messages.Add(
                 SkillMessages.Used(hero.Name, skill.Name));
             result.RoomChanged = true;
@@ -425,15 +468,20 @@ namespace Darkness
             return result;
         }
 
-        private void ApplyRoomEntryEffect(Room room)
+        private string ApplyRoomEntryEffect(Room room)
         {
             if (room == null || room.Type.Id != "room-4")
             {
-                return;
+                return null;
             }
 
+            int previousHealth = hero.CurrentHealth;
+            int previousFocus = hero.CurrentFocus;
             hero.RestoreHealth(hero.Type.MaxHealth);
             hero.RestoreFocus(hero.Type.MaxFocus);
+            return HeroStateMessages.Restored(
+                hero.CurrentHealth - previousHealth,
+                hero.CurrentFocus - previousFocus);
         }
 
     }

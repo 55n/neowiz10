@@ -15,7 +15,16 @@ namespace Darkness
             private set;
         }
         public List<MonsterMoveRequest> MonsterMoves { get; private set; }
-        public bool RevealSlot { get; set; }
+        public List<SlotContentChangeRequest> SlotContentChanges
+        {
+            get;
+            private set;
+        }
+        public List<SlotStateChangeRequest> SlotStateChanges
+        {
+            get;
+            private set;
+        }
         public bool RemoveContent { get; set; }
         public bool LoudEventOccurred { get; set; }
 
@@ -29,6 +38,10 @@ namespace Darkness
             DurabilityRequests =
                 new List<EquipmentDurabilityRequest>();
             MonsterMoves = new List<MonsterMoveRequest>();
+            SlotContentChanges =
+                new List<SlotContentChangeRequest>();
+            SlotStateChanges =
+                new List<SlotStateChangeRequest>();
         }
 
         public void Merge(SlotInteractionResult other)
@@ -45,7 +58,8 @@ namespace Darkness
             ItemThrows.AddRange(other.ItemThrows);
             DurabilityRequests.AddRange(other.DurabilityRequests);
             MonsterMoves.AddRange(other.MonsterMoves);
-            RevealSlot = RevealSlot || other.RevealSlot;
+            SlotContentChanges.AddRange(other.SlotContentChanges);
+            SlotStateChanges.AddRange(other.SlotStateChanges);
             RemoveContent = RemoveContent || other.RemoveContent;
             LoudEventOccurred =
                 LoudEventOccurred || other.LoudEventOccurred;

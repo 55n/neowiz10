@@ -85,6 +85,14 @@ namespace Darkness
                 command.Item,
                 command.SkillUse,
                 command.ItemSourceEquipmentSlot);
+            string playerActionMessage = HeroActionMessages.Started(
+                command.Action,
+                GetVisibleSlotTargetName(command.TargetSlot));
+            if (!string.IsNullOrEmpty(playerActionMessage))
+            {
+                turnResult.Messages.Add(playerActionMessage);
+            }
+
             bool loudEventOccurred = ApplyPlayerAction(
                 room,
                 playerAction,
@@ -161,6 +169,9 @@ namespace Darkness
             {
                 dungeon.Move(direction);
                 turnResult.RoomChanged = true;
+                turnResult.Messages.Add(
+                    HeroActionMessages.Moved(
+                        dungeon.CurrentRoom.Type.Name));
             }
 
             TurnNumber++;
@@ -300,18 +311,28 @@ namespace Darkness
                     continue;
                 }
 
+                MonsterState previousState = entry.Monster.State;
                 MonsterDecision decision = entry.Monster.Decide(
                     new MonsterPerception(
                         playerAction,
                         room,
                         entry.Slot,
                         loudEventOccurred));
-                if (!string.IsNullOrEmpty(decision.Message))
+                string message = decision.Message;
+                if (string.IsNullOrEmpty(message))
+                {
+                    message = MonsterActionMessages.DecisionFallback(
+                        entry.Monster.Name,
+                        previousState,
+                        decision);
+                }
+
+                if (!string.IsNullOrEmpty(message))
                 {
                     turnResult.Messages.Add(
                         GetVisibleDecisionMessage(
                             entry,
-                            decision.Message));
+                            message));
                 }
             }
         }
@@ -351,8 +372,18 @@ namespace Darkness
             turnResult.Messages.AddRange(result.Messages);
             if (result.RemoveContent)
             {
-                slot.ClearContent();
-                AddChangedSlot(room, slot, turnResult);
+                ISlotContent content = slot == null
+                    ? null
+                    : slot.Content;
+                if (content != null)
+                {
+                    ApplySlotContentChange(
+                        room,
+                        SlotContentChangeRequest.Remove(
+                            slot,
+                            content),
+                        turnResult);
+                }
             }
 
             foreach (SkillUseContext skillUse in result.SkillUses)
@@ -412,12 +443,15 @@ namespace Darkness
                 defeatedMonster != null && !defeatedMonster.IsAlive
                     ? GetVisibleName(room, defeatedMonster)
                     : null;
-            if (DropDefeatedMonsterLoot(slot))
+            if (DropDefeatedMonsterLoot(
+                    room,
+                    slot,
+                    defeatedMonster,
+                    turnResult))
             {
                 turnResult.Messages.Add(
                     CombatMessages.MonsterDefeated(
                         defeatedMonsterName));
-                AddChangedSlot(room, slot, turnResult);
             }
 
             TreasureChest destroyedChest = slot == null
@@ -427,24 +461,31 @@ namespace Darkness
                 destroyedChest != null && destroyedChest.IsDestroyed
                     ? GetVisibleName(room, destroyedChest)
                     : null;
-            if (RemoveDestroyedTreasureChest(slot))
+            if (RemoveDestroyedTreasureChest(
+                    room,
+                    slot,
+                    destroyedChest,
+                    turnResult))
             {
                 turnResult.Messages.Add(
                     CombatMessages.ObjectDestroyed(
                         destroyedChestName));
-                AddChangedSlot(room, slot, turnResult);
             }
+
+            ApplySlotContentChanges(
+                room,
+                result.SlotContentChanges,
+                turnResult);
 
             foreach (MonsterMoveRequest move in result.MonsterMoves)
             {
                 ApplyMonsterMove(room, move, turnResult);
             }
 
-            if (result.RevealSlot)
-            {
-                slot.Reveal();
-                AddChangedSlot(room, slot, turnResult);
-            }
+            ApplySlotStateChanges(
+                room,
+                result.SlotStateChanges,
+                turnResult);
 
             AddDoorDiscoveryMessage(slot, turnResult);
         }
@@ -547,8 +588,13 @@ namespace Darkness
                 return;
             }
 
-            sourceSlot.Reveal();
-            AddChangedSlot(room, sourceSlot, turnResult);
+            ApplySlotStateChanges(
+                room,
+                new[]
+                {
+                    SlotStateChangeRequest.Reveal(sourceSlot)
+                },
+                turnResult);
         }
 
         private static string GetVisibleDecisionMessage(
@@ -580,15 +626,60 @@ namespace Darkness
             string message)
         {
             IDamageable source = user as IDamageable;
-            if (source == null || string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
             {
                 return message;
             }
 
-            string visibleName = GetVisibleName(room, source);
-            return visibleName == source.Name
-                ? message
-                : message.Replace(source.Name, visibleName);
+            string visibleMessage = message;
+            if (source != null)
+            {
+                string visibleName = GetVisibleName(room, source);
+                if (visibleName != source.Name)
+                {
+                    visibleMessage = visibleMessage.Replace(
+                        source.Name,
+                        visibleName);
+                }
+            }
+
+            foreach (RoomSlot slot in room.Slots)
+            {
+                if (slot.State != SlotState.REVEALED &&
+                    slot.Content != null &&
+                    !string.IsNullOrEmpty(slot.Content.Name))
+                {
+                    visibleMessage = visibleMessage.Replace(
+                        slot.Content.Name,
+                        "???");
+                }
+            }
+
+            return visibleMessage;
+        }
+
+        private static string GetVisibleSlotTargetName(RoomSlot slot)
+        {
+            if (slot == null)
+            {
+                return "주변";
+            }
+
+            if (slot.State != SlotState.REVEALED)
+            {
+                return slot.Content == null
+                    ? "어두운 공간"
+                    : "???";
+            }
+
+            if (slot.Content != null)
+            {
+                return slot.Content.Name;
+            }
+
+            return slot.Type.HasDoor
+                ? ExplorationMessages.Door()
+                : "빈 공간";
         }
 
         private static RoomSlot FindContentSlot(
@@ -603,41 +694,42 @@ namespace Darkness
                         content));
         }
 
-        private bool DropDefeatedMonsterLoot(RoomSlot slot)
+        private bool DropDefeatedMonsterLoot(
+            Room room,
+            RoomSlot slot,
+            Monster monster,
+            TurnResult turnResult)
         {
-            if (slot == null)
-            {
-                return false;
-            }
-
-            Monster monster = slot.Content as Monster;
-            if (monster == null || monster.IsAlive)
+            if (slot == null || monster == null || monster.IsAlive ||
+                !ReferenceEquals(slot.Content, monster))
             {
                 return false;
             }
 
             monster.Inventory.TransferAllTo(slot.GroundInventory);
-            slot.ClearContent();
-            return true;
+            return ApplySlotContentChange(
+                room,
+                SlotContentChangeRequest.Remove(slot, monster),
+                turnResult);
         }
 
-        private static bool RemoveDestroyedTreasureChest(
-            RoomSlot slot)
+        private bool RemoveDestroyedTreasureChest(
+            Room room,
+            RoomSlot slot,
+            TreasureChest chest,
+            TurnResult turnResult)
         {
-            if (slot == null)
+            if (slot == null || chest == null ||
+                !chest.IsDestroyed ||
+                !ReferenceEquals(slot.Content, chest))
             {
                 return false;
             }
 
-            TreasureChest chest =
-                slot.Content as TreasureChest;
-            if (chest == null || !chest.IsDestroyed)
-            {
-                return false;
-            }
-
-            slot.ClearContent();
-            return true;
+            return ApplySlotContentChange(
+                room,
+                SlotContentChangeRequest.Remove(slot, chest),
+                turnResult);
         }
 
         private void ApplyMonsterMove(
@@ -664,12 +756,19 @@ namespace Darkness
                 return;
             }
 
-            sourceSlot.TakeContent();
-            request.TargetSlot.SetContent(request.Monster);
+            bool moved = ApplySlotContentChange(
+                room,
+                SlotContentChangeRequest.Move(
+                    sourceSlot,
+                    request.TargetSlot,
+                    request.Monster),
+                turnResult);
+            if (!moved)
+            {
+                return;
+            }
+
             request.Monster.CompleteMove(request.StateAfterMove);
-            turnResult.ChangedSlotIndexes.Add(sourceIndex);
-            turnResult.ChangedSlotIndexes.Add(targetIndex);
-            AddDoorDiscoveryMessage(sourceSlot, turnResult);
         }
 
         private static void AddDoorDiscoveryMessage(
@@ -680,6 +779,218 @@ namespace Darkness
             {
                 turnResult.Messages.Add(
                     ExplorationMessages.DoorFound());
+            }
+        }
+
+        private void ApplySlotContentChanges(
+            Room room,
+            IEnumerable<SlotContentChangeRequest> requests,
+            TurnResult turnResult)
+        {
+            if (requests == null)
+            {
+                return;
+            }
+
+            foreach (SlotContentChangeRequest request in requests)
+            {
+                ApplySlotContentChange(
+                    room,
+                    request,
+                    turnResult);
+            }
+        }
+
+        private bool ApplySlotContentChange(
+            Room room,
+            SlotContentChangeRequest request,
+            TurnResult turnResult)
+        {
+            if (room == null || request == null ||
+                turnResult == null)
+            {
+                return false;
+            }
+
+            switch (request.ChangeType)
+            {
+                case SlotContentChangeType.Place:
+                    return ApplyContentPlace(
+                        room,
+                        request,
+                        turnResult);
+                case SlotContentChangeType.Remove:
+                    return ApplyContentRemove(
+                        room,
+                        request,
+                        turnResult);
+                case SlotContentChangeType.Move:
+                    return ApplyContentMove(
+                        room,
+                        request,
+                        turnResult);
+                case SlotContentChangeType.Replace:
+                    return ApplyContentReplace(
+                        room,
+                        request,
+                        turnResult);
+                default:
+                    return false;
+            }
+        }
+
+        private bool ApplyContentPlace(
+            Room room,
+            SlotContentChangeRequest request,
+            TurnResult turnResult)
+        {
+            RoomSlot target = request.TargetSlot;
+            if (!ContainsSlot(room, target) || !target.IsEmpty ||
+                request.NewContent == null ||
+                ContainsContent(room, request.NewContent))
+            {
+                return false;
+            }
+
+            target.SetContent(request.NewContent);
+            AddChangedSlot(room, target, turnResult);
+            return true;
+        }
+
+        private bool ApplyContentRemove(
+            Room room,
+            SlotContentChangeRequest request,
+            TurnResult turnResult)
+        {
+            RoomSlot source = request.SourceSlot;
+            if (!ContainsSlot(room, source) ||
+                request.ExpectedContent == null ||
+                !ReferenceEquals(
+                    source.Content,
+                    request.ExpectedContent))
+            {
+                return false;
+            }
+
+            source.ClearContent();
+            AddChangedSlot(room, source, turnResult);
+            AddDoorDiscoveryMessage(source, turnResult);
+            return true;
+        }
+
+        private bool ApplyContentMove(
+            Room room,
+            SlotContentChangeRequest request,
+            TurnResult turnResult)
+        {
+            RoomSlot source = request.SourceSlot;
+            RoomSlot target = request.TargetSlot;
+            if (!ContainsSlot(room, source) ||
+                !ContainsSlot(room, target) ||
+                ReferenceEquals(source, target) ||
+                request.ExpectedContent == null ||
+                !ReferenceEquals(
+                    source.Content,
+                    request.ExpectedContent) ||
+                !target.IsEmpty)
+            {
+                return false;
+            }
+
+            ISlotContent content = source.TakeContent();
+            target.SetContent(content);
+            AddChangedSlot(room, source, turnResult);
+            AddChangedSlot(room, target, turnResult);
+            AddDoorDiscoveryMessage(source, turnResult);
+            return true;
+        }
+
+        private bool ApplyContentReplace(
+            Room room,
+            SlotContentChangeRequest request,
+            TurnResult turnResult)
+        {
+            RoomSlot target = request.TargetSlot;
+            if (!ContainsSlot(room, target) ||
+                request.ExpectedContent == null ||
+                !ReferenceEquals(
+                    target.Content,
+                    request.ExpectedContent) ||
+                request.NewContent == null ||
+                ContainsContentExcept(
+                    room,
+                    request.NewContent,
+                    target))
+            {
+                return false;
+            }
+
+            target.SetContent(request.NewContent);
+            AddChangedSlot(room, target, turnResult);
+            return true;
+        }
+
+        private static bool ContainsSlot(
+            Room room,
+            RoomSlot slot)
+        {
+            return room != null && slot != null &&
+                   room.Slots.Contains(slot);
+        }
+
+        private static bool ContainsContent(
+            Room room,
+            ISlotContent content)
+        {
+            return room != null && content != null &&
+                   room.Slots.Exists(slot => ReferenceEquals(
+                       slot.Content,
+                       content));
+        }
+
+        private static bool ContainsContentExcept(
+            Room room,
+            ISlotContent content,
+            RoomSlot excludedSlot)
+        {
+            return room != null && content != null &&
+                   room.Slots.Exists(slot =>
+                       !ReferenceEquals(slot, excludedSlot) &&
+                       ReferenceEquals(slot.Content, content));
+        }
+
+        private void ApplySlotStateChanges(
+            Room room,
+            IEnumerable<SlotStateChangeRequest> requests,
+            TurnResult turnResult)
+        {
+            if (room == null || requests == null ||
+                turnResult == null)
+            {
+                return;
+            }
+
+            foreach (SlotStateChangeRequest request in requests)
+            {
+                if (request == null || request.Slot == null ||
+                    !room.Slots.Contains(request.Slot))
+                {
+                    continue;
+                }
+
+                RoomSlot changedSlot = request.Slot;
+                if (changedSlot.State != request.State)
+                {
+                    changedSlot.SetState(request.State);
+                    AddChangedSlot(room, changedSlot, turnResult);
+                }
+
+                if (request.State == SlotState.REVEALED)
+                {
+                    AddDoorDiscoveryMessage(
+                        changedSlot,
+                        turnResult);
+                }
             }
         }
 

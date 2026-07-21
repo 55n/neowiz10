@@ -43,11 +43,6 @@ namespace Darkness
             State = state;
         }
 
-        public void Reveal()
-        {
-            State = SlotState.REVEALED;
-        }
-
         public void ClearContent()
         {
             Content = null;

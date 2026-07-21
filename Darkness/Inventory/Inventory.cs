@@ -10,8 +10,13 @@ namespace Darkness
 
         public Inventory(int capacity)
         {
-            Capacity = capacity;
+            Capacity = Math.Max(0, capacity);
             ItemStacks = new List<ItemStack>();
+        }
+
+        public void ExpandCapacity(int amount)
+        {
+            Capacity += Math.Max(0, amount);
         }
 
         public int Store(ItemStack itemStack)

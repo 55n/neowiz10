@@ -211,20 +211,6 @@ namespace Darkness
             return currentRoom.Edges.ContainsKey(direction);
         }
 
-        public void SetSlotState(int slotIndex, SlotState state)
-        {
-            if (currentRoom == null ||
-                slotIndex < 0 || slotIndex >= currentRoom.Slots.Count)
-            {
-                return;
-            }
-
-            currentRoom.Slots[slotIndex].SetState(state);
-            RefreshMoveOption();
-            DrawSlots(View.Display, currentRoom.Slots);
-            explorationPanel.DrawSelection();
-        }
-
         public void RefreshRoom()
         {
             if (currentRoom == null)
@@ -411,14 +397,7 @@ namespace Darkness
 
         private bool HasUnrevealedObject(RoomSlot slot)
         {
-            if (slot.Content != null)
-            {
-                return true;
-            }
-
-            return slot.Type.ObjectType ==
-                       RoomObjectType.TreasureChest ||
-                   slot.Type.ObjectType == RoomObjectType.Pile;
+            return slot.Content != null;
         }
 
         private string BuildHiddenBorder()

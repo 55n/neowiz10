@@ -14,13 +14,18 @@ namespace Darkness
 
         public static string Result(SkillType skill, IEffectTarget target)
         {
-            if (skill == null || target == null ||
-                string.IsNullOrEmpty(skill.ResultMessage))
+            if (skill == null || target == null)
             {
                 return null;
             }
 
-            return string.Format(skill.ResultMessage, target.Name);
+            if (!string.IsNullOrEmpty(skill.ResultMessage))
+            {
+                return string.Format(skill.ResultMessage, target.Name);
+            }
+
+            return target.Name + "에게 [" + skill.Name +
+                   "]의 효과가 적용되었다.";
         }
 
         public static string CannotUse(string skill)

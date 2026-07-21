@@ -11,6 +11,7 @@ namespace Darkness
         CreateScent,
         CreateVibration,
         SilenceMovement,
+        ExpandInventory,
         Damage,
         BreakArmor
     }
