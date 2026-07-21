@@ -9,6 +9,7 @@ namespace Darkness
         public List<DamageContext> Damages { get; private set; }
         public List<SkillUseContext> SkillUses { get; private set; }
         public List<ItemThrowPlan> ItemThrows { get; private set; }
+        public List<EffectRequest> EffectRequests { get; private set; }
         public List<EquipmentDurabilityRequest> DurabilityRequests
         {
             get;
@@ -35,6 +36,7 @@ namespace Darkness
             Damages = new List<DamageContext>();
             SkillUses = new List<SkillUseContext>();
             ItemThrows = new List<ItemThrowPlan>();
+            EffectRequests = new List<EffectRequest>();
             DurabilityRequests =
                 new List<EquipmentDurabilityRequest>();
             MonsterMoves = new List<MonsterMoveRequest>();
@@ -56,6 +58,7 @@ namespace Darkness
             Damages.AddRange(other.Damages);
             SkillUses.AddRange(other.SkillUses);
             ItemThrows.AddRange(other.ItemThrows);
+            EffectRequests.AddRange(other.EffectRequests);
             DurabilityRequests.AddRange(other.DurabilityRequests);
             MonsterMoves.AddRange(other.MonsterMoves);
             SlotContentChanges.AddRange(other.SlotContentChanges);

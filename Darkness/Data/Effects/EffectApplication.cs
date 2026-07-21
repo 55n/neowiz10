@@ -92,6 +92,24 @@ namespace Darkness
                 0);
         }
 
+        public static EffectApplication RemoveStatus(
+            string effectId,
+            EffectTarget target,
+            int applyChance = 100)
+        {
+            return new EffectApplication(
+                EffectOperation.RemoveStatus,
+                effectId,
+                target,
+                applyChance,
+                0,
+                1,
+                AttackDeliveryType.Natural,
+                EquipmentSlot.Weapon,
+                false,
+                0);
+        }
+
         public static EffectApplication Attack(
             EffectTarget target,
             int damagePercent,

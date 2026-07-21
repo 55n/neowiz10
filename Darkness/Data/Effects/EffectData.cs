@@ -50,6 +50,20 @@ namespace Darkness
                 null,
                 false,
                 1);
+            EffectType startled = new EffectType(
+                "startled",
+                "깜짝 놀람",
+                "다음 행동까지 정확도와 회피율이 10 감소한다.",
+                1,
+                false,
+                1);
+            EffectType poison = new EffectType(
+                "poison",
+                "중독",
+                "매 플레이어 턴 종료 시 5의 피해를 입는다.",
+                null,
+                false,
+                1);
 
             EffectTypes = new Dictionary<string, EffectType>
             {
@@ -58,7 +72,9 @@ namespace Darkness
                 { perfectFocus.Id, perfectFocus },
                 { defending.Id, defending },
                 { trapMisfire.Id, trapMisfire },
-                { weaponEmpowerment.Id, weaponEmpowerment }
+                { weaponEmpowerment.Id, weaponEmpowerment },
+                { startled.Id, startled },
+                { poison.Id, poison }
             };
         }
     }

@@ -18,6 +18,7 @@ namespace Darkness
         public List<EffectApplication> AttackEffects { get; private set; }
         public MonsterFunction AttackFunction { get; private set; }
         public List<string> FocusSkillIds { get; private set; }
+        public bool CanBePoisoned { get; private set; }
 
         public MonsterType(
             string id,
@@ -32,7 +33,8 @@ namespace Darkness
             int evasion,
             List<EffectApplication> attackEffects,
             MonsterFunction attackFunction,
-            List<string> focusSkillIds)
+            List<string> focusSkillIds,
+            bool canBePoisoned = false)
         {
             Id = id;
             Name = name;
@@ -47,6 +49,7 @@ namespace Darkness
             AttackEffects = attackEffects;
             AttackFunction = attackFunction;
             FocusSkillIds = focusSkillIds;
+            CanBePoisoned = canBePoisoned;
         }
     }
 }

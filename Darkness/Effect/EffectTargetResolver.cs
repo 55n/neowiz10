@@ -38,6 +38,11 @@ namespace Darkness
                 return ResolveRoomContents(context.Room);
             }
 
+            if (target == EffectTarget.AllRoomOccupants)
+            {
+                return ResolveRoomOccupants(context);
+            }
+
             if (target == EffectTarget.EquippedWeapon)
             {
                 IEquipmentUser equipmentUser =
@@ -67,6 +72,36 @@ namespace Darkness
                 if (slot.Content is IDamageable)
                 {
                     targets.Add(slot.Content);
+                }
+            }
+
+            return targets;
+        }
+
+        private static List<object> ResolveRoomOccupants(
+            EffectContext context)
+        {
+            List<object> targets = new List<object>();
+            foreach (object selectedTarget in context.SelectedTargets)
+            {
+                IEffectTarget occupant = selectedTarget as IEffectTarget;
+                if (occupant != null && !targets.Contains(occupant))
+                {
+                    targets.Add(occupant);
+                }
+            }
+
+            if (context.Room == null)
+            {
+                return targets;
+            }
+
+            foreach (RoomSlot slot in context.Room.Slots)
+            {
+                Monster occupant = slot.Content as Monster;
+                if (occupant != null && !targets.Contains(occupant))
+                {
+                    targets.Add(occupant);
                 }
             }
 

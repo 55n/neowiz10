@@ -65,5 +65,48 @@ namespace Darkness
                     ? null
                     : new object[] { plan.Target });
         }
+
+        public static EffectContext FromItemUse(
+            Hero user,
+            Item item,
+            Room room)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
+            return new EffectContext(
+                user,
+                EffectOriginType.ItemUse,
+                item.Type.Id,
+                room,
+                new object[] { user });
+        }
+
+        public static EffectContext FromRoomEffect(
+            IRoomEffectSource source,
+            Room room,
+            Hero hero)
+        {
+            if (source == null || source.EffectSource == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            return new EffectContext(
+                source.EffectSource,
+                source.EffectOriginType,
+                source.EffectOriginId,
+                room,
+                hero == null
+                    ? null
+                    : new object[] { hero });
+        }
     }
 }

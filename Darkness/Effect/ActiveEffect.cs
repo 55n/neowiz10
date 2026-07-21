@@ -5,11 +5,13 @@ namespace Darkness
     public class ActiveEffect
     {
         public EffectType Type { get; private set; }
+        public object Source { get; private set; }
         public int StackCount { get; private set; }
 
-        public ActiveEffect(EffectType type)
+        public ActiveEffect(EffectType type, object source = null)
         {
             Type = type;
+            Source = source;
             StackCount = 1;
         }
 
@@ -52,6 +54,20 @@ namespace Darkness
         public virtual bool ModifyIncomingDamage(DamageContext context)
         {
             return false;
+        }
+
+        public virtual bool CanApplyTo(IEffectTarget target)
+        {
+            return true;
+        }
+
+        public virtual void OnTurnEnd(EffectTurnContext context)
+        {
+        }
+
+        public virtual bool IsActiveInRoom(Room room)
+        {
+            return true;
         }
     }
 }

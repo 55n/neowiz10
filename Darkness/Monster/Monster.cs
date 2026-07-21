@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Darkness
 {
-    public class Monster : IDamageable, ISkillUser, IEffectTarget, ISlotContent
+    public class Monster : IDamageable, ISkillUser, IEffectTarget,
+        ISlotContent, IPoisonable
     {
         public MonsterType Type { get; private set; }
         public int CurrentHealth { get; private set; }
@@ -39,6 +40,7 @@ namespace Darkness
         public bool WasHitSinceLastAction { get; private set; }
         public bool IsAlive { get { return CurrentHealth > 0; } }
         public bool CanAct { get { return IsAlive; } }
+        public bool CanBePoisoned { get { return Type.CanBePoisoned; } }
         public string Id { get { return Type.Id; } }
         public string Name { get { return Type.Name; } }
         public RoomObjectType ObjectType { get { return RoomObjectType.Monster; } }
@@ -72,6 +74,17 @@ namespace Darkness
         public void ReceiveDamage(int damage)
         {
             CurrentHealth = Math.Max(0, CurrentHealth - Math.Max(0, damage));
+        }
+
+        public void ResetAfterDefeat(MonsterState nextState)
+        {
+            CurrentHealth = Type.MaxHealth;
+            CurrentFocus = Type.MaxFocus;
+            Effects.Clear();
+            State = nextState;
+            NextAction = MonsterActionPlan.None();
+            DetectionTurnsRemaining = DetectionDelayTurns;
+            WasHitSinceLastAction = false;
         }
 
         public void RegisterHit()

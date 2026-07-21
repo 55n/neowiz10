@@ -17,6 +17,7 @@ namespace Darkness
         private readonly MonsterData monsterData;
         private readonly SkillData skillData;
         private readonly TurnManager turnManager;
+        private readonly EffectResolver effectResolver;
         private bool openingEventCompleted;
 
         public Exploration(Hero hero, Dungeon dungeon)
@@ -28,6 +29,7 @@ namespace Darkness
             monsterData = new MonsterData();
             skillData = new SkillData();
             turnManager = new TurnManager();
+            effectResolver = new EffectResolver();
         }
 
         public GameSignal Run()
@@ -38,12 +40,9 @@ namespace Darkness
                 openingEventCompleted = true;
             }
 
-            string entryStateMessage =
-                ApplyRoomEntryEffect(dungeon.CurrentRoom);
-            screen.InitScreen(dungeon.CurrentRoom, hero);
-            if (!string.IsNullOrEmpty(entryStateMessage))
+            if (EnterCurrentRoom())
             {
-                Utility.PlayMessage(entryStateMessage);
+                return GameSignal.GAME_OVER;
             }
 
             while (true)
@@ -57,8 +56,7 @@ namespace Darkness
                         HandleSkillSelection(skillSelection);
                     if (skillResult != null)
                     {
-                        ApplyTurnResult(skillResult);
-                        if (skillResult.HeroDied)
+                        if (ApplyTurnResult(skillResult))
                         {
                             return GameSignal.GAME_OVER;
                         }
@@ -73,8 +71,7 @@ namespace Darkness
                         HandleScreenSelection(selection);
                     if (selectionResult != null)
                     {
-                        ApplyTurnResult(selectionResult);
-                        if (selectionResult.HeroDied)
+                        if (ApplyTurnResult(selectionResult))
                         {
                             return GameSignal.GAME_OVER;
                         }
@@ -89,8 +86,7 @@ namespace Darkness
                         dungeon,
                         direction,
                         hero);
-                    ApplyTurnResult(moveResult);
-                    if (moveResult.HeroDied)
+                    if (ApplyTurnResult(moveResult))
                     {
                         return GameSignal.GAME_OVER;
                     }
@@ -102,8 +98,7 @@ namespace Darkness
                 {
                     TurnResult actionResult =
                         ResolvePlayerAction(action, null);
-                    ApplyTurnResult(actionResult);
-                    if (actionResult.HeroDied)
+                    if (ApplyTurnResult(actionResult))
                     {
                         return GameSignal.GAME_OVER;
                     }
@@ -136,7 +131,7 @@ namespace Darkness
                 dungeon.CurrentRoom);
         }
 
-        private void ApplyTurnResult(TurnResult result)
+        private bool ApplyTurnResult(TurnResult result)
         {
             if (!result.RoomChanged &&
                 result.ChangedSlotIndexes.Count > 0)
@@ -151,20 +146,48 @@ namespace Darkness
 
             if (result.RoomChanged && !result.HeroDied)
             {
-                string entryStateMessage =
-                    ApplyRoomEntryEffect(dungeon.CurrentRoom);
-                screen.InitScreen(dungeon.CurrentRoom, hero);
-                if (!string.IsNullOrEmpty(entryStateMessage))
-                {
-                    Utility.PlayMessage(entryStateMessage);
-                }
-                return;
+                return EnterCurrentRoom();
             }
 
             if (result.TurnCompleted && !result.HeroDied)
             {
                 screen.OpenExplorationSelection();
             }
+
+            return result.HeroDied;
+        }
+
+        private bool EnterCurrentRoom()
+        {
+            Room room = dungeon.CurrentRoom;
+            bool isFirstEntry = !room.HasBeenEntered;
+            List<string> entryStateMessages =
+                ApplyRoomEntryEffects(room);
+            screen.InitScreen(room, hero);
+            if (entryStateMessages.Count > 0)
+            {
+                Utility.PlayMessages(entryStateMessages.ToArray());
+            }
+
+            if (!isFirstEntry ||
+                !room.Type.ConsumesTurnOnFirstEntry)
+            {
+                return false;
+            }
+
+            PlayerTurnCommand command = new PlayerTurnCommand(
+                PlayerActionType.Wait,
+                null,
+                null,
+                null,
+                null,
+                true,
+                false);
+            TurnResult ambushResult = turnManager.Resolve(
+                command,
+                hero,
+                room);
+            return ApplyTurnResult(ambushResult);
         }
 
         private bool TryGetRoomDirection(
@@ -379,6 +402,35 @@ namespace Darkness
             }
 
             ItemType itemType = itemStack.Item.Type;
+            if (itemType.UseEffects.Count > 0)
+            {
+                EffectPlan plan;
+                bool prepared = effectResolver.TryPrepare(
+                    itemType.UseEffects,
+                    EffectContext.FromItemUse(
+                        hero,
+                        itemStack.Item,
+                        dungeon.CurrentRoom),
+                    out plan);
+                if (!prepared)
+                {
+                    Utility.PlayMessage(
+                        InventoryMessages.ItemHadNoEffect(
+                            itemType.Name));
+                    return;
+                }
+
+                EffectResolveResult effectResult =
+                    effectResolver.Execute(plan);
+                if (effectResult.AffectedEffectTargets.Count > 0 &&
+                    hero.Inventory.Discard(itemStack, 1) == 1)
+                {
+                    Utility.PlayMessage(
+                        InventoryMessages.ItemUsed(itemType.Name));
+                    return;
+                }
+            }
+
             if (itemType.UseFunction == ItemFunction.ExpandInventory &&
                 hero.Inventory.Discard(itemStack, 1) == 1)
             {
@@ -468,20 +520,38 @@ namespace Darkness
             return result;
         }
 
-        private string ApplyRoomEntryEffect(Room room)
+        private List<string> ApplyRoomEntryEffects(Room room)
         {
-            if (room == null || room.Type.Id != "room-4")
+            List<string> messages = new List<string>();
+            if (room == null)
             {
-                return null;
+                return messages;
+            }
+
+            TurnResult roomEffectResult =
+                turnManager.SynchronizeRoomEffects(room, hero);
+            messages.AddRange(roomEffectResult.Messages);
+
+            if (room.Type.RevealsAllSlotsOnEntry)
+            {
+                TurnResult revealResult =
+                    turnManager.RevealAllSlots(room);
+                messages.AddRange(revealResult.Messages);
+            }
+
+            if (room.Type.Id != "room-4")
+            {
+                return messages;
             }
 
             int previousHealth = hero.CurrentHealth;
             int previousFocus = hero.CurrentFocus;
             hero.RestoreHealth(hero.Type.MaxHealth);
             hero.RestoreFocus(hero.Type.MaxFocus);
-            return HeroStateMessages.Restored(
+            messages.Add(HeroStateMessages.Restored(
                 hero.CurrentHealth - previousHealth,
-                hero.CurrentFocus - previousFocus);
+                hero.CurrentFocus - previousFocus));
+            return messages;
         }
 
     }

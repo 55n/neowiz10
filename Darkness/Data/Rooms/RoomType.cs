@@ -11,6 +11,8 @@ namespace Darkness
         public List<string> EnterMessages { get; private set; }
         public Dictionary<RoomDirection, RoomEdgeType> Edges { get; private set; }
         public List<RoomSlotType> Slots { get; private set; }
+        public bool RevealsAllSlotsOnEntry { get; private set; }
+        public bool ConsumesTurnOnFirstEntry { get; private set; }
         
 
         public RoomType(
@@ -19,7 +21,9 @@ namespace Darkness
             string description,
             List<string> enterMessages,
             Dictionary<RoomDirection, RoomEdgeType> edges,
-            List<RoomSlotType> slots)
+            List<RoomSlotType> slots,
+            bool revealsAllSlotsOnEntry = false,
+            bool consumesTurnOnFirstEntry = false)
         {
             Id = id;
             Name = name;
@@ -27,6 +31,8 @@ namespace Darkness
             EnterMessages = enterMessages;
             Edges = edges;
             Slots = slots;
+            RevealsAllSlotsOnEntry = revealsAllSlotsOnEntry;
+            ConsumesTurnOnFirstEntry = consumesTurnOnFirstEntry;
         }
     }
 }

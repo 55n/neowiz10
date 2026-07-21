@@ -37,4 +37,16 @@ C:\course\projects\Darkness\bin\CodexVerify2\Darkness.pdb
 C:\projects\course\Darkness\bin\CodexVerify\Darkness.exe.config
 C:\projects\course\Darkness\bin\CodexVerify\Darkness.exe
 C:\projects\course\Darkness\bin\CodexVerify\Darkness.pdb
+C:\projects\course\Darkness\bin\EstimateVerify\Darkness.exe.config
+C:\projects\course\Darkness\bin\EstimateVerify\Darkness.exe
+C:\projects\course\Darkness\bin\EstimateVerify\Darkness.pdb
+C:\projects\course\Darkness\bin\Room6Verify\Darkness.exe.config
+C:\projects\course\Darkness\bin\Room6Verify\Darkness.exe
+C:\projects\course\Darkness\bin\Room6Verify\Darkness.pdb
+C:\projects\course\Darkness\bin\Room7Verify\Darkness.exe.config
+C:\projects\course\Darkness\bin\Room7Verify\Darkness.exe
+C:\projects\course\Darkness\bin\Room7Verify\Darkness.pdb
+C:\projects\course\Darkness\bin\Room8Verify\Darkness.exe.config
+C:\projects\course\Darkness\bin\Room8Verify\Darkness.exe
+C:\projects\course\Darkness\bin\Room8Verify\Darkness.pdb
 C:\projects\course\Darkness\obj\Debug\Darkness.exe.config

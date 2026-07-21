@@ -8,6 +8,7 @@ namespace Darkness
         public SkillUseContext SkillUse { get; private set; }
         public EquipmentSlot? ItemSourceEquipmentSlot { get; private set; }
         public bool ConsumesTurn { get; private set; }
+        public bool AnnouncesAction { get; private set; }
 
         public PlayerTurnCommand(
             PlayerActionType action,
@@ -40,7 +41,8 @@ namespace Darkness
             ItemStack item,
             SkillUseContext skillUse,
             EquipmentSlot? itemSourceEquipmentSlot,
-            bool consumesTurn)
+            bool consumesTurn,
+            bool announcesAction = true)
         {
             Action = action;
             TargetSlot = targetSlot;
@@ -48,6 +50,7 @@ namespace Darkness
             SkillUse = skillUse;
             ItemSourceEquipmentSlot = itemSourceEquipmentSlot;
             ConsumesTurn = consumesTurn;
+            AnnouncesAction = announcesAction;
         }
     }
 }

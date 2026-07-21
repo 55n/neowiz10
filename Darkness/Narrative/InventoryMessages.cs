@@ -37,6 +37,16 @@ namespace Darkness
             return item + " 을(를) 사용할 수 없습니다";
         }
 
+        public static string ItemUsed(string item)
+        {
+            return item + " 을(를) 사용했다";
+        }
+
+        public static string ItemHadNoEffect(string item)
+        {
+            return item + " 을(를) 사용할 필요가 없다";
+        }
+
         public static string ThrowItemPrompt(string item)
         {
             return item + " 을(를) 던집니까?";

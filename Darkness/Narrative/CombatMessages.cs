@@ -76,5 +76,10 @@ namespace Darkness
         {
             return monster + " 이(가) 쓰러졌다";
         }
+
+        public static string MonsterLootDropped()
+        {
+            return "무언가가 바닥에 떨어졌다";
+        }
     }
 }

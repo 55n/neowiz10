@@ -12,7 +12,8 @@ namespace Darkness
             MonsterTypes = new List<MonsterType>
             {
                 Monster("fall", "낙하", "끝을 알 수 없는 높이에서 바닥으로 추락한다.",
-                    1, 0, 999999, 0, 0, 999999, 0),
+                    1, 0, 999999, 0, 0, 999999, 0,
+                    canBePoisoned: false),
                 Monster("lost_goblin", "고블린", "어둠에 적응하지 못한 작고 겁 많은 잡식성 생물이다.",
                     5, 2, 2, 0, 4, 70, 20,
                     Effects(), MonsterFunction.Damage, Skills("goblin_rush")),
@@ -21,9 +22,11 @@ namespace Darkness
                     Effects(), MonsterFunction.Damage, Skills("troll_regeneration")),
                 Monster("bound_armor_spirit", "갑주령", "갑옷과 방에 속박되어 마석으로 기억과 영혼을 유지하는 옛 탐험가다.",
                     30, 5, 7, 6, 2, 85, 10,
-                    Effects(Target("bind", 40), Target("bind", 40)), MonsterFunction.Damage, Skills("armor_chain_bind")),
+                    Effects(Target("bind", 40), Target("bind", 40)), MonsterFunction.Damage, Skills("armor_chain_bind"),
+                    false),
                 Monster("coffin_undead", "관 속의 망자", "오랜 잠에서 깨어나 관을 밀치고 일어난 언데드다.",
-                    12, 0, 4, 2, 1, 75, 5),
+                    12, 0, 4, 2, 1, 75, 5,
+                    canBePoisoned: false),
                 Monster("frost_wolf", "서리늑대", "후각과 무리 신호가 발달한 미궁의 육식동물이다.",
                     10, 3, 4, 1, 5, 80, 30,
                     Effects(), MonsterFunction.Damage, Skills("wolf_pack_assault")),
@@ -66,13 +69,14 @@ namespace Darkness
             int evasion,
             List<EffectApplication> attackEffects = null,
             MonsterFunction attackFunction = MonsterFunction.Damage,
-            List<string> focusSkillIds = null)
+            List<string> focusSkillIds = null,
+            bool canBePoisoned = true)
         {
             return new MonsterType(
                 id, name, description, maxHealth, maxFocus, attack, defense,
                 speed, accuracy, evasion,
                 attackEffects ?? Effects(), attackFunction,
-                focusSkillIds ?? Skills());
+                focusSkillIds ?? Skills(), canBePoisoned);
         }
 
         private static List<string> Skills(params string[] skillIds)

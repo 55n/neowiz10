@@ -2,7 +2,7 @@ namespace Darkness
 {
     public class Pile : ISlotContent
     {
-        public string Name { get { return "물건 더미"; } }
+        public string Name { get { return "잡동사니"; } }
         public Inventory Inventory { get; private set; }
 
         public Pile(Inventory inventory)

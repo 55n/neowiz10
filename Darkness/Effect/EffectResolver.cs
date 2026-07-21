@@ -62,6 +62,11 @@ namespace Darkness
                     ApplyStatus(effect, result);
                 }
                 else if (effect.Application.Operation ==
+                         EffectOperation.RemoveStatus)
+                {
+                    RemoveStatus(effect, result);
+                }
+                else if (effect.Application.Operation ==
                          EffectOperation.Damage)
                 {
                     IDamageable target = effect.Target as IDamageable;
@@ -136,7 +141,8 @@ namespace Darkness
                 {
                     IEffectTarget receiver = target as IEffectTarget;
                     ActiveEffect activeEffect = activeEffectFactory.Create(
-                        application.EffectId);
+                        application.EffectId,
+                        context.Source);
                     if (receiver == null || activeEffect == null)
                     {
                         return false;
@@ -148,6 +154,25 @@ namespace Darkness
                             application,
                             receiver,
                             activeEffect));
+                    }
+                }
+                else if (application.Operation ==
+                         EffectOperation.RemoveStatus)
+                {
+                    IEffectTarget receiver = target as IEffectTarget;
+                    if (receiver == null)
+                    {
+                        return false;
+                    }
+
+                    if (receiver.Effects.Exists(
+                            active => active.Type != null &&
+                                      active.Type.Id == application.EffectId))
+                    {
+                        plan.Effects.Add(new PlannedEffect(
+                            application,
+                            receiver,
+                            null));
                     }
                 }
                 else if (application.Operation == EffectOperation.Damage)
@@ -211,6 +236,11 @@ namespace Darkness
             IEffectTarget target,
             ActiveEffect effect)
         {
+            if (!effect.CanApplyTo(target))
+            {
+                return false;
+            }
+
             ActiveEffect existing = target.Effects.Find(
                 active => active.Type.Id == effect.Type.Id);
             return existing == null ||
@@ -229,6 +259,15 @@ namespace Darkness
                 target.ApplyEffect(effect.ActiveEffect);
             }
 
+            result.AffectedEffectTargets.Add(target);
+        }
+
+        private static void RemoveStatus(
+            PlannedEffect effect,
+            EffectResolveResult result)
+        {
+            IEffectTarget target = (IEffectTarget)effect.Target;
+            target.RemoveEffect(effect.Application.EffectId);
             result.AffectedEffectTargets.Add(target);
         }
     }

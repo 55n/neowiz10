@@ -15,7 +15,7 @@ namespace Darkness
                 case PlayerActionType.Search:
                     return target == "???"
                         ? "당신은 ???의 정체를 확인하려고 손을 뻗는다."
-                        : "당신은 " + target + "을(를) 자세히 살핀다.";
+                        : "당신은 " + target + "을(를) 손으로 더듬어 살핀다.";
                 default:
                     return null;
             }

@@ -8,6 +8,7 @@ namespace Darkness
         public ItemStack Item { get; private set; }
         public SkillUseContext SkillUse { get; private set; }
         public EquipmentSlot? ItemSourceEquipmentSlot { get; private set; }
+        public Room Room { get; private set; }
 
         public PlayerActionContext(
             Hero actor,
@@ -15,7 +16,7 @@ namespace Darkness
             RoomSlot targetSlot,
             ItemStack item,
             SkillUseContext skillUse)
-            : this(actor, action, targetSlot, item, skillUse, null)
+            : this(actor, action, targetSlot, item, skillUse, null, null)
         {
         }
 
@@ -25,7 +26,8 @@ namespace Darkness
             RoomSlot targetSlot,
             ItemStack item,
             SkillUseContext skillUse,
-            EquipmentSlot? itemSourceEquipmentSlot)
+            EquipmentSlot? itemSourceEquipmentSlot,
+            Room room = null)
         {
             Actor = actor;
             Action = action;
@@ -33,6 +35,7 @@ namespace Darkness
             Item = item;
             SkillUse = skillUse;
             ItemSourceEquipmentSlot = itemSourceEquipmentSlot;
+            Room = room;
         }
     }
 }

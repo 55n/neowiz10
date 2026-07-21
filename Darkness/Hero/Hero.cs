@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Darkness
 {
     public class Hero : IDamageable, ISkillUser, IEffectTarget,
-        IEquipmentUser
+        IEquipmentUser, IPoisonable
     {
         public HeroType Type { get; private set; }
         public string Name { get { return Type.Name; } }
@@ -37,6 +37,7 @@ namespace Darkness
         public HashSet<string> LearnedSkillIds { get; private set; }
         public List<ActiveEffect> Effects { get; private set; }
         public bool CanAct { get { return CurrentHealth > 0; } }
+        public bool CanBePoisoned { get { return true; } }
 
         public Hero(
             HeroType type,

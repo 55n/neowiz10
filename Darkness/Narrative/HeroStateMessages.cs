@@ -26,5 +26,21 @@ namespace Darkness
 
             return null;
         }
+
+        public static string EffectDamage(
+            string target,
+            string effect,
+            int damage)
+        {
+            return target + " 이(가) " + effect + "으로 " +
+                   damage + "의 피해를 입었다.";
+        }
+
+        public static string EffectEnded(
+            string target,
+            string effect)
+        {
+            return target + "에게서 " + effect + " 효과가 사라졌다.";
+        }
     }
 }

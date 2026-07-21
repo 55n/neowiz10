@@ -5,7 +5,7 @@ namespace Darkness
 {
     public class TreasureChest : IDamageable, ISlotContent
     {
-        public string Name { get { return "보물 상자"; } }
+        public string Name { get { return "보물상자"; } }
         public int CurrentHealth { get; private set; }
         public int Defense { get; private set; }
         public int Evasion { get { return 0; } }

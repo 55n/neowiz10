@@ -122,7 +122,8 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Pile, "room4_loser_mark_pile", false),
-                });
+                },
+                true);
             RoomType room5 = new RoomType(
                 "room-5",
                 "창고",
@@ -154,7 +155,7 @@ namespace Darkness
                     "\"사람? 사람인가! 여기! 여기로 오게!\"",
                     "\"자네가 보고 있는 방향 그대로 가운데로 오면 되네!\"",
                     "\"해칠 생각은 없으니 걱정 말게나. 그냥 반가워서 그러네!\"",
-                    "\"미리 경고하는데 다른 쪽은 건들지 말게나. 그것들은 내 물건들이네.\"",
+                    "\"다만 미리 경고하는데 다른 쪽은 건들지 말게나. 그것들은 내 물건들이네.\"",
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -175,6 +176,9 @@ namespace Darkness
                 new List<string>
                 {
                     "무언가로 앞이 가로막혀있다",
+                    "망자의 말소리가 들려온다",
+                    "\"쓸데 없이 열면 죽인다. 네 명은 진실을, 하나는 거짓을 말한다.\"",
+                    "\"거짓말쟁이를 찾아라. 그자가 길을 막고 있다.\""
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -192,12 +196,11 @@ namespace Darkness
             RoomType room8 = new RoomType(
                 "room-8",
                 "맹독안개",
-                "죽음의 향기.",
+                "희미한 죽음의 향기",
                 new List<string>
                 {
-                    "들어서마자 매캐한 공기가 피부를 찌른다",
-                    "당신은 본능적으로 숨을 틀어막고 눈을 감았다",
-                    "맹독이다",
+                    "희미하게 매캐한 향이 공기에 남아있다",
+                    "당신은 불길함을 애써 무시하고 손을 뻗고 천천히 전진한다",
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -206,11 +209,11 @@ namespace Darkness
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Trap, "room8_poison_fog_trap", false),
-                    new RoomSlotType(RoomObjectType.Body, "room8_skeleton_1", true),
-                    new RoomSlotType(RoomObjectType.Body, "room8_skeleton_2", false),
+                    new RoomSlotType(RoomObjectType.Body, "room8_trapped_skeleton", false),
+                    new RoomSlotType(RoomObjectType.Body, "room8_antidote_skeleton", true),
                     new RoomSlotType(RoomObjectType.Body, "room8_skeleton_3", false),
                     new RoomSlotType(RoomObjectType.Body, "room8_skeleton_4", false),
+                    new RoomSlotType(RoomObjectType.Body, "room8_skeleton_5", false),
                 });
             RoomType room9 = new RoomType(
                 "room-9",
@@ -234,7 +237,9 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Monster, "room9_echo_bat_3", false),
                     new RoomSlotType(RoomObjectType.Monster, "room9_echo_bat_4", false),
                     new RoomSlotType(RoomObjectType.Monster, "room9_echo_bat_5", false),
-                });
+                },
+                false,
+                true);
 
             RoomType room10 = new RoomType(
                 "room-10",
@@ -293,7 +298,7 @@ namespace Darkness
                     "기다렸다는 듯이 어둠 속에서 늑대 울음소리가 들린다",
                     "갑작스러운 굉음이 뒤에서 난다", 
                     "당신은 본능적으로 앞으로 몸을 굴렀다",
-                    "...아무래도 퇴로가 무너진 것 같다"
+                    "뒤를 돌아보니...아무래도 퇴로가 무너진 것 같다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -429,6 +434,10 @@ namespace Darkness
                 { room3.Id, room3 },
                 { room4.Id, room4 },
                 { room5.Id, room5 },
+                { room6.Id, room6 },
+                { room7.Id, room7 },
+                { room8.Id, room8 },
+                { room9.Id, room9 },
             };
         }
     }

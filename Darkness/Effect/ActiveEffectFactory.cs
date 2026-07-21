@@ -11,6 +11,11 @@ namespace Darkness
 
         public ActiveEffect Create(string effectId)
         {
+            return Create(effectId, null);
+        }
+
+        public ActiveEffect Create(string effectId, object source)
+        {
             EffectType effectType;
             if (string.IsNullOrEmpty(effectId) ||
                 !effectData.EffectTypes.TryGetValue(
@@ -34,6 +39,10 @@ namespace Darkness
                     return new TrapMisfireEffect(effectType);
                 case "weapon_empowerment":
                     return new WeaponEmpowermentEffect(effectType);
+                case "startled":
+                    return new StartledEffect(effectType);
+                case "poison":
+                    return new PoisonEffect(effectType, source);
                 default:
                     return null;
             }

@@ -26,7 +26,8 @@ namespace Darkness
                 new ItemType("troll_blood", "트롤 피", "재생력이 남은 희귀한 피로 체력을 크게 회복한다.", ItemCategory.Consumable, 12, 2, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.HealHealth, ItemFunction.HealHealth),
                 new ItemType("vibration_shell", "진동벌레 허물", "바닥에 부딪히면 길고 복잡한 진동을 만든다.", ItemCategory.Consumable, 5, 3, false, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.CreateVibration),
                 new ItemType("door_slime", "문붙이 점액", "사용하면 발소리를 줄이고 던져 맞히면 속박 4스택을 부여한다.", ItemCategory.Consumable, 7, 3, true, 1, 0, 0, 0, null, Effects(), Effects(Target("bind"), Target("bind"), Target("bind"), Target("bind")), ItemFunction.SilenceMovement, ItemFunction.None),
-                new ItemType("whetstone", "숫돌", "선택한 무기의 내구도를 완전히 회복하고 소모된다.", ItemCategory.Consumable, 10, 1, true, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.RepairWeapon, ItemFunction.Damage)
+                new ItemType("whetstone", "숫돌", "선택한 무기의 내구도를 완전히 회복하고 소모된다.", ItemCategory.Consumable, 10, 1, true, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.RepairWeapon, ItemFunction.Damage),
+                new ItemType("antidote", "해독제", "몸속에 퍼진 독을 중화해 중독 상태이상을 제거한다.", ItemCategory.Consumable, 8, 3, true, 1, 0, 0, 0, null, Effects(EffectApplication.RemoveStatus("poison", EffectTarget.Self)), Effects(), ItemFunction.None, ItemFunction.None)
             }.ToDictionary(itemType => itemType.Id);
         }
 

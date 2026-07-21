@@ -23,13 +23,23 @@ namespace Darkness
                 { "room1_lost_goblin", CreateRoom1LostGoblin },
                 { "room3_hungry_troll", CreateRoom3HungryTroll },
                 { "room5_goblin_1", CreateRoom5BaitGoblin },
-                { "room5_goblin_2", CreateRoom5RagGoblin }
+                { "room5_goblin_2", CreateRoom5RagGoblin },
+                { "room6_armor_spirit", CreateRoom6ArmorSpirit },
+                { "room9_echo_bat_1", CreateRoom9EchoBat },
+                { "room9_echo_bat_2", CreateRoom9EchoBat },
+                { "room9_echo_bat_3", CreateRoom9EchoBat },
+                { "room9_echo_bat_4", CreateRoom9EchoBat },
+                { "room9_echo_bat_5", CreateRoom9EchoBat }
             };
             treasureChestFactories =
                 new Dictionary<string, Func<TreasureChest>>
                 {
                     { "room2_treasure_chest", CreateRoom2TreasureChest },
-                    { "room3_treasure_chest", CreateRoom3TreasureChest }
+                    { "room3_treasure_chest", CreateRoom3TreasureChest },
+                    { "room6_treasure_chest_1", CreateRoom6TreasureChest1 },
+                    { "room6_treasure_chest_2", CreateRoom6TreasureChest2 },
+                    { "room6_treasure_chest_3", CreateRoom6TreasureChest3 },
+                    { "room6_treasure_chest_4", CreateRoom6TreasureChest4 }
                 };
             trapTypeIds = new Dictionary<string, string>
             {
@@ -40,7 +50,9 @@ namespace Darkness
                 { RoomObjectType.Monster, CreateMonster },
                 { RoomObjectType.Trap, CreateTrap },
                 { RoomObjectType.TreasureChest, CreateTreasureChest },
-                { RoomObjectType.Pile, CreatePile }
+                { RoomObjectType.Pile, CreatePile },
+                { RoomObjectType.Coffin, CreateCoffin },
+                { RoomObjectType.Body, CreateBody }
             };
         }
 
@@ -195,6 +207,24 @@ namespace Darkness
                 3);
         }
 
+        private Monster CreateRoom6ArmorSpirit()
+        {
+            return CreateMonster(
+                "bound_armor_spirit",
+                new Inventory(0),
+                new ArmorSpiritBehavior(),
+                new List<string>());
+        }
+
+        private Monster CreateRoom9EchoBat()
+        {
+            return CreateMonster(
+                "echo_bat",
+                new Inventory(0),
+                new EchoBatBehavior(3),
+                new List<string>());
+        }
+
         private ISlotContent CreateTreasureChest(
             RoomSlotType slotType,
             int slotIndex)
@@ -227,6 +257,33 @@ namespace Darkness
             return new TreasureChest(8, 1, inventory);
         }
 
+        private TreasureChest CreateRoom6TreasureChest1()
+        {
+            return CreateTreasureChestWithItem("whetstone");
+        }
+
+        private TreasureChest CreateRoom6TreasureChest2()
+        {
+            return CreateTreasureChestWithItem("ordinary_sword");
+        }
+
+        private TreasureChest CreateRoom6TreasureChest3()
+        {
+            return CreateTreasureChestWithItem("ordinary_armor");
+        }
+
+        private TreasureChest CreateRoom6TreasureChest4()
+        {
+            return CreateTreasureChestWithItem("guardian_charm");
+        }
+
+        private TreasureChest CreateTreasureChestWithItem(string itemId)
+        {
+            Inventory inventory = new Inventory(1);
+            StoreItem(inventory, itemId, 1);
+            return new TreasureChest(8, 1, inventory);
+        }
+
         private ISlotContent CreatePile(
             RoomSlotType slotType,
             int slotIndex)
@@ -249,6 +306,63 @@ namespace Darkness
             throw new InvalidOperationException(
                 "Unknown pile instance: " +
                 slotType.ObjectTypeId);
+        }
+
+        private ISlotContent CreateCoffin(
+            RoomSlotType slotType,
+            int slotIndex)
+        {
+            if (slotType.ObjectTypeId == null ||
+                !slotType.ObjectTypeId.StartsWith("room7_coffin_") ||
+                slotIndex < 0 || slotIndex > 4)
+            {
+                throw new InvalidOperationException(
+                    "Unknown coffin instance: " +
+                    slotType.ObjectTypeId);
+            }
+
+            Monster occupant = CreateMonster(
+                "coffin_undead",
+                new Inventory(0),
+                new CoffinUndeadBehavior(),
+                new List<string>());
+            return new Coffin(
+                CoffinMessages.Hint(slotIndex),
+                occupant);
+        }
+
+        private ISlotContent CreateBody(
+            RoomSlotType slotType,
+            int slotIndex)
+        {
+            Inventory inventory = new Inventory(1);
+            PoisonFogTrap hiddenTrap = null;
+            switch (slotType.ObjectTypeId)
+            {
+                case "room8_trapped_skeleton":
+                    StoreItem(inventory, "magic_stone", 1);
+                    hiddenTrap = new PoisonFogTrap(
+                        trapData.TrapTypes["poison_fog_trap"]);
+                    break;
+                case "room8_antidote_skeleton":
+                    StoreItem(inventory, "antidote", 1);
+                    break;
+                case "room8_skeleton_3":
+                    StoreItem(inventory, "monster_bait", 1);
+                    break;
+                case "room8_skeleton_4":
+                    StoreItem(inventory, "magic_stone", 2);
+                    break;
+                case "room8_skeleton_5":
+                    StoreItem(inventory, "whetstone", 1);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        "Unknown body instance: " +
+                        slotType.ObjectTypeId);
+            }
+
+            return new Body(8, 0, inventory, hiddenTrap);
         }
     }
 }

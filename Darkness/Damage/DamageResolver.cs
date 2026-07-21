@@ -16,9 +16,12 @@ namespace Darkness
             List<ActiveEffect> consumedSourceEffects =
                 ApplyOutgoingEffects(source, context);
 
-            context.FinalDamage = Math.Max(
-                0,
-                context.FinalDamage - context.Target.Defense);
+            if (!context.IgnoresDefense)
+            {
+                context.FinalDamage = Math.Max(
+                    0,
+                    context.FinalDamage - context.Target.Defense);
+            }
 
             List<ActiveEffect> consumedTargetEffects =
                 ApplyIncomingEffects(context.Target, context);
