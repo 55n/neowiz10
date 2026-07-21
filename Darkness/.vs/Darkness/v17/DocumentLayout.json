@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\projects\\course\\Darkness\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\narrative\\coffinmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:narrative\\coffinmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\monster\\behavior\\coffinundeadbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:monster\\behavior\\coffinundeadbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|c:\\projects\\course\\darkness\\data\\rooms\\roomdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FA4AD31-ECEB-4E26-9F59-44808A69710A}|Darkness.csproj|solutionrelative:data\\rooms\\roomdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -58,11 +66,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CoffinMessages.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative\\CoffinMessages.cs",
+              "RelativeDocumentMoniker": "Narrative\\CoffinMessages.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Narrative\\CoffinMessages.cs",
+              "RelativeToolTip": "Narrative\\CoffinMessages.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAIwCUAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-21T22:57:49.433Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "CoffinUndeadBehavior.cs",
+              "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\CoffinUndeadBehavior.cs",
+              "RelativeDocumentMoniker": "Monster\\Behavior\\CoffinUndeadBehavior.cs",
+              "ToolTip": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\CoffinUndeadBehavior.cs",
+              "RelativeToolTip": "Monster\\Behavior\\CoffinUndeadBehavior.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-21T22:57:21.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Pile.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Pile\\Pile.cs",
               "RelativeDocumentMoniker": "Pile\\Pile.cs",
@@ -74,7 +108,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "HeroActionMessages.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative\\HeroActionMessages.cs",
               "RelativeDocumentMoniker": "Narrative\\HeroActionMessages.cs",
@@ -86,7 +120,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "TreasureChest.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\TreasureChest\\TreasureChest.cs",
               "RelativeDocumentMoniker": "TreasureChest\\TreasureChest.cs",
@@ -98,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "MonsterData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Monsters\\MonsterData.cs",
               "RelativeDocumentMoniker": "Data\\Monsters\\MonsterData.cs",
@@ -110,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "ItemData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Items\\ItemData.cs",
               "RelativeDocumentMoniker": "Data\\Items\\ItemData.cs",
@@ -122,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "LostGoblinBehavior.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\LostGoblinBehavior.cs",
               "RelativeDocumentMoniker": "Monster\\Behavior\\LostGoblinBehavior.cs",
@@ -134,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "CombatMessages.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Narrative\\CombatMessages.cs",
               "RelativeDocumentMoniker": "Narrative\\CombatMessages.cs",
@@ -146,7 +180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "HungryTrollBehavior.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Behavior\\HungryTrollBehavior.cs",
               "RelativeDocumentMoniker": "Monster\\Behavior\\HungryTrollBehavior.cs",
@@ -158,20 +192,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "RoomData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs",
               "RelativeDocumentMoniker": "Data\\Rooms\\RoomData.cs",
               "ToolTip": "C:\\projects\\course\\Darkness\\Data\\Rooms\\RoomData.cs",
               "RelativeToolTip": "Data\\Rooms\\RoomData.cs",
-              "ViewState": "AgIAANcAAAAAAAAAAAAAAPUAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAMUAAAAAAAAAAAAAAPQAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-20T10:37:43.06Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "RoomSlotContentFactory.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\World\\RoomSlotContentFactory.cs",
               "RelativeDocumentMoniker": "World\\RoomSlotContentFactory.cs",
@@ -183,7 +217,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "Monster.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Monster\\Monster.cs",
               "RelativeDocumentMoniker": "Monster\\Monster.cs",
@@ -195,7 +229,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "SkillData.cs",
               "DocumentMoniker": "C:\\projects\\course\\Darkness\\Data\\Skills\\SkillData.cs",
               "RelativeDocumentMoniker": "Data\\Skills\\SkillData.cs",

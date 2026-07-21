@@ -64,6 +64,20 @@ namespace Darkness
                 null,
                 false,
                 1);
+            EffectType wet = new EffectType(
+                "wet",
+                "젖음",
+                "회피율이 10 감소하고 얼어붙음으로 받는 추가 피해가 1 증가한다.",
+                null,
+                false,
+                1);
+            EffectType frozen = new EffectType(
+                "frozen",
+                "얼어붙음",
+                "받는 모든 피해가 1 증가한다.",
+                null,
+                false,
+                1);
 
             EffectTypes = new Dictionary<string, EffectType>
             {
@@ -74,7 +88,9 @@ namespace Darkness
                 { trapMisfire.Id, trapMisfire },
                 { weaponEmpowerment.Id, weaponEmpowerment },
                 { startled.Id, startled },
-                { poison.Id, poison }
+                { poison.Id, poison },
+                { wet.Id, wet },
+                { frozen.Id, frozen }
             };
         }
     }

@@ -64,7 +64,13 @@ namespace Darkness
                 return consumedEffects;
             }
 
-            foreach (ActiveEffect effect in target.Effects)
+            List<ActiveEffect> orderedEffects =
+                new List<ActiveEffect>(target.Effects);
+            orderedEffects.Sort((left, right) =>
+                left.IncomingDamagePriority.CompareTo(
+                    right.IncomingDamagePriority));
+
+            foreach (ActiveEffect effect in orderedEffects)
             {
                 if (effect.ModifyIncomingDamage(context))
                 {

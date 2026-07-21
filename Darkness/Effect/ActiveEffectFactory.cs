@@ -43,6 +43,10 @@ namespace Darkness
                     return new StartledEffect(effectType);
                 case "poison":
                     return new PoisonEffect(effectType, source);
+                case "wet":
+                    return new WetEffect(effectType);
+                case "frozen":
+                    return new FrozenEffect(effectType);
                 default:
                     return null;
             }

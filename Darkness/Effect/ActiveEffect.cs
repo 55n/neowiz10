@@ -7,6 +7,10 @@ namespace Darkness
         public EffectType Type { get; private set; }
         public object Source { get; private set; }
         public int StackCount { get; private set; }
+        public virtual int IncomingDamagePriority
+        {
+            get { return 0; }
+        }
 
         public ActiveEffect(EffectType type, object source = null)
         {

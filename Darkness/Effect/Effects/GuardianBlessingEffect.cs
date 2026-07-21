@@ -2,6 +2,11 @@ namespace Darkness
 {
     public class GuardianBlessingEffect : ActiveEffect
     {
+        public override int IncomingDamagePriority
+        {
+            get { return 100; }
+        }
+
         public GuardianBlessingEffect(EffectType type)
             : base(type)
         {

@@ -76,11 +76,13 @@
     <Compile Include="Effect\Effects\GuardianBlessingEffect.cs" />
     <Compile Include="Effect\Effects\DefendingEffect.cs" />
     <Compile Include="Effect\Effects\HastyEffect.cs" />
+    <Compile Include="Effect\Effects\FrozenEffect.cs" />
     <Compile Include="Effect\Effects\PerfectFocusEffect.cs" />
     <Compile Include="Effect\Effects\PoisonEffect.cs" />
     <Compile Include="Effect\Effects\StartledEffect.cs" />
     <Compile Include="Effect\Effects\TrapMisfireEffect.cs" />
     <Compile Include="Effect\Effects\WeaponEmpowermentEffect.cs" />
+    <Compile Include="Effect\Effects\WetEffect.cs" />
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Interaction\ISlotContent.cs" />
     <Compile Include="Interaction\ItemThrowResolver.cs" />
