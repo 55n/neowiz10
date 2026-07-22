@@ -81,6 +81,18 @@ namespace Darkness
         {
             SlotInteractionResult result = new SlotInteractionResult();
 
+            if (context == null)
+            {
+                return result;
+            }
+
+            if (context.Action == PlayerActionType.Talk)
+            {
+                result.Messages.Add(
+                    ExplorationMessages.NoResponse());
+                return result;
+            }
+
             if (context.Action == PlayerActionType.Attack)
             {
                 Item weapon = context.Actor.GetEquippedItem(

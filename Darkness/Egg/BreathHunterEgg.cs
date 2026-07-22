@@ -60,6 +60,11 @@ namespace Darkness
                 result.Messages.Add(
                     "팽팽한 거미줄 사이로 질긴 알껍질이 만져진다.");
             }
+            else if (context.Action == PlayerActionType.Talk)
+            {
+                result.Messages.Add(
+                    "푸른 알은 아무 대답 없이 희미한 빛만 흘린다.");
+            }
 
             return result;
         }

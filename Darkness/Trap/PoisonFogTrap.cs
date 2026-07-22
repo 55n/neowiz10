@@ -25,7 +25,19 @@ namespace Darkness
             PlayerActionContext context)
         {
             SlotInteractionResult result = new SlotInteractionResult();
-            if (context == null || !IsActive)
+            if (context == null)
+            {
+                return result;
+            }
+
+            if (context.Action == PlayerActionType.Talk)
+            {
+                result.Messages.Add(
+                    ExplorationMessages.NoResponse());
+                return result;
+            }
+
+            if (!IsActive)
             {
                 return result;
             }

@@ -145,7 +145,7 @@ namespace Darkness
                 "이동", "", isExitRoom, moveNode, ExplorationSelectionOptions.MOVE);
             explorationNode.Options.Add(moveOption);
             explorationNode.Options.Add(new SelectionOption(
-                "뒤로가기", "이전 방으로 돌아간다",
+                "이전 방으로 가기", "직전에 있던 방으로 이동한다",
                 !isExitRoom && HasAvailableEdge(RoomDirection.BACK),
                 null,
                 ExplorationSelectionOptions.BACK));
@@ -169,7 +169,8 @@ namespace Darkness
             battleNode.Options.Add(new SelectionOption(
                 "공격하기", "", true, null, AttackSelectionOptions.ATTACK));
             battleNode.Options.Add(new SelectionOption(
-                "방어 자세", "", true, null, AttackSelectionOptions.DEFFENSE));
+                "방어 자세", "방어력 +3. 전투 중이면 집중 1 회복. 막으면 무기 내구도가 감소한다.",
+                true, null, AttackSelectionOptions.DEFFENSE));
             battleNode.Options.Add(SelectionOption.DynamicNode(
                 "스킬 선택",
                 "사용할 스킬을 선택한다",

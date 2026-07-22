@@ -51,6 +51,11 @@ namespace Darkness
             {
                 Attack(context, result);
             }
+            else if (context.Action == PlayerActionType.Talk)
+            {
+                result.Messages.Add(
+                    ExplorationMessages.NoResponse());
+            }
 
             return result;
         }

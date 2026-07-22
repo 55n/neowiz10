@@ -47,8 +47,8 @@ namespace Darkness
                 new List<RoomSlotType>
                 {
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
-                    new RoomSlotType(RoomObjectType.Monster, "room1_lost_goblin", true),
+                    new RoomSlotType(RoomObjectType.Monster, "room1_lost_goblin", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", true),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                 });
@@ -61,7 +61,8 @@ namespace Darkness
                 {
                     "적막이 맴돈다",
                     "아주 작은 금속음이 간신히 들린다",
-                    "불길한 예감이 든다"
+                    "불길한 예감이 든다",
+                    "손을 뻗기 전에 무언가를 먼저 던져보는 게 좋을 것 같다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -85,7 +86,9 @@ namespace Darkness
                 {
                     "짐승 같은 악취가 코를 찌른다",
                     "거대한 무언가가 킁킁거리고 있다",
-                    "배가 고픈 것 같다"
+                    "배가 고픈 것 같다",
+                    "벽을 더듬던 당신은 고급스러운 장식의 굴곡을 손끝으로 파악했다",
+                    "무언가 값진 것이 방 안에 있을지도 모른다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -98,7 +101,7 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
-                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                    new RoomSlotType(RoomObjectType.TreasureChest, "room3_treasure_chest", false),
                 });
             RoomType room4 = new RoomType(
                 "room-4",
@@ -175,7 +178,7 @@ namespace Darkness
                 "돌부스러기가 밟힌다",
                 new List<string>
                 {
-                    "무언가로 앞이 가로막혀있다",
+                    "음산한 횃불이 어둠 속에서 타올라 다섯 개의 돌관을 비춘다",
                     "망자의 말소리가 들려온다",
                     "\"쓸데 없이 열면 죽인다. 네 명은 진실을, 하나는 거짓을 말한다.\"",
                     "\"거짓말쟁이를 찾아라. 그자가 길을 막고 있다.\""
@@ -192,7 +195,8 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Coffin, "room7_coffin_3", false),
                     new RoomSlotType(RoomObjectType.Coffin, "room7_coffin_4", false),
                     new RoomSlotType(RoomObjectType.Coffin, "room7_coffin_5", true),
-                });
+                },
+                true);
             RoomType room8 = new RoomType(
                 "room-8",
                 "맹독안개",
@@ -294,12 +298,14 @@ namespace Darkness
                 new List<string>
                 {
                     "통로를 넘는 순간 공기가 급격히 차가워졌다",
+                    "어렴풋한 빛이 방 안을 비추고 있다",
                     "벽과 바닥을 훑는 손에 서리가 쓸려나간다",
                     "바닥에선 짐승의 냄새가 난다. 아마도 늑대...?",
                     "기다렸다는 듯이 어둠 속에서 늑대 울음소리가 들린다",
+                    "울음과 발소리는 서로 다른 세 곳에서 들려온다",
                     "갑작스러운 굉음이 뒤에서 난다", 
                     "당신은 본능적으로 앞으로 몸을 굴렀다",
-                    "뒤를 돌아보니...아무래도 퇴로가 무너진 것 같다",
+                    "뒤쪽을 더듬어보니...아무래도 퇴로가 무너진 것 같다",
                     "늑대 울음소리가 가까워지고 있다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
@@ -313,7 +319,8 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Monster, "room12_frost_wolf_2", true),
                     new RoomSlotType(RoomObjectType.Monster, "room12_frost_wolf_3", false),
                     new RoomSlotType(RoomObjectType.Empty, "empty", false),
-                });
+                },
+                true);
             RoomType room13 = new RoomType(
                 "room-13",
                 "메아리의 방",
@@ -369,13 +376,13 @@ namespace Darkness
                 "매우 불길한 예감이 든다",
                 new List<string>
                 {
+                    "벽과 천장을 빼곡히 뒤덮은 알들이 푸른 빛을 내며 방 안을 밝힌다",
                     "무언가 불길한 예감이 당신을 덮친다" ,
                     "노련한 모험가로서의 본능이 경종을 울린다",
                     "이곳을 최대한 빨리 빠져나가야 한다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
-                    { RoomDirection.BACK, new RoomEdgeType("room-14", false) },
                     { RoomDirection.FORWARD, new RoomEdgeType("room-16", false) },
                 },
                 new List<RoomSlotType>
@@ -385,7 +392,8 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Prey, "room15_bound_goblin", false),
                     new RoomSlotType(RoomObjectType.Egg, "room15_breath_hunter_egg_2", true),
                     new RoomSlotType(RoomObjectType.Prey, "room15_bound_wolf", false),
-                });
+                },
+                true);
             RoomType room16 = new RoomType(
                 "room-16",
                 "사냥터",
@@ -405,10 +413,11 @@ namespace Darkness
                 {
                     new RoomSlotType(RoomObjectType.Monster, "room16_web_1", false),
                     new RoomSlotType(RoomObjectType.Monster, "room16_web_2", false),
-                    new RoomSlotType(RoomObjectType.Monster, "room16_web_3", false),
-                    new RoomSlotType(RoomObjectType.Monster, "room16_web_4", true),
-                    new RoomSlotType(RoomObjectType.Monster, "room16_web_5", false),
-                });
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_3", true),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_4", false),
+                    new RoomSlotType(RoomObjectType.Empty, "empty", false),
+                },
+                true);
             RoomType room17 = new RoomType(
                 "room-17",
                 "출구",

@@ -12,6 +12,12 @@ namespace Darkness
             return "당신은 방어 자세를 취했다.";
         }
 
+        public static string DefenseFocusRestored(int amount)
+        {
+            return "당신은 적의 움직임에 집중해 집중력 " + amount +
+                   "을(를) 회복했다.";
+        }
+
         public static string ObjectDestroyed(string target)
         {
             return target + "이(가) 부서졌다.";

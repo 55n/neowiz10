@@ -10,8 +10,15 @@ namespace Darkness
     {
         static void Main(string[] args)
         {
-            Game game = new Game();
-            game.Start();
+            try
+            {
+                Game game = new Game();
+                game.Start();
+            }
+            catch (ConsoleWindowTooSmallException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
     }
 }

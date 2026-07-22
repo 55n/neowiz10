@@ -58,6 +58,14 @@ namespace Darkness
                    amount + "을(를) 회복했다";
         }
 
+        public static string WeaponRepaired(
+            string item,
+            string weapon)
+        {
+            return item + "을(를) 사용해 " + weapon +
+                   "의 내구도를 완전히 회복했다";
+        }
+
         public static string ItemHadNoEffect(string item)
         {
             return item + " 을(를) 사용할 필요가 없다";

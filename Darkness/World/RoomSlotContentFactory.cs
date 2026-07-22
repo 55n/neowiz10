@@ -105,7 +105,7 @@ namespace Darkness
                 new LostGoblinBehavior(),
                 new List<string>
                 {
-                    "어둠 속에서 작은 그림자가 움직인다.",
+                    "어둠 속에서 작은 발소리가 빠르게 움직인다.",
                 },
                 3);
         }
@@ -198,7 +198,7 @@ namespace Darkness
                 inventory,
                 new List<string>
                 {
-                    "어둠 속에서 두 개의 작은 그림자가 움직인다."
+                    "서로 다른 두 곳에서 작은 발소리가 부산하게 움직인다."
                 });
         }
 
@@ -273,7 +273,7 @@ namespace Darkness
         private TreasureChest CreateRoom3TreasureChest()
         {
             Inventory inventory = new Inventory(1);
-            StoreItem(inventory, "magic_stone", 1);
+            StoreItem(inventory, "mist_charm", 1);
             return new TreasureChest(8, 1, inventory);
         }
 
@@ -287,14 +287,14 @@ namespace Darkness
         {
             Inventory inventory = new Inventory(2);
             StoreItem(inventory, "freeze_core", 1);
-            StoreItem(inventory, "magic_stone", 1);
+            StoreItem(inventory, "magic_stone", 3);
             Monster monster = CreateMonster(
                 "swamp_specter",
                 inventory,
                 new SwampSpecterBehavior(),
                 new List<string>
                 {
-                    "물속에서 정체를 알 수 없는 그림자가 움직인다."
+                    "멀리서 희미하게 첨벙이는 소리가 들린다."
                 });
             monster.ApplyEffect(new WetEffect(
                 new EffectData().EffectTypes["wet"]));

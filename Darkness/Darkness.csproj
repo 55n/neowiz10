@@ -232,6 +232,7 @@
     <Compile Include="World\MoveInterceptionResult.cs" />
     <Compile Include="World\Room.cs" />
     <Compile Include="World\Room11MoveInterceptor.cs" />
+    <Compile Include="World\Room16MoveInterceptor.cs" />
     <Compile Include="World\RoomMoveInterceptorFactory.cs" />
     <Compile Include="World\RoomTurnBehaviorFactory.cs" />
     <Compile Include="World\Room16TurnBehavior.cs" />
@@ -244,6 +245,49 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Attack\README.md" />
+    <None Include="Body\README.md" />
+    <None Include="Coffin\README.md" />
+    <None Include="Damage\README.md" />
+    <None Include="Data\Effects\README.md" />
+    <None Include="Data\Heroes\README.md" />
+    <None Include="Data\Items\README.md" />
+    <None Include="Data\Monsters\README.md" />
+    <None Include="Data\README.md" />
+    <None Include="Data\Rooms\README.md" />
+    <None Include="Data\Skills\README.md" />
+    <None Include="Data\StatusEffects\README.md" />
+    <None Include="Data\Traps\README.md" />
+    <None Include="Documentation\README.md" />
+    <None Include="Durability\README.md" />
+    <None Include="Effect\Effects\README.md" />
+    <None Include="Effect\README.md" />
+    <None Include="Egg\README.md" />
+    <None Include="Hero\README.md" />
+    <None Include="Interaction\README.md" />
+    <None Include="Inventory\README.md" />
+    <None Include="MAINTENANCE.md" />
+    <None Include="Message\README.md" />
+    <None Include="Monster\Behavior\README.md" />
+    <None Include="Monster\README.md" />
+    <None Include="Narrative\README.md" />
+    <None Include="Phase\README.md" />
+    <None Include="Pile\README.md" />
+    <None Include="Presentation\Images\README.md" />
+    <None Include="Presentation\README.md" />
+    <None Include="Prey\README.md" />
+    <None Include="Properties\README.md" />
+    <None Include="README.md" />
+    <None Include="Sand\README.md" />
+    <None Include="Screens\README.md" />
+    <None Include="Skill\README.md" />
+    <None Include="Trade\README.md" />
+    <None Include="Trap\README.md" />
+    <None Include="TreasureChest\README.md" />
+    <None Include="Turn\README.md" />
+    <None Include="Water\README.md" />
+    <None Include="World\README.md" />
+    <None Include="스틸컷\README.md" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

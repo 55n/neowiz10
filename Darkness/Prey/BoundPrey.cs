@@ -29,6 +29,11 @@ namespace Darkness
             {
                 result.Messages.Add(talkMessage);
             }
+            else if (context.Action == PlayerActionType.Attack)
+            {
+                result.Messages.Add(
+                    "촘촘한 거미줄이 무기를 휘감아 묶인 먹잇감에게 공격이 닿지 않는다.");
+            }
             else
             {
                 result.Messages.Add(

@@ -89,6 +89,11 @@ namespace Darkness
                 return 0;
             }
 
+            if (action.Item.Item.Type.Id == "stone")
+            {
+                return 2;
+            }
+
             return action.Item.Item.Type.Weight / 2;
         }
 

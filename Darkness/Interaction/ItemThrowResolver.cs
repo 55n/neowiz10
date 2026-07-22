@@ -21,11 +21,17 @@ namespace Darkness
                 return result;
             }
 
+            bool isConsumedByDoorClinger =
+                context.Item.Item.Type.Id == "magic_stone" &&
+                context.TargetSlot.Content is Monster &&
+                ((Monster)context.TargetSlot.Content).Id.StartsWith(
+                    "door_clinger_");
             bool isLostInTerrain =
                 context.TargetSlot.Content is Water ||
                 context.TargetSlot.Content is Sand ||
                 context.TargetSlot.Type.ObjectType ==
-                    RoomObjectType.Sand;
+                    RoomObjectType.Sand ||
+                isConsumedByDoorClinger;
             ItemStack landedStack = new ItemStack(thrownItem, 1);
             if (!isLostInTerrain &&
                 context.TargetSlot.GroundInventory.Store(landedStack) != 0)
@@ -60,9 +66,11 @@ namespace Darkness
                 InventoryMessages.ItemThrown(thrownItem.Type.Name));
             if (isLostInTerrain)
             {
-                string terrain = context.TargetSlot.Content is Water
-                    ? "물속"
-                    : "모래 속";
+                string terrain = isConsumedByDoorClinger
+                    ? "문붙이의 몸속"
+                    : context.TargetSlot.Content is Water
+                        ? "물속"
+                        : "모래 속";
                 result.Messages.Add(
                     InventoryMessages.ItemLostInTerrain(
                         thrownItem.Type.Name,

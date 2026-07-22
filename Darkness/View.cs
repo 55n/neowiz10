@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace Darkness
 {
+    public class ConsoleWindowTooSmallException : InvalidOperationException
+    {
+        public ConsoleWindowTooSmallException()
+            : base("콘솔 창 크기가 너무 작습니다. 80칸 × 30줄 이상으로 키운 뒤 다시 실행해 주세요.")
+        {
+        }
+    }
+
     public static class View
     {
         public const int Width = 80;
@@ -16,7 +24,7 @@ namespace Darkness
         {
             if (Console.WindowWidth < Width || Console.WindowHeight < Height)
             {
-                throw new InvalidOperationException("콘솔 창은 최소 80칸 × 30줄이어야 합니다.");
+                throw new ConsoleWindowTooSmallException();
             }
 
             int left = (Console.WindowWidth - Width) / 2;

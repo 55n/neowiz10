@@ -19,6 +19,10 @@ namespace Darkness
                 "room-11",
                 contentFactory =>
                     new Room11MoveInterceptor(contentFactory));
+            Register(
+                "room-16",
+                contentFactory =>
+                    new Room16MoveInterceptor());
         }
 
         public void Register(

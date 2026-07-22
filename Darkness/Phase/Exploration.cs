@@ -361,13 +361,35 @@ namespace Darkness
                 string itemName = selection.ItemStack == null
                     ? "장비"
                     : selection.ItemStack.Item.Type.Name;
+                string boundSkillId = selection.ItemStack == null
+                    ? null
+                    : selection.ItemStack.Item.Type.BoundSkillId;
+                bool alreadyKnewSkill =
+                    hero.KnowsSkill(boundSkillId);
                 bool equipped = hero.Equip(
                     selection.EquipmentSlot.Value,
                     selection.ItemStack);
-                Utility.PlayMessage(
+                List<string> messages = new List<string>
+                {
                     equipped
                         ? EquipmentMessages.Equipped(itemName)
-                        : EquipmentMessages.CannotEquip());
+                        : EquipmentMessages.CannotEquip()
+                };
+                if (equipped && !alreadyKnewSkill &&
+                    hero.KnowsSkill(boundSkillId))
+                {
+                    SkillType learnedSkill;
+                    if (skillData.SkillTypes.TryGetValue(
+                            boundSkillId,
+                            out learnedSkill))
+                    {
+                        messages.Add(
+                            SkillMessages.Learned(
+                                learnedSkill.Name));
+                    }
+                }
+
+                Utility.PlayMessages(messages.ToArray());
                 screen.OpenExplorationSelection();
                 return null;
             }
@@ -479,6 +501,39 @@ namespace Darkness
                 return;
             }
 
+            if (itemType.UseFunction == ItemFunction.RepairWeapon)
+            {
+                Item weapon = hero.GetEquippedItem(
+                    EquipmentSlot.Weapon);
+                if (weapon == null)
+                {
+                    Utility.PlayMessage(
+                        InventoryMessages.CannotUseItem(
+                            itemType.Name));
+                    return;
+                }
+
+                if (weapon.CurrentDurability >=
+                    weapon.Type.MaxDurability)
+                {
+                    Utility.PlayMessage(
+                        InventoryMessages.ItemHadNoEffect(
+                            itemType.Name));
+                    return;
+                }
+
+                if (hero.Inventory.Discard(itemStack, 1) == 1)
+                {
+                    weapon.SetDurability(
+                        weapon.Type.MaxDurability);
+                    Utility.PlayMessage(
+                        InventoryMessages.WeaponRepaired(
+                            itemType.Name,
+                            weapon.Name));
+                    return;
+                }
+            }
+
             Utility.PlayMessage(
                 InventoryMessages.CannotUseItem(itemType.Name));
         }
@@ -574,6 +629,31 @@ namespace Darkness
                 TurnResult revealResult =
                     turnManager.RevealAllSlots(room);
                 messages.AddRange(revealResult.Messages);
+            }
+
+            if (room.Type.Id == "room-14" &&
+                !room.HasBeenEntered)
+            {
+                ItemType stoneType =
+                    new ItemData().ItemTypes["stone"];
+                int previousCapacity = hero.Inventory.Capacity;
+                int remaining =
+                    hero.Inventory.StoreWithTemporaryCapacity(
+                        new ItemStack(new Item(stoneType), 3),
+                        stoneType.Id);
+                if (remaining == 0)
+                {
+                    messages.Add(
+                        "방에 들어서며 발치의 돌멩이 세 개를 주워 챙겼다.");
+                    messages.Add(
+                        InventoryMessages.ItemObtained(
+                            stoneType.Name + " x3"));
+                    if (hero.Inventory.Capacity > previousCapacity)
+                    {
+                        messages.Add(
+                            "돌멩이를 보관하는 동안 소지품 칸이 임시로 1칸 늘어난다.");
+                    }
+                }
             }
 
             if (room.Type.Id != "room-4")

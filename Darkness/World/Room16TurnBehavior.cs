@@ -57,7 +57,7 @@ namespace Darkness
                 result.SlotContentChanges.Add(
                     SlotContentChangeRequest.Place(slot, part));
                 result.SlotStateChanges.Add(
-                    SlotStateChangeRequest.Unreveal(slot));
+                    SlotStateChangeRequest.Reveal(slot));
             }
 
             result.Messages.Add(
@@ -86,7 +86,7 @@ namespace Darkness
                 }
             }
 
-            RoomSlot doorSlot = room.Slots[3];
+            RoomSlot doorSlot = room.Slots[2];
             result.SlotStateChanges.Add(
                 SlotStateChangeRequest.Reveal(doorSlot));
             result.Messages.Add(

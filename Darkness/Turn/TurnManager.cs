@@ -125,6 +125,23 @@ namespace Darkness
                         defendingEffectType));
                 turnResult.Messages.Add(
                     CombatMessages.DefenseStanceTaken());
+                if (room.Slots.Exists(slot =>
+                        slot.Content is Monster &&
+                        ((Monster)slot.Content).IsAlive &&
+                        ((Monster)slot.Content).State !=
+                            MonsterState.Indifferent))
+                {
+                    int previousFocus = hero.CurrentFocus;
+                    hero.RestoreFocus(1);
+                    int restoredFocus =
+                        hero.CurrentFocus - previousFocus;
+                    if (restoredFocus > 0)
+                    {
+                        turnResult.Messages.Add(
+                            CombatMessages.DefenseFocusRestored(
+                                restoredFocus));
+                    }
+                }
             }
 
             PlayerActionContext playerAction = new PlayerActionContext(
@@ -318,12 +335,65 @@ namespace Darkness
             }
 
             turnResult = new TurnResult();
+            List<ActiveEffect> expiringPlayerEffects =
+                interception.ConsumesTurn
+                    ? CaptureExpiringPlayerEffects(hero)
+                    : null;
             Phase = TurnPhase.PlayerAction;
+            if (interception.ConsumesTurn)
+            {
+                hero.ApplyEffect(new HastyEffect(hastyEffectType));
+            }
+
             ApplyInteraction(
                 room,
                 null,
                 interception.Interaction,
                 turnResult);
+
+            if (interception.ConsumesTurn)
+            {
+                PlayerActionContext playerAction =
+                    new PlayerActionContext(
+                        hero,
+                        PlayerActionType.Move,
+                        null,
+                        null,
+                        null);
+                List<MonsterTurnEntry> monsters =
+                    SnapshotMonsters(room);
+
+                Phase = TurnPhase.MonsterDecision;
+                DecideMonsterActions(
+                    room,
+                    playerAction,
+                    monsters,
+                    false,
+                    turnResult);
+
+                Phase = TurnPhase.MonsterAction;
+                ExecuteMonsterActions(
+                    room,
+                    hero,
+                    monsters,
+                    turnResult);
+                ExecuteRoomTurnBehavior(
+                    room,
+                    hero,
+                    playerAction,
+                    turnResult);
+                RemoveExpiredPlayerEffects(
+                    hero,
+                    expiringPlayerEffects);
+                hero.RemoveEffect(hastyEffectType.Id);
+
+                Phase = TurnPhase.EndTurn;
+                ApplyRoomEffects(room, hero, turnResult);
+                ResolveTurnEndEffects(room, hero, turnResult);
+                RemoveEndTurnDefeatedMonsters(room, turnResult);
+                TurnNumber++;
+            }
+
             turnResult.TurnCompleted = true;
             turnResult.TurnNumber = TurnNumber;
             turnResult.HeroDied = !hero.CanAct;
@@ -1231,6 +1301,13 @@ namespace Darkness
 
             if (slot.State != SlotState.REVEALED)
             {
+                ISlotAppearance appearance =
+                    slot.Content as ISlotAppearance;
+                if (appearance != null)
+                {
+                    return appearance.SlotDisplayName;
+                }
+
                 return slot.Content == null
                     ? "어두운 공간"
                     : "???";

@@ -2,7 +2,7 @@ namespace Darkness
 {
     public class PoisonEffect : ActiveEffect
     {
-        private const int TurnEndDamage = 5;
+        private const int TurnEndDamage = 3;
 
         public PoisonEffect(EffectType type, object source)
             : base(type, source)

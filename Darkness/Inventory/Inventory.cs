@@ -5,6 +5,9 @@ namespace Darkness
 {
     public class Inventory
     {
+        private string temporaryCapacityItemId;
+        private int temporaryCapacityBonus;
+
         public List<ItemStack> ItemStacks { get; private set; }
         public int Capacity { get; private set; }
 
@@ -51,6 +54,24 @@ namespace Darkness
             return remaining;
         }
 
+        public int StoreWithTemporaryCapacity(
+            ItemStack itemStack,
+            string temporaryItemId)
+        {
+            int remaining = Store(itemStack);
+            if (remaining == 0 || itemStack == null ||
+                itemStack.Item == null ||
+                itemStack.Item.Type.Id != temporaryItemId)
+            {
+                return remaining;
+            }
+
+            ExpandCapacity(1);
+            temporaryCapacityItemId = temporaryItemId;
+            temporaryCapacityBonus++;
+            return Store(new ItemStack(itemStack.Item, remaining));
+        }
+
         public int Discard(ItemStack itemStack)
         {
             return Discard(itemStack, itemStack == null ? 0 : itemStack.Count);
@@ -63,13 +84,34 @@ namespace Darkness
                 return 0;
             }
 
+            string itemId = itemStack.Item.Type.Id;
             int removed = itemStack.Remove(count);
             if (itemStack.Count == 0)
             {
                 ItemStacks.Remove(itemStack);
             }
 
+            ReleaseTemporaryCapacityIfItemIsGone(itemId);
+
             return removed;
+        }
+
+        private void ReleaseTemporaryCapacityIfItemIsGone(
+            string itemId)
+        {
+            if (temporaryCapacityBonus == 0 ||
+                temporaryCapacityItemId != itemId ||
+                ItemStacks.Exists(stack =>
+                    stack.Item.Type.Id == itemId))
+            {
+                return;
+            }
+
+            Capacity = Math.Max(
+                ItemStacks.Count,
+                Capacity - temporaryCapacityBonus);
+            temporaryCapacityItemId = null;
+            temporaryCapacityBonus = 0;
         }
 
         public bool RemoveItem(Item item)
