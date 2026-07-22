@@ -14,6 +14,7 @@ namespace Darkness
         public SkillAttackType AttackType { get; private set; }
         public List<EffectApplication> Effects { get; private set; }
         public string ResultMessage { get; private set; }
+        public SkillFollowUpType FollowUpType { get; private set; }
 
         public SkillType(
             string id,
@@ -72,7 +73,8 @@ namespace Darkness
             SkillTargetingType targetingType,
             SkillAttackType attackType,
             List<EffectApplication> effects,
-            string resultMessage = null)
+            string resultMessage = null,
+            SkillFollowUpType followUpType = SkillFollowUpType.None)
         {
             Id = id;
             Name = name;
@@ -84,6 +86,7 @@ namespace Darkness
             AttackType = attackType;
             Effects = effects;
             ResultMessage = resultMessage;
+            FollowUpType = followUpType;
         }
     }
 }

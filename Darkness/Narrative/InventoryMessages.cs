@@ -27,6 +27,14 @@ namespace Darkness
             return "당신은 " + item + " 을(를) 던졌다";
         }
 
+        public static string ItemLostInTerrain(
+            string item,
+            string terrain)
+        {
+            return item + "은(는) " + terrain +
+                   " 깊이 파묻혀 회수할 수 없게 되었다.";
+        }
+
         public static string InventoryExpanded(int amount)
         {
             return "소지품 칸 수가 " + amount + " 늘어났습니다";
@@ -40,6 +48,14 @@ namespace Darkness
         public static string ItemUsed(string item)
         {
             return item + " 을(를) 사용했다";
+        }
+
+        public static string HealthRestored(
+            string item,
+            int amount)
+        {
+            return item + "을(를) 사용해 생명력 " +
+                   amount + "을(를) 회복했다";
         }
 
         public static string ItemHadNoEffect(string item)

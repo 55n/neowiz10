@@ -9,6 +9,7 @@ namespace Darkness
         public MonsterType Type { get; private set; }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int MaxFocus { get { return Type.MaxFocus; } }
         public int Attack
         {
             get
@@ -183,6 +184,16 @@ namespace Darkness
 
             if (context.Action == PlayerActionType.Attack)
             {
+                IPlayerTargetability targetability =
+                    Behavior as IPlayerTargetability;
+                if (targetability != null &&
+                    !targetability.CanBeTargetedByPlayer)
+                {
+                    result.Messages.Add(
+                        "공격할 수 있는 대상이 보이지 않는다.");
+                    return result;
+                }
+
                 Item weapon = context.Actor.GetEquippedItem(
                     EquipmentSlot.Weapon);
                 result.Attacks.Add(new AttackContext(
@@ -197,6 +208,21 @@ namespace Darkness
                     weapon,
                     weapon == null ? 0 : 1));
             }
+            else if (context.Action == PlayerActionType.Search)
+            {
+                ISearchHintBehavior searchHintBehavior =
+                    Behavior as ISearchHintBehavior;
+                if (searchHintBehavior != null)
+                {
+                    string hint = searchHintBehavior.GetSearchHint(
+                        this,
+                        context);
+                    if (!string.IsNullOrEmpty(hint))
+                    {
+                        result.Messages.Add(hint);
+                    }
+                }
+            }
 
             return result;
         }
@@ -210,6 +236,42 @@ namespace Darkness
             }
 
             RemoveEffect("defending");
+
+            ISkillOutcomeReflector skillOutcomeReflector =
+                Behavior as ISkillOutcomeReflector;
+            bool mustReflectSkillOutcome =
+                perception != null &&
+                perception.PlayerAction != null &&
+                perception.PlayerAction.Action ==
+                    PlayerActionType.UseSkill &&
+                skillOutcomeReflector != null &&
+                skillOutcomeReflector.HasPendingSkillOutcome;
+            bool mustHandleReflectionWait =
+                perception != null &&
+                perception.PlayerAction != null &&
+                perception.PlayerAction.Action ==
+                    PlayerActionType.Wait &&
+                skillOutcomeReflector != null;
+
+            string bindingName;
+            int remainingBindingStacks;
+            if (!mustReflectSkillOutcome &&
+                !mustHandleReflectionWait &&
+                EffectActionRules.TryConsumeForcedWait(
+                    this,
+                    out bindingName,
+                    out remainingBindingStacks))
+            {
+                MonsterDecision forcedWait = new MonsterDecision(
+                    State,
+                    MonsterActionPlan.Wait(),
+                    EffectMessages.ForcedWait(
+                        NarrativeTokens.Actor,
+                        bindingName,
+                        remainingBindingStacks));
+                NextAction = forcedWait.Action;
+                return forcedWait;
+            }
 
             MonsterDecision decision = Behavior.Decide(this, perception) ??
                 MonsterDecision.None(State);
@@ -238,6 +300,14 @@ namespace Darkness
                     Accuracy,
                     target.Type.Evasion));
             }
+            else if (action.Type == MonsterActionType.DrainFocus)
+            {
+                result.FocusDamages.Add(
+                    new FocusDamageRequest(
+                        this,
+                        target,
+                        Attack));
+            }
             else if (action.Type == MonsterActionType.Move &&
                      action.TargetSlot != null)
             {
@@ -265,8 +335,34 @@ namespace Darkness
                         this,
                         skill,
                         room,
-                        new object[] { target }));
+                        new object[] { target },
+                        action.TargetSlot));
                 }
+            }
+            else if (action.Type == MonsterActionType.Reflect)
+            {
+                if (action.ReflectedDamage > 0)
+                {
+                    result.Damages.Add(new DamageContext(
+                        this,
+                        target,
+                        action.ReflectedDamage,
+                        true));
+                }
+
+                foreach (ReflectedEffect effect in
+                         action.ReflectedEffects)
+                {
+                    result.EffectCopies.Add(new EffectCopyRequest(
+                        this,
+                        target,
+                        effect.EffectId,
+                        effect.StackCount));
+                }
+            }
+            else if (action.Type == MonsterActionType.Vanish)
+            {
+                result.RemoveContent = true;
             }
 
             if (action.Type != MonsterActionType.Move &&
@@ -286,6 +382,20 @@ namespace Darkness
             {
                 State = stateAfterMove.Value;
             }
+        }
+
+        public void EnterCombat()
+        {
+            State = MonsterState.Combat;
+            NextAction = MonsterActionPlan.None();
+            DetectionTurnsRemaining = 0;
+        }
+
+        public void EnterAlertState()
+        {
+            State = MonsterState.Alert;
+            NextAction = MonsterActionPlan.None();
+            DetectionTurnsRemaining = DetectionDelayTurns;
         }
 
     }

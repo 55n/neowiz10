@@ -21,15 +21,30 @@ namespace Darkness
                 return result;
             }
 
+            bool isLostInTerrain =
+                context.TargetSlot.Content is Water ||
+                context.TargetSlot.Content is Sand ||
+                context.TargetSlot.Type.ObjectType ==
+                    RoomObjectType.Sand;
             ItemStack landedStack = new ItemStack(thrownItem, 1);
-            if (context.TargetSlot.GroundInventory.Store(landedStack) != 0)
+            if (!isLostInTerrain &&
+                context.TargetSlot.GroundInventory.Store(landedStack) != 0)
             {
                 RestoreItem(context, thrownItem);
                 return result;
             }
 
-            IDamageable target =
-                context.TargetSlot.Content as IDamageable;
+            object content = context.TargetSlot.Content;
+            IPlayerTargetability targetability =
+                content as IPlayerTargetability;
+            bool canBeTargeted = targetability == null ||
+                targetability.CanBeTargetedByPlayer;
+            IDamageable target = canBeTargeted
+                ? content as IDamageable
+                : null;
+            IEffectTarget effectTarget = canBeTargeted
+                ? content as IEffectTarget
+                : null;
             AttackContext impactAttack = target == null
                 ? null
                 : CreateImpactAttack(context.Actor, thrownItem, target);
@@ -38,10 +53,21 @@ namespace Darkness
                 thrownItem,
                 context.TargetSlot,
                 target,
+                effectTarget,
                 impactAttack,
                 thrownItem.Type.ThrowEffects));
             result.Messages.Add(
                 InventoryMessages.ItemThrown(thrownItem.Type.Name));
+            if (isLostInTerrain)
+            {
+                string terrain = context.TargetSlot.Content is Water
+                    ? "물속"
+                    : "모래 속";
+                result.Messages.Add(
+                    InventoryMessages.ItemLostInTerrain(
+                        thrownItem.Type.Name,
+                        terrain));
+            }
 
             return result;
         }

@@ -168,7 +168,7 @@ namespace Darkness
             Console.SetCursorPosition(Left, Top + row);
             Console.Write(new string(' ', Width));
             Console.SetCursorPosition(Left, Top + row);
-            Console.Write(text.Length > Width ? text.Substring(0, Width) : text);
+            Console.Write(Utility.TruncateToDisplayWidth(text, Width));
         }
 
         public void DrawLineCentered(int row, string text)
@@ -181,6 +181,7 @@ namespace Darkness
             Console.SetCursorPosition(Left, Top + row);
             Console.Write(new string(' ', Width));
 
+            text = Utility.TruncateToDisplayWidth(text, Width);
             int textWidth = Utility.GetDisplayWidth(text);
             int offset = Math.Max(0, (Width - textWidth) / 2);
             Console.SetCursorPosition(Left + offset, Top + row);

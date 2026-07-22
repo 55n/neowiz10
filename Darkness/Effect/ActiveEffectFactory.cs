@@ -46,7 +46,19 @@ namespace Darkness
                 case "wet":
                     return new WetEffect(effectType);
                 case "frozen":
-                    return new FrozenEffect(effectType);
+                    return new FrozenEffect(effectType, source);
+                case "bind":
+                    return new BoundEffect(effectType, source);
+                case "magic_charge":
+                    return new MagicChargeEffect(effectType, source);
+                case "magic_overload":
+                    return new MagicOverloadEffect(effectType, source);
+                case "magic_stone_eater":
+                    return new ActiveEffect(effectType, source);
+                case "fixed":
+                    return new FixedEffect(effectType, source);
+                case "spirit_barrier":
+                    return new SpiritBarrierEffect(effectType, source);
                 default:
                     return null;
             }

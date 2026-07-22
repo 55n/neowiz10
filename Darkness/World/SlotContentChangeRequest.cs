@@ -59,6 +59,20 @@ namespace Darkness
                 null);
         }
 
+        public static SlotContentChangeRequest MoveReplacing(
+            RoomSlot sourceSlot,
+            RoomSlot targetSlot,
+            ISlotContent expectedContent,
+            ISlotContent sourceReplacement)
+        {
+            return new SlotContentChangeRequest(
+                SlotContentChangeType.Move,
+                sourceSlot,
+                targetSlot,
+                expectedContent,
+                sourceReplacement);
+        }
+
         public static SlotContentChangeRequest Replace(
             RoomSlot targetSlot,
             ISlotContent expectedContent,

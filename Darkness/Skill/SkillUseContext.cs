@@ -11,12 +11,14 @@ namespace Darkness
         public Room Room { get; private set; }
         public List<object> SelectedTargets { get; private set; }
         public List<object> Targets { get { return SelectedTargets; } }
+        public RoomSlot FollowUpSlot { get; private set; }
 
         public SkillUseContext(
             ISkillUser user,
             SkillType skill,
             Room room,
-            IEnumerable<object> selectedTargets)
+            IEnumerable<object> selectedTargets,
+            RoomSlot followUpSlot = null)
         {
             if (user == null)
             {
@@ -34,6 +36,7 @@ namespace Darkness
             SelectedTargets = selectedTargets == null
                 ? new List<object>()
                 : new List<object>(selectedTargets);
+            FollowUpSlot = followUpSlot;
         }
     }
 }

@@ -16,6 +16,11 @@ namespace Darkness
             get;
             private set;
         }
+        public List<AppliedEffectResult> AppliedEffects
+        {
+            get;
+            private set;
+        }
 
         public EffectResolveResult()
         {
@@ -24,6 +29,27 @@ namespace Darkness
             DurabilityRequests =
                 new List<EquipmentDurabilityRequest>();
             AffectedEffectTargets = new HashSet<IEffectTarget>();
+            AppliedEffects = new List<AppliedEffectResult>();
+        }
+    }
+
+    public class AppliedEffectResult
+    {
+        public IEffectTarget Target { get; private set; }
+        public EffectType Effect { get; private set; }
+        public int StackCount { get; private set; }
+        public bool WasTriggered { get; private set; }
+
+        public AppliedEffectResult(
+            IEffectTarget target,
+            EffectType effect,
+            int stackCount,
+            bool wasTriggered)
+        {
+            Target = target;
+            Effect = effect;
+            StackCount = stackCount;
+            WasTriggered = wasTriggered;
         }
     }
 }

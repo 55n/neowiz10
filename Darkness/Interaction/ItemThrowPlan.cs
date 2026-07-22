@@ -8,6 +8,7 @@ namespace Darkness
         public Item ThrownItem { get; private set; }
         public RoomSlot TargetSlot { get; private set; }
         public IDamageable Target { get; private set; }
+        public IEffectTarget EffectTarget { get; private set; }
         public AttackContext ImpactAttack { get; private set; }
         public List<EffectApplication> OnHitEffects { get; private set; }
 
@@ -16,6 +17,7 @@ namespace Darkness
             Item thrownItem,
             RoomSlot targetSlot,
             IDamageable target,
+            IEffectTarget effectTarget,
             AttackContext impactAttack,
             IEnumerable<EffectApplication> onHitEffects)
         {
@@ -23,6 +25,7 @@ namespace Darkness
             ThrownItem = thrownItem;
             TargetSlot = targetSlot;
             Target = target;
+            EffectTarget = effectTarget;
             ImpactAttack = impactAttack;
             OnHitEffects = onHitEffects == null
                 ? new List<EffectApplication>()

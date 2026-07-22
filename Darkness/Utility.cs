@@ -21,6 +21,84 @@ namespace Darkness
             return width;
         }
 
+        public static string TruncateToDisplayWidth(string text, int maxWidth)
+        {
+            if (string.IsNullOrEmpty(text) || maxWidth <= 0)
+            {
+                return "";
+            }
+
+            StringBuilder result = new StringBuilder();
+            int width = 0;
+            foreach (char character in text)
+            {
+                int characterWidth = GetDisplayWidth(character.ToString());
+                if (width + characterWidth > maxWidth)
+                {
+                    break;
+                }
+
+                result.Append(character);
+                width += characterWidth;
+            }
+
+            return result.ToString();
+        }
+
+        public static IEnumerable<string> WrapText(string text, int maxWidth)
+        {
+            if (maxWidth <= 0)
+            {
+                throw new ArgumentOutOfRangeException("maxWidth");
+            }
+
+            string normalized = (text ?? "").Replace("\r\n", "\n").Replace('\r', '\n');
+            string[] paragraphs = normalized.Split('\n');
+
+            foreach (string paragraph in paragraphs)
+            {
+                string remaining = paragraph;
+                if (remaining.Length == 0)
+                {
+                    yield return "";
+                    continue;
+                }
+
+                while (GetDisplayWidth(remaining) > maxWidth)
+                {
+                    int splitIndex = FindWrapIndex(remaining, maxWidth);
+                    string line = remaining.Substring(0, splitIndex).TrimEnd();
+                    yield return line;
+                    remaining = remaining.Substring(splitIndex).TrimStart();
+                }
+
+                yield return remaining;
+            }
+        }
+
+        private static int FindWrapIndex(string text, int maxWidth)
+        {
+            int width = 0;
+            int lastWhitespace = -1;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                int characterWidth = GetDisplayWidth(text[i].ToString());
+                if (width + characterWidth > maxWidth)
+                {
+                    return lastWhitespace > 0 ? lastWhitespace : Math.Max(1, i);
+                }
+
+                width += characterWidth;
+                if (char.IsWhiteSpace(text[i]))
+                {
+                    lastWhitespace = i;
+                }
+            }
+
+            return text.Length;
+        }
+
         public static ConsoleKey ReadInput()
         {
             while (true)
@@ -47,11 +125,22 @@ namespace Darkness
         public static void PlayMessages(string[] messages)
         {
             View.Message.Clear();
+            int row = 0;
 
-            for (int i = 0; i < messages.Length; i++)
+            foreach (string message in messages)
             {
-                View.Message.DrawLine(i, messages[i]);
-                Utility.WaitForEnter();
+                foreach (string line in WrapText(message, View.Message.Width))
+                {
+                    if (row >= View.Message.Height)
+                    {
+                        View.Message.Clear();
+                        row = 0;
+                    }
+
+                    View.Message.DrawLine(row, line);
+                    row++;
+                    Utility.WaitForEnter();
+                }
             }
         }
 

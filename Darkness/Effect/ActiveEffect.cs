@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Darkness
 {
@@ -11,6 +12,10 @@ namespace Darkness
         {
             get { return 0; }
         }
+        public virtual bool ForcesWait
+        {
+            get { return false; }
+        }
 
         public ActiveEffect(EffectType type, object source = null)
         {
@@ -22,6 +27,12 @@ namespace Darkness
         public void AddStack()
         {
             StackCount = Math.Min(Type.MaxStackCount, StackCount + 1);
+        }
+
+        public bool ConsumeStack()
+        {
+            StackCount = Math.Max(0, StackCount - 1);
+            return StackCount == 0;
         }
 
         public virtual int GetAttackBonus()
@@ -63,6 +74,17 @@ namespace Darkness
         public virtual bool CanApplyTo(IEffectTarget target)
         {
             return true;
+        }
+
+        public virtual IEnumerable<string> GetTriggeredEffectIds(
+            IEffectTarget target)
+        {
+            return new string[0];
+        }
+
+        public virtual void OnStackIncreased(
+            EffectStackIncreaseContext context)
+        {
         }
 
         public virtual void OnTurnEnd(EffectTurnContext context)

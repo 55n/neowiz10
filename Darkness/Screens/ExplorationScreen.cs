@@ -20,7 +20,7 @@ namespace Darkness
     }
     enum MoveSelectionOptions
     {
-        BACK, FORWARD, LEFT, RIGHT
+        BACK, FORWARD, LEFT, RIGHT, CLIMB
     }
 
     public enum SlotState
@@ -61,6 +61,15 @@ namespace Darkness
 
             if (!room.HasBeenEntered)
             {
+                if (room.Type.Id == "room-4")
+                {
+                    View.Display.DrawCentered(RestImage.Lines);
+                }
+                else if (room.Type.Id == "room-17")
+                {
+                    View.Display.DrawCentered(ExitImage.Lines);
+                }
+
                 explorationPanel.PlayNarrations(
                     room.Type.EnterMessages);
                 room.MarkAsEntered();
@@ -90,6 +99,8 @@ namespace Darkness
         public SelectionMenu BuildExplorationSelection(Hero hero)
         {
             SkillData skillData = new SkillData();
+            bool isExitRoom = currentRoom != null &&
+                currentRoom.Type.Id == "room-17";
             string roomDescription = currentRoom == null
                 ? ""
                 : currentRoom.Type.Description;
@@ -121,21 +132,21 @@ namespace Darkness
             explorationNode.Options.Add(SelectionOption.DynamicNode(
                 "상태창",
                 "",
-                true,
+                !isExitRoom,
                 () => StatusScreen.BuildNode(hero, explorationNode)));
             explorationNode.Options.Add(SelectionOption.DynamicNode(
                 "소지품",
                 "",
-                true,
+                !isExitRoom,
                 () => InventoryScreen.BuildNode(hero, explorationNode)));
             explorationNode.Options.Add(new SelectionOption(
-                "행동", "", true, encounterNode, ExplorationSelectionOptions.ENCOUNTER));
+                "행동", "", !isExitRoom, encounterNode, ExplorationSelectionOptions.ENCOUNTER));
             moveOption = new SelectionOption(
-                "이동", "", false, moveNode, ExplorationSelectionOptions.MOVE);
+                "이동", "", isExitRoom, moveNode, ExplorationSelectionOptions.MOVE);
             explorationNode.Options.Add(moveOption);
             explorationNode.Options.Add(new SelectionOption(
                 "뒤로가기", "이전 방으로 돌아간다",
-                HasAvailableEdge(RoomDirection.BACK),
+                !isExitRoom && HasAvailableEdge(RoomDirection.BACK),
                 null,
                 ExplorationSelectionOptions.BACK));
 
@@ -170,25 +181,37 @@ namespace Darkness
             battleNode.Options.Add(new SelectionOption(
                 "취소", "", true, encounterNode, AttackSelectionOptions.CANCEL));
 
-            moveNode.Options.Add(new SelectionOption(
-                "돌아가기", "이전 선택지로 돌아간다",
-                true,
-                explorationNode));
-            moveNode.Options.Add(new SelectionOption(
-                "앞으로 간다", "",
-                HasAvailableEdge(RoomDirection.FORWARD),
-                null,
-                MoveSelectionOptions.FORWARD));
-            moveNode.Options.Add(new SelectionOption(
-                "왼쪽으로 간다", "",
-                HasAvailableEdge(RoomDirection.LEFT),
-                null,
-                MoveSelectionOptions.LEFT));
-            moveNode.Options.Add(new SelectionOption(
-                "오른쪽으로 간다", "",
-                HasAvailableEdge(RoomDirection.RIGHT),
-                null,
-                MoveSelectionOptions.RIGHT));
+            if (isExitRoom)
+            {
+                moveNode.Options.Add(new SelectionOption(
+                    "올라간다",
+                    "지상으로 이어지는 사다리를 오른다",
+                    true,
+                    null,
+                    MoveSelectionOptions.CLIMB));
+            }
+            else
+            {
+                moveNode.Options.Add(new SelectionOption(
+                    "돌아가기", "이전 선택지로 돌아간다",
+                    true,
+                    explorationNode));
+                moveNode.Options.Add(new SelectionOption(
+                    "앞으로 간다", "",
+                    HasAvailableEdge(RoomDirection.FORWARD),
+                    null,
+                    MoveSelectionOptions.FORWARD));
+                moveNode.Options.Add(new SelectionOption(
+                    "왼쪽으로 간다", "",
+                    HasAvailableEdge(RoomDirection.LEFT),
+                    null,
+                    MoveSelectionOptions.LEFT));
+                moveNode.Options.Add(new SelectionOption(
+                    "오른쪽으로 간다", "",
+                    HasAvailableEdge(RoomDirection.RIGHT),
+                    null,
+                    MoveSelectionOptions.RIGHT));
+            }
 
             return new SelectionMenu(explorationNode);
         }
@@ -230,7 +253,9 @@ namespace Darkness
                 return;
             }
 
-            moveOption.SetEnabled(CanMove(currentRoom.Slots));
+            moveOption.SetEnabled(
+                currentRoom.Type.Id == "room-17" ||
+                CanMove(currentRoom.Slots));
         }
 
         private bool CanMove(List<RoomSlot> slots)
@@ -238,9 +263,7 @@ namespace Darkness
             for (int i = 0; i < slots.Count; i++)
             {
                 RoomSlot slot = slots[i];
-                if (slot.Type.HasDoor &&
-                    slot.IsEmpty &&
-                    slot.State == SlotState.REVEALED)
+                if (slot.IsDoorDiscovered)
                 {
                     return true;
                 }
@@ -363,17 +386,29 @@ namespace Darkness
             {
                 if (slot.Content != null)
                 {
-                    contentName = slot.Content.Name;
+                    ISlotAppearance appearance =
+                        slot.Content as ISlotAppearance;
+                    contentName = appearance == null
+                        ? slot.Content.Name
+                        : appearance.SlotDisplayName;
                 }
                 else if (slot.Type.HasDoor)
                 {
                     contentName = ExplorationMessages.Door();
                 }
             }
-            else if (slotState == SlotState.UNREVEALED &&
-                     HasUnrevealedObject(slot))
+            else if (slotState == SlotState.UNREVEALED)
             {
-                contentName = "???";
+                ISlotAppearance appearance =
+                    slot.Content as ISlotAppearance;
+                if (appearance != null)
+                {
+                    contentName = appearance.SlotDisplayName;
+                }
+                else if (HasUnrevealedObject(slot))
+                {
+                    contentName = "???";
+                }
             }
 
             if (row == SlotHeight / 2)

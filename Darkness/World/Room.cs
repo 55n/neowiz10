@@ -12,10 +12,18 @@ namespace Darkness
         public Dictionary<RoomDirection, RoomEdge> Edges { get; private set; }
         public List<RoomSlot> Slots { get; private set; }
         public bool HasBeenEntered { get; private set; }
+        public IMoveInterceptor MoveInterceptor { get; private set; }
+        public IRoomTurnBehavior TurnBehavior { get; private set; }
 
-        public Room(RoomType type, RoomSlotContentFactory contentFactory)
+        public Room(
+            RoomType type,
+            RoomSlotContentFactory contentFactory,
+            IMoveInterceptor moveInterceptor = null,
+            IRoomTurnBehavior turnBehavior = null)
         {
             Type = type;
+            MoveInterceptor = moveInterceptor;
+            TurnBehavior = turnBehavior;
             HasBeenEntered = false;
             Edges = new Dictionary<RoomDirection, RoomEdge>();
             Slots = type.Slots

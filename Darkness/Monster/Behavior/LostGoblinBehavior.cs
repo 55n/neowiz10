@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 
 namespace Darkness
 {
-    public class LostGoblinBehavior : IMonsterBehavior
+    public class LostGoblinBehavior :
+        IMonsterBehavior,
+        IBaitResponsiveBehavior
     {
         private const string RushSkillId = "goblin_rush";
 
@@ -61,7 +63,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Alert,
                     MonsterActionPlan.Wait(),
-                    monster.Name + "은(는) 주변을 경계하고 있다.");
+                    NarrativeTokens.Actor + "은(는) 주변을 경계하고 있다.");
             }
 
             if (action.Action == PlayerActionType.Wait ||
@@ -70,7 +72,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Indifferent,
                     MonsterActionPlan.Wait(),
-                    monster.Name + "은(는) 아무 반응도 하지 않는다.");
+                    NarrativeTokens.Actor + "은(는) 아무 반응도 하지 않는다.");
             }
 
             return MonsterDecision.None(monster.State);
@@ -106,7 +108,7 @@ namespace Darkness
             return new MonsterDecision(
                 MonsterState.Alert,
                 MonsterActionPlan.Wait(),
-                monster.Name + "와의 거리가 가까워지고 있다.");
+                NarrativeTokens.Actor + "와의 거리가 가까워지고 있다.");
         }
 
         private static MonsterDecision DecideCombat(
@@ -123,7 +125,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Combat,
                     MonsterActionPlan.UseSkill(RushSkillId),
-                    monster.Name +
+                    NarrativeTokens.Actor +
                     "은(는) 공격에 겁먹고 당신을 향해 무작정 돌진한다.");
             }
 
@@ -131,7 +133,7 @@ namespace Darkness
                 MonsterState.Combat,
                 MonsterActionPlan.Defend(),
                 string.IsNullOrEmpty(message)
-                    ? monster.Name + "은(는) 몸을 웅크리고 방어한다."
+                    ? NarrativeTokens.Actor + "은(는) 몸을 웅크리고 방어한다."
                     : message);
         }
 
@@ -140,7 +142,7 @@ namespace Darkness
             return new MonsterDecision(
                 MonsterState.Detected,
                 MonsterActionPlan.Attack(MonsterState.Combat),
-                monster.Name +
+                NarrativeTokens.Actor +
                 "은(는) 당신을 발견하고 곧장 달려든다!");
         }
 
@@ -155,15 +157,15 @@ namespace Darkness
                 ? MonsterActionPlan.UseSkill(RushSkillId)
                 : MonsterActionPlan.Defend();
             string actionMessage = willRush
-                ? monster.Name +
+                ? NarrativeTokens.Actor +
                   "은(는) 겁에 질려 당신을 향해 무작정 돌진한다."
-                : monster.Name +
+                : NarrativeTokens.Actor +
                   "은(는) 몸을 웅크려 당신의 공격에 대비한다.";
             return new MonsterDecision(
                 MonsterState.Combat,
                 action,
                 announceDetection
-                    ? monster.Name + "은(는) 당신을 발견했다! " +
+                    ? NarrativeTokens.Actor + "은(는) 당신을 발견했다! " +
                       actionMessage
                     : actionMessage);
         }
@@ -178,12 +180,18 @@ namespace Darkness
             bool isBait = action.Item != null &&
                 action.Item.Item != null &&
                 action.Item.Item.Type.ThrowFunction == ItemFunction.Lure;
+            if (isBait &&
+                !MonsterBaitTargeting.IsNearestResponsiveMonster(
+                    perception))
+            {
+                isBait = false;
+            }
             if (!isBait)
             {
                 return new MonsterDecision(
                     MonsterState.Alert,
                     MonsterActionPlan.Wait(),
-                    monster.Name +
+                    NarrativeTokens.Actor +
                     "은(는) 물건이 떨어지는 소리에 경계한다.");
             }
 
@@ -194,7 +202,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Indifferent,
                     MonsterActionPlan.Wait(),
-                    monster.Name +
+                    NarrativeTokens.Actor +
                     "은(는) 미끼에 정신이 팔렸다.");
             }
 
@@ -207,7 +215,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Alert,
                     MonsterActionPlan.Wait(),
-                    monster.Name +
+                    NarrativeTokens.Actor +
                     "은(는) 미끼 냄새가 나는 방향을 살핀다.");
             }
 
@@ -216,7 +224,7 @@ namespace Darkness
                 MonsterActionPlan.MoveTo(
                     destination,
                     MonsterState.Indifferent),
-                monster.Name +
+                NarrativeTokens.Actor +
                 "은(는) 미끼 냄새를 따라 움직인다.");
         }
 
@@ -316,17 +324,17 @@ namespace Darkness
         {
             if (action == PlayerActionType.Wait)
             {
-                return monster.Name + "은(는) 기다려주지 않는다.";
+                return NarrativeTokens.Actor + "은(는) 기다려주지 않는다.";
             }
 
             if (action == PlayerActionType.Search)
             {
-                return monster.Name + "은(는) 손길을 뿌리쳤다.";
+                return NarrativeTokens.Actor + "은(는) 손길을 뿌리쳤다.";
             }
 
             if (action == PlayerActionType.Talk)
             {
-                return monster.Name + "은(는) 대답하지 않는다.";
+                return NarrativeTokens.Actor + "은(는) 대답하지 않는다.";
             }
 
             return null;

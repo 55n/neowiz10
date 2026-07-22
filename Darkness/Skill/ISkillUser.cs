@@ -4,6 +4,7 @@ namespace Darkness
     {
         string Name { get; }
         int CurrentFocus { get; }
+        int MaxFocus { get; }
         int Attack { get; }
         int Accuracy { get; }
         Inventory Inventory { get; }

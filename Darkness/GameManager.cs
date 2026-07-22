@@ -43,7 +43,7 @@ namespace Darkness
 
     public enum GameSignal
     {
-        START_GAME, GAME_OVER, EXIT_GAME
+        START_GAME, GAME_OVER, EXIT_GAME, RETURN_TO_TITLE
     }
 
     enum GameState
@@ -141,6 +141,11 @@ namespace Darkness
             if (gameSignal == GameSignal.EXIT_GAME)
             {
                 return GameState.STOP;
+            }
+
+            if (gameSignal == GameSignal.RETURN_TO_TITLE)
+            {
+                return GameState.INTRO;
             }
 
             return null;

@@ -9,7 +9,8 @@ namespace Darkness
 
         public static string Used(string caster, string skill)
         {
-            return caster + " 은(는) [" + skill + "] 을(를) 사용했다";
+            return NarrativeTokens.Actor + " 은(는) [" + skill +
+                   "] 을(를) 사용했다";
         }
 
         public static string Result(SkillType skill, IEffectTarget target)
@@ -21,10 +22,12 @@ namespace Darkness
 
             if (!string.IsNullOrEmpty(skill.ResultMessage))
             {
-                return string.Format(skill.ResultMessage, target.Name);
+                return skill.ResultMessage.Replace(
+                    "{0}",
+                    NarrativeTokens.Target);
             }
 
-            return target.Name + "에게 [" + skill.Name +
+            return NarrativeTokens.Target + "에게 [" + skill.Name +
                    "]의 효과가 적용되었다.";
         }
 

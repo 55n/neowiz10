@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 
 namespace Darkness
 {
-    public class ConfidentGoblinBehavior : IMonsterBehavior
+    public class ConfidentGoblinBehavior :
+        IMonsterBehavior,
+        IBaitResponsiveBehavior
     {
         private readonly LostGoblinBehavior loneBehavior;
         private bool packLossAnnounced;
@@ -37,7 +39,7 @@ namespace Darkness
                 }
 
                 packLossAnnounced = true;
-                string transitionMessage = monster.Name +
+                string transitionMessage = NarrativeTokens.Actor +
                     "은(는) 쓰러진 동료를 보고 자신감을 잃는다.";
                 string message = string.IsNullOrEmpty(
                     loneDecision.Message)
@@ -58,7 +60,7 @@ namespace Darkness
             return new MonsterDecision(
                 MonsterState.Combat,
                 MonsterActionPlan.Attack(),
-                monster.Name +
+                NarrativeTokens.Actor +
                 "은(는) 동료와 함께 당신을 포위하며 공격한다.");
         }
 

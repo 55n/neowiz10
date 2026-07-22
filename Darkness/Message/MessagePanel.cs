@@ -27,8 +27,11 @@ namespace Darkness
         {
             foreach (string message in messages)
             {
-                SetNarration(message);
-                Utility.WaitForEnter();
+                foreach (string line in Utility.WrapText(message, View.Width))
+                {
+                    SetNarration(line);
+                    Utility.WaitForEnter();
+                }
             }
         }
 

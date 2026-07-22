@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -18,17 +18,17 @@ namespace Darkness
         {
             itemIdsBySlot = new Dictionary<int, string>
             {
-                { 0, "whetstone" },
-                { 1, "ordinary_sword" },
-                { 3, "ordinary_armor" },
-                { 4, "guardian_charm" }
+                { 0, "snowflake_pendant" },
+                { 1, "chain_sword" },
+                { 3, "spirit_armor" },
+                { 4, "memory_charm" }
             };
             pricesBySlot = new Dictionary<int, int>
             {
-                { 0, 2 },
-                { 1, 3 },
+                { 0, 3 },
+                { 1, 4 },
                 { 3, 4 },
-                { 4, 6 }
+                { 4, 5 }
             };
             purchasedSlots = new HashSet<int>();
             itemData = new ItemData();
@@ -45,7 +45,7 @@ namespace Darkness
                 return new MonsterDecision(
                     MonsterState.Combat,
                     MonsterActionPlan.Attack(),
-                    monster.Name + "이(가) 사슬을 휘두르며 달려든다.");
+                    NarrativeTokens.Actor + "이(가) 사슬을 휘두르며 달려든다.");
             }
 
             bool targetsArmorSpirit =

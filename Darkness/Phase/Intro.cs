@@ -14,25 +14,11 @@ namespace Darkness
     }
     class Intro
     {
-        private string[] _introImage = new string[]
-            {
-                "                  ▄▄████████████▄▄                  ",
-                "               ▄██████▓▓▓▓▓▓▓▓▓██████▄              ",
-                "             ▄████▓▓▓▒▒▒▒▒▒▒▒▒▒▒▓▓████▄            ",
-                "           ▄███▓▓▒▒░           ░░▒▒▓▓███▄          ",
-                "          ███▓▒▒░░   ▄▄██████▄▄   ░░▒▒▓███          ",
-                "        ▄██▓▒░░   ▄██████████████▄   ░░▒▓██▄        ",
-                "       ▄██▓▒░   ▄██████████████████▄   ░▒▓██▄       ",
-                "      ███▓▒░   █████▀▀          ▀▀█████   ░▒▓███      ",
-                "     ███▓▒░   ████▀                ▀████   ░▒▓███     ",
-                "    ███▓▒░   ████                    ████   ░▒▓███    ",
-            };
-
         public GameSignal Run()
         {
             View.Display.Clear();
             View.Message.Clear();
-            View.Display.DrawCenteredLineByLine(_introImage);
+            View.Display.DrawCenteredLineByLine(IntroImage.Lines);
             Utility.PlayMessages(new string[] { "[방향키와 엔터키로 진행합니다]" });
             Utility.PlayMessages(new string[] {
                 "노련한 모험가인 당신은 여느 때와 같이 던전에 들어갔다",
@@ -62,7 +48,7 @@ namespace Darkness
 
             if (selectedOptionValue == IntroSelectionOptions.START)
             {
-                PlayFallingEffect(_introImage.Length);
+                PlayFallingEffect(IntroImage.Lines.Length);
                 return GameSignal.START_GAME;
             }
             else

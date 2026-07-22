@@ -80,14 +80,37 @@ namespace Darkness
                 throw new ArgumentNullException("room");
             }
 
-            ValidateTarget(command, room);
-
             TurnResult turnResult = new TurnResult();
             if (!command.ConsumesTurn)
             {
+                ValidateTarget(command, room);
                 turnResult.TurnNumber = TurnNumber;
                 return turnResult;
             }
+
+            string bindingName;
+            int remainingBindingStacks;
+            if (EffectActionRules.TryConsumeForcedWait(
+                    hero,
+                    out bindingName,
+                    out remainingBindingStacks))
+            {
+                command = new PlayerTurnCommand(
+                    PlayerActionType.Wait,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true,
+                    false);
+                turnResult.Messages.Add(
+                    EffectMessages.ForcedWait(
+                        hero.Name,
+                        bindingName,
+                        remainingBindingStacks));
+            }
+
+            ValidateTarget(command, room);
 
             List<ActiveEffect> expiringPlayerEffects =
                 CaptureExpiringPlayerEffects(hero);
@@ -122,10 +145,13 @@ namespace Darkness
                 turnResult.Messages.Add(playerActionMessage);
             }
 
+            List<SkillOutcomeReflectionEntry> reflections =
+                BeginSkillOutcomeReflections(room, playerAction);
             bool loudEventOccurred = ApplyPlayerAction(
                 room,
                 playerAction,
                 turnResult);
+            CompleteSkillOutcomeReflections(reflections);
             RemoveExpiredPlayerEffects(
                 hero,
                 expiringPlayerEffects);
@@ -142,6 +168,11 @@ namespace Darkness
 
             Phase = TurnPhase.MonsterAction;
             ExecuteMonsterActions(room, hero, monsters, turnResult);
+            ExecuteRoomTurnBehavior(
+                room,
+                hero,
+                playerAction,
+                turnResult);
             if (isDefending)
             {
                 hero.RemoveEffect(defendingEffectType.Id);
@@ -175,6 +206,31 @@ namespace Darkness
             }
 
             Room room = dungeon.CurrentRoom;
+            if (EffectActionRules.HasForcedWait(hero))
+            {
+                return Resolve(
+                    new PlayerTurnCommand(
+                        PlayerActionType.Wait,
+                        null,
+                        null,
+                        null,
+                        null,
+                        true,
+                        false),
+                    hero,
+                    room);
+            }
+
+            TurnResult interceptionResult;
+            if (TryInterceptMove(
+                    room,
+                    direction,
+                    hero,
+                    out interceptionResult))
+            {
+                return interceptionResult;
+            }
+
             TurnResult turnResult = new TurnResult();
             List<ActiveEffect> expiringPlayerEffects =
                 CaptureExpiringPlayerEffects(hero);
@@ -199,6 +255,11 @@ namespace Darkness
 
             Phase = TurnPhase.MonsterAction;
             ExecuteMonsterActions(room, hero, monsters, turnResult);
+            ExecuteRoomTurnBehavior(
+                room,
+                hero,
+                playerAction,
+                turnResult);
             RemoveExpiredPlayerEffects(
                 hero,
                 expiringPlayerEffects);
@@ -223,6 +284,51 @@ namespace Darkness
             turnResult.HeroDied = !hero.CanAct;
             Phase = TurnPhase.PlayerInput;
             return turnResult;
+        }
+
+        private bool TryInterceptMove(
+            Room room,
+            RoomDirection direction,
+            Hero hero,
+            out TurnResult turnResult)
+        {
+            turnResult = null;
+            if (room == null || room.MoveInterceptor == null)
+            {
+                return false;
+            }
+
+            RoomEdge edge;
+            if (!room.Edges.TryGetValue(direction, out edge))
+            {
+                return false;
+            }
+
+            MoveInterceptionResult interception =
+                room.MoveInterceptor.TryIntercept(
+                    new MoveInterceptionContext(
+                        hero,
+                        room,
+                        direction,
+                        edge));
+            if (interception == null ||
+                !interception.MovementCanceled)
+            {
+                return false;
+            }
+
+            turnResult = new TurnResult();
+            Phase = TurnPhase.PlayerAction;
+            ApplyInteraction(
+                room,
+                null,
+                interception.Interaction,
+                turnResult);
+            turnResult.TurnCompleted = true;
+            turnResult.TurnNumber = TurnNumber;
+            turnResult.HeroDied = !hero.CanAct;
+            Phase = TurnPhase.PlayerInput;
+            return true;
         }
 
         public TurnResult SynchronizeRoomEffects(Room room, Hero hero)
@@ -387,6 +493,49 @@ namespace Darkness
             return monsters;
         }
 
+        private static List<SkillOutcomeReflectionEntry>
+            BeginSkillOutcomeReflections(
+                Room room,
+                PlayerActionContext playerAction)
+        {
+            List<SkillOutcomeReflectionEntry> entries =
+                new List<SkillOutcomeReflectionEntry>();
+            if (playerAction == null ||
+                playerAction.Action != PlayerActionType.UseSkill)
+            {
+                return entries;
+            }
+
+            foreach (RoomSlot slot in room.Slots)
+            {
+                Monster monster = slot.Content as Monster;
+                ISkillOutcomeReflector reflector = monster == null
+                    ? null
+                    : monster.Behavior as ISkillOutcomeReflector;
+                if (reflector == null)
+                {
+                    continue;
+                }
+
+                reflector.BeginSkillResolution(monster);
+                entries.Add(new SkillOutcomeReflectionEntry(
+                    monster,
+                    reflector));
+            }
+
+            return entries;
+        }
+
+        private static void CompleteSkillOutcomeReflections(
+            IEnumerable<SkillOutcomeReflectionEntry> entries)
+        {
+            foreach (SkillOutcomeReflectionEntry entry in entries)
+            {
+                entry.Reflector.CompleteSkillResolution(
+                    entry.Monster);
+            }
+        }
+
         private void DecideMonsterActions(
             Room room,
             PlayerActionContext playerAction,
@@ -491,19 +640,25 @@ namespace Darkness
                     turnResult.Messages.Add(
                         GetVisibleSkillMessage(
                             room,
-                            skillUse.User,
+                            skillUse,
                             message));
                 }
                 result.Attacks.AddRange(skillResult.Attacks);
                 result.Damages.AddRange(skillResult.Damages);
                 result.DurabilityRequests.AddRange(
                     skillResult.DurabilityRequests);
+                result.MonsterMoves.AddRange(
+                    skillResult.MonsterMoves);
             }
 
             foreach (EffectRequest request in
                      result.EffectRequests.ToArray())
             {
-                ResolveEffectRequest(request, result);
+                ResolveEffectRequest(
+                    request,
+                    result,
+                    room,
+                    turnResult);
             }
 
             foreach (ItemThrowPlan itemThrow in result.ItemThrows)
@@ -531,12 +686,74 @@ namespace Darkness
 
             foreach (DamageContext damage in result.Damages)
             {
+                ActiveEffect triggeredEffect =
+                    damage.Source as ActiveEffect;
+                if (triggeredEffect != null &&
+                    triggeredEffect.Type != null)
+                {
+                    turnResult.Messages.Add(
+                        EffectMessages.Triggered(
+                            GetVisibleName(room, damage.Target),
+                            triggeredEffect.Type.Name));
+                }
+
+                List<ActiveEffect> sourceEffects =
+                    CaptureEffects(damage.Source as IDamageable);
+                List<ActiveEffect> targetEffects =
+                    CaptureEffects(damage.Target);
                 DamageResolver.Resolve(damage);
+                AddConsumedEffectMessages(
+                    room,
+                    damage.Source as IDamageable,
+                    sourceEffects,
+                    turnResult);
+                AddConsumedEffectMessages(
+                    room,
+                    damage.Target,
+                    targetEffects,
+                    turnResult);
                 turnResult.Messages.Add(
                     CombatMessages.DamageReceived(
                         GetVisibleName(room, damage.Target),
                         damage.FinalDamage));
             }
+
+            foreach (EffectCopyRequest copy in result.EffectCopies)
+            {
+                ApplyEffectCopy(copy, room, turnResult);
+            }
+
+            foreach (FocusDamageRequest focusDamage in
+                     result.FocusDamages)
+            {
+                RoomSlot sourceSlot = FindContentSlot(
+                    room,
+                    focusDamage.Source);
+                if (sourceSlot != null &&
+                    sourceSlot.State != SlotState.REVEALED)
+                {
+                    ApplySlotStateChanges(
+                        room,
+                        new[]
+                        {
+                            SlotStateChangeRequest.Reveal(sourceSlot)
+                        },
+                        turnResult);
+                }
+
+                int previousFocus = focusDamage.Target.CurrentFocus;
+                focusDamage.Target.SpendFocus(focusDamage.Amount);
+                int drainedFocus = previousFocus -
+                    focusDamage.Target.CurrentFocus;
+                turnResult.Messages.Add(
+                    CombatMessages.FocusDrained(
+                        focusDamage.Target.Name,
+                        drainedFocus));
+            }
+
+            RemoveDestroyedSlotContents(
+                room,
+                turnResult);
 
             Monster defeatedMonster = slot == null
                 ? null
@@ -611,11 +828,78 @@ namespace Darkness
             AddDoorDiscoveryMessage(slot, turnResult);
         }
 
+        private static void ApplyEffectCopy(
+            EffectCopyRequest request,
+            Room room,
+            TurnResult turnResult)
+        {
+            if (request == null || request.Target == null ||
+                request.StackCount <= 0)
+            {
+                return;
+            }
+
+            ActiveEffectFactory factory = new ActiveEffectFactory();
+            for (int i = 0; i < request.StackCount; i++)
+            {
+                ActiveEffect effect = factory.Create(
+                    request.EffectId,
+                    request.Source);
+                if (effect == null || !effect.CanApplyTo(request.Target))
+                {
+                    continue;
+                }
+
+                request.Target.ApplyEffect(effect);
+            }
+
+            ActiveEffect applied = request.Target.Effects.Find(
+                effect => effect.Type.Id == request.EffectId);
+            if (applied != null)
+            {
+                turnResult.Messages.Add(
+                    EffectMessages.StackApplied(
+                        GetVisibleEffectTargetName(room, request.Target),
+                        applied.Type.Name,
+                        applied.StackCount));
+            }
+        }
+
+        private void ExecuteRoomTurnBehavior(
+            Room room,
+            Hero hero,
+            PlayerActionContext playerAction,
+            TurnResult turnResult)
+        {
+            if (room == null || room.TurnBehavior == null ||
+                hero == null || !hero.CanAct)
+            {
+                return;
+            }
+
+            SlotInteractionResult result =
+                room.TurnBehavior.Act(
+                    room,
+                    hero,
+                    playerAction);
+            if (result != null)
+            {
+                ApplyInteraction(
+                    room,
+                    null,
+                    result,
+                    turnResult);
+            }
+        }
+
         private void ResolveEffectRequest(
             EffectRequest request,
-            SlotInteractionResult result)
+            SlotInteractionResult result,
+            Room room,
+            TurnResult turnResult)
         {
-            if (request == null || result == null)
+            if (request == null || result == null ||
+                turnResult == null)
             {
                 return;
             }
@@ -635,6 +919,79 @@ namespace Darkness
             result.Damages.AddRange(effectResult.Damages);
             result.DurabilityRequests.AddRange(
                 effectResult.DurabilityRequests);
+            AddAppliedEffectMessages(
+                room,
+                effectResult,
+                turnResult);
+        }
+
+        private static void AddAppliedEffectMessages(
+            Room room,
+            EffectResolveResult effectResult,
+            TurnResult turnResult)
+        {
+            List<AppliedEffectResult> latestResults =
+                new List<AppliedEffectResult>();
+            foreach (AppliedEffectResult applied in
+                     effectResult.AppliedEffects)
+            {
+                if (applied == null || applied.Target == null ||
+                    applied.Effect == null)
+                {
+                    continue;
+                }
+
+                int existingIndex = latestResults.FindIndex(
+                    existing =>
+                        ReferenceEquals(
+                            existing.Target,
+                            applied.Target) &&
+                        existing.Effect.Id == applied.Effect.Id);
+                if (existingIndex >= 0)
+                {
+                    latestResults[existingIndex] = applied;
+                }
+                else
+                {
+                    latestResults.Add(applied);
+                }
+            }
+
+            foreach (AppliedEffectResult applied in latestResults)
+            {
+                turnResult.Messages.Add(
+                    EffectMessages.StackApplied(
+                        GetVisibleEffectTargetName(
+                            room,
+                            applied.Target),
+                        applied.Effect.Name,
+                        applied.StackCount));
+            }
+        }
+
+        private class SkillOutcomeReflectionEntry
+        {
+            public Monster Monster { get; private set; }
+            public ISkillOutcomeReflector Reflector { get; private set; }
+
+            public SkillOutcomeReflectionEntry(
+                Monster monster,
+                ISkillOutcomeReflector reflector)
+            {
+                Monster = monster;
+                Reflector = reflector;
+            }
+        }
+
+        private static string GetVisibleEffectTargetName(
+            Room room,
+            IEffectTarget target)
+        {
+            RoomSlot slot = FindContentSlot(room, target);
+            return slot != null &&
+                   slot.State != SlotState.REVEALED
+                ? "???"
+                : target.Name;
         }
 
         private void ResolveItemThrow(
@@ -643,16 +1000,25 @@ namespace Darkness
             SlotInteractionResult interactionResult,
             TurnResult turnResult)
         {
-            if (plan == null || plan.ImpactAttack == null)
+            if (plan == null)
             {
                 return;
             }
 
-            AttackResult attackResult = ResolveAttack(
-                room,
-                plan.ImpactAttack,
-                turnResult);
-            if (!attackResult.IsHit || plan.Target.CurrentHealth <= 0 ||
+            if (plan.ImpactAttack != null)
+            {
+                AttackResult attackResult = ResolveAttack(
+                    room,
+                    plan.ImpactAttack,
+                    turnResult);
+                if (!attackResult.IsHit ||
+                    plan.Target.CurrentHealth <= 0)
+                {
+                    return;
+                }
+            }
+
+            if (plan.EffectTarget == null ||
                 plan.OnHitEffects.Count == 0)
             {
                 return;
@@ -669,6 +1035,10 @@ namespace Darkness
 
             EffectResolveResult effectResult =
                 effectResolver.Execute(effectPlan);
+            AddAppliedEffectMessages(
+                room,
+                effectResult,
+                turnResult);
             interactionResult.Attacks.AddRange(effectResult.Attacks);
             interactionResult.Damages.AddRange(effectResult.Damages);
             interactionResult.DurabilityRequests.AddRange(
@@ -686,7 +1056,21 @@ namespace Darkness
                     GetVisibleName(room, attack.Source),
                     GetVisibleName(room, attack.Target)));
 
+            List<ActiveEffect> sourceEffects =
+                CaptureEffects(attack.Source);
+            List<ActiveEffect> targetEffects =
+                CaptureEffects(attack.Target);
             AttackResult attackResult = AttackResolver.Resolve(attack);
+            AddConsumedEffectMessages(
+                room,
+                attack.Source,
+                sourceEffects,
+                turnResult);
+            AddConsumedEffectMessages(
+                room,
+                attack.Target,
+                targetEffects,
+                turnResult);
             Monster hitMonster = attack.Target as Monster;
             if (attackResult.IsHit && hitMonster != null)
             {
@@ -714,6 +1098,40 @@ namespace Darkness
 
             turnResult.Messages.AddRange(durabilityResult.Messages);
             return attackResult;
+        }
+
+        private static List<ActiveEffect> CaptureEffects(
+            IDamageable target)
+        {
+            return target == null || target.Effects == null
+                ? new List<ActiveEffect>()
+                : new List<ActiveEffect>(target.Effects);
+        }
+
+        private static void AddConsumedEffectMessages(
+            Room room,
+            IDamageable target,
+            IEnumerable<ActiveEffect> effectsBeforeResolution,
+            TurnResult turnResult)
+        {
+            if (target == null || effectsBeforeResolution == null)
+            {
+                return;
+            }
+
+            foreach (ActiveEffect effect in effectsBeforeResolution)
+            {
+                if (effect == null || effect.Type == null ||
+                    target.Effects.Contains(effect))
+                {
+                    continue;
+                }
+
+                turnResult.Messages.Add(
+                    EffectMessages.Consumed(
+                        GetVisibleName(room, target),
+                        effect.Type.Name));
+            }
         }
 
         private void RevealAttackingSlot(
@@ -748,12 +1166,10 @@ namespace Darkness
             MonsterTurnEntry entry,
             string message)
         {
-            if (entry.Slot.State == SlotState.REVEALED)
-            {
-                return message;
-            }
-
-            return message.Replace(entry.Monster.Name, "???");
+            string actor = entry.Slot.State == SlotState.REVEALED
+                ? entry.Monster.Name
+                : "???";
+            return NarrativeTemplate.Format(message, actor);
         }
 
         private static string GetVisibleName(
@@ -769,40 +1185,41 @@ namespace Darkness
 
         private static string GetVisibleSkillMessage(
             Room room,
-            ISkillUser user,
+            SkillUseContext skillUse,
             string message)
         {
-            IDamageable source = user as IDamageable;
-            if (string.IsNullOrEmpty(message))
+            IDamageable source = skillUse.User as IDamageable;
+            string actor = source == null
+                ? skillUse.User.Name
+                : GetVisibleName(room, source);
+            object selectedTarget = skillUse.SelectedTargets.Count == 0
+                ? null
+                : skillUse.SelectedTargets[0];
+            string target = GetVisibleTemplateTargetName(
+                room,
+                selectedTarget);
+            return NarrativeTemplate.Format(message, actor, target);
+        }
+
+        private static string GetVisibleTemplateTargetName(
+            Room room,
+            object target)
+        {
+            if (target == null)
             {
-                return message;
+                return "";
             }
 
-            string visibleMessage = message;
-            if (source != null)
+            RoomSlot slot = FindContentSlot(room, target);
+            if (slot != null && slot.State != SlotState.REVEALED)
             {
-                string visibleName = GetVisibleName(room, source);
-                if (visibleName != source.Name)
-                {
-                    visibleMessage = visibleMessage.Replace(
-                        source.Name,
-                        visibleName);
-                }
+                return "???";
             }
 
-            foreach (RoomSlot slot in room.Slots)
-            {
-                if (slot.State != SlotState.REVEALED &&
-                    slot.Content != null &&
-                    !string.IsNullOrEmpty(slot.Content.Name))
-                {
-                    visibleMessage = visibleMessage.Replace(
-                        slot.Content.Name,
-                        "???");
-                }
-            }
-
-            return visibleMessage;
+            IEffectTarget effectTarget = target as IEffectTarget;
+            return effectTarget == null
+                ? target.ToString()
+                : effectTarget.Name;
         }
 
         private static string GetVisibleSlotTargetName(RoomSlot slot)
@@ -1057,7 +1474,8 @@ namespace Darkness
             Room room,
             RoomSlot slot,
             Monster monster,
-            TurnResult turnResult)
+            TurnResult turnResult,
+            ISlotContent defeatReplacement = null)
         {
             if (slot == null || monster == null || monster.IsAlive ||
                 !ReferenceEquals(slot.Content, monster))
@@ -1066,9 +1484,25 @@ namespace Darkness
             }
 
             monster.Inventory.TransferAllTo(slot.GroundInventory);
+
+            ISlotContent replacement = defeatReplacement;
+            if (replacement == null)
+            {
+                ISlotMovementBehavior movementBehavior =
+                    monster.Behavior as ISlotMovementBehavior;
+                replacement = movementBehavior == null
+                    ? null
+                    : movementBehavior.CreateContentForVacatedSlot(slot);
+            }
+
             return ApplySlotContentChange(
                 room,
-                SlotContentChangeRequest.Remove(slot, monster),
+                replacement == null
+                    ? SlotContentChangeRequest.Remove(slot, monster)
+                    : SlotContentChangeRequest.Replace(
+                        slot,
+                        monster,
+                        replacement),
                 turnResult);
         }
 
@@ -1086,18 +1520,24 @@ namespace Darkness
 
             IDefeatBehavior defeatBehavior =
                 monster.Behavior as IDefeatBehavior;
+            ISlotContent replacement = null;
             if (defeatBehavior != null)
             {
                 DefeatBehaviorResult result =
                     defeatBehavior.ResolveDefeat(monster);
-                if (result != null && result.PreventRemoval)
+                if (result != null)
                 {
                     if (!string.IsNullOrEmpty(result.Message))
                     {
                         turnResult.Messages.Add(result.Message);
                     }
 
-                    return false;
+                    if (result.PreventRemoval)
+                    {
+                        return false;
+                    }
+
+                    replacement = result.ReplacementContent;
                 }
             }
 
@@ -1105,7 +1545,51 @@ namespace Darkness
                 room,
                 slot,
                 monster,
-                turnResult);
+                turnResult,
+                replacement);
+        }
+
+        private void RemoveDestroyedSlotContents(
+            Room room,
+            TurnResult turnResult)
+        {
+            if (room == null || turnResult == null)
+            {
+                return;
+            }
+
+            foreach (RoomSlot slot in room.Slots.ToArray())
+            {
+                IDestroyableSlotContent content =
+                    slot.Content as IDestroyableSlotContent;
+                if (content == null || !content.IsDestroyed)
+                {
+                    continue;
+                }
+
+                SlotDestructionResult destruction =
+                    content.ResolveDestruction(room, slot) ??
+                    new SlotDestructionResult();
+                bool removed = ApplySlotContentChange(
+                    room,
+                    SlotContentChangeRequest.Remove(
+                        slot,
+                        content),
+                    turnResult);
+                if (!removed)
+                {
+                    continue;
+                }
+
+                destruction.Drops.TransferAllTo(
+                    slot.GroundInventory);
+                turnResult.Messages.AddRange(
+                    destruction.Messages);
+                ApplySlotContentChanges(
+                    room,
+                    destruction.ContentChanges,
+                    turnResult);
+            }
         }
 
         private bool RemoveDestroyedTreasureChest(
@@ -1133,8 +1617,17 @@ namespace Darkness
             TurnResult turnResult)
         {
             if (request == null || request.Monster == null ||
-                !request.Monster.CanAct || request.TargetSlot == null ||
-                !request.TargetSlot.IsEmpty)
+                !request.Monster.CanAct || request.TargetSlot == null)
+            {
+                return;
+            }
+
+            ISlotMovementBehavior movementBehavior =
+                request.Monster.Behavior as ISlotMovementBehavior;
+            bool canEnter = request.TargetSlot.IsEmpty ||
+                movementBehavior != null &&
+                movementBehavior.CanEnter(request.TargetSlot.Content);
+            if (!canEnter)
             {
                 return;
             }
@@ -1151,12 +1644,21 @@ namespace Darkness
                 return;
             }
 
+            ISlotContent sourceReplacement = movementBehavior == null
+                ? null
+                : movementBehavior.CreateContentForVacatedSlot(sourceSlot);
             bool moved = ApplySlotContentChange(
                 room,
-                SlotContentChangeRequest.Move(
-                    sourceSlot,
-                    request.TargetSlot,
-                    request.Monster),
+                sourceReplacement == null
+                    ? SlotContentChangeRequest.Move(
+                        sourceSlot,
+                        request.TargetSlot,
+                        request.Monster)
+                    : SlotContentChangeRequest.MoveReplacing(
+                        sourceSlot,
+                        request.TargetSlot,
+                        request.Monster,
+                        sourceReplacement),
                 turnResult);
             if (!moved)
             {
@@ -1287,12 +1789,16 @@ namespace Darkness
                 !ReferenceEquals(
                     source.Content,
                     request.ExpectedContent) ||
-                !target.IsEmpty)
+                request.NewContent == null && !target.IsEmpty)
             {
                 return false;
             }
 
             ISlotContent content = source.TakeContent();
+            if (request.NewContent != null)
+            {
+                source.SetContent(request.NewContent);
+            }
             target.SetContent(content);
             AddChangedSlot(room, source, turnResult);
             AddChangedSlot(room, target, turnResult);

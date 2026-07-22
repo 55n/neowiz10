@@ -27,6 +27,14 @@ namespace Darkness
             return target + " 이(가) 피해를 회피했다";
         }
 
+        public static string FocusDrained(
+            string target,
+            int amount)
+        {
+            return target + " 이(가) 집중력 " + amount +
+                   "을(를) 잃었다";
+        }
+
         public static string DamageTaken(string enemy, string damage)
         {
             return "[" + enemy + "]에게 " + damage + "의 데미지를 받았습니다";

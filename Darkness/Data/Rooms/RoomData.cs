@@ -249,6 +249,7 @@ namespace Darkness
                 {
                     "걸음마다 찰박거리는 소리가 들린다",
                     "깊지는 않지만 다리가 젖는 것을 막을 수는 없었다",
+                    "당신은 스산한 기척을 희미하게 느꼈다",
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -298,7 +299,8 @@ namespace Darkness
                     "기다렸다는 듯이 어둠 속에서 늑대 울음소리가 들린다",
                     "갑작스러운 굉음이 뒤에서 난다", 
                     "당신은 본능적으로 앞으로 몸을 굴렀다",
-                    "뒤를 돌아보니...아무래도 퇴로가 무너진 것 같다"
+                    "뒤를 돌아보니...아무래도 퇴로가 무너진 것 같다",
+                    "늑대 울음소리가 가까워지고 있다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -334,7 +336,6 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Echo, "room13_echo_4", false),
                     new RoomSlotType(RoomObjectType.Echo, "room13_echo_5", true),
                 });
-
             RoomType room14 = new RoomType(
                 "room-14",
                 "진동벌레둥지",
@@ -346,6 +347,8 @@ namespace Darkness
                     "당신만큼 불운한 누군가가 모래에 쓸려 어둠으로 떨어진 것 같다",
                     "푹 하고 모래에 파묻히는 소리" ,
                     "동시에 거대한 무언가가 모래에서 튀어나오며 비명을 집어삼킨다",
+                    "당신은 사막의 희귀한 거대 벌레를 기억해냈다",
+                    "그 벌레는 장님이며, 무거운 물건에 더 관심을 보였던 것 같다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -368,6 +371,7 @@ namespace Darkness
                 {
                     "무언가 불길한 예감이 당신을 덮친다" ,
                     "노련한 모험가로서의 본능이 경종을 울린다",
+                    "이곳을 최대한 빨리 빠져나가야 한다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -379,8 +383,8 @@ namespace Darkness
                     new RoomSlotType(RoomObjectType.Prey, "room15_bound_troll", false),
                     new RoomSlotType(RoomObjectType.Egg, "room15_breath_hunter_egg_1", true),
                     new RoomSlotType(RoomObjectType.Prey, "room15_bound_goblin", false),
-                    new RoomSlotType(RoomObjectType.Egg, "room15_breath_hunter_egg_2", false),
-                    new RoomSlotType(RoomObjectType.Prey, "room15_bound_wolf", true),
+                    new RoomSlotType(RoomObjectType.Egg, "room15_breath_hunter_egg_2", true),
+                    new RoomSlotType(RoomObjectType.Prey, "room15_bound_wolf", false),
                 });
             RoomType room16 = new RoomType(
                 "room-16",
@@ -388,9 +392,10 @@ namespace Darkness
                 "이곳은 위험하다",
                 new List<string>
                 {
-                    "무언가가 당신을 쫓고 있다",
+                    "아주 가느다란 빛이 천장에서 나와 어둠을 간신히 밝힌다",
+                    "기뻐할 틈도 없이 무언가가 당신을 쫓아 온다",
                     "당신은 그것이 당신을 몰아 넣고 있다는 것을 깨달았다",
-                    "당신은 절망에 빠졌다"
+                    "당신은 함정에 빠졌다"
                 },
                 new Dictionary<RoomDirection, RoomEdgeType>
                 {
@@ -398,13 +403,12 @@ namespace Darkness
                 },
                 new List<RoomSlotType>
                 {
-                    new RoomSlotType(RoomObjectType.Trap, "room16_web_1", false),
-                    new RoomSlotType(RoomObjectType.Trap, "room16_web_2", false),
-                    new RoomSlotType(RoomObjectType.Trap, "room16_web_3", false),
-                    new RoomSlotType(RoomObjectType.Trap, "room16_web_4", true),
-                    new RoomSlotType(RoomObjectType.Trap, "room16_web_5", false),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_1", false),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_2", false),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_3", false),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_4", true),
+                    new RoomSlotType(RoomObjectType.Monster, "room16_web_5", false),
                 });
-
             RoomType room17 = new RoomType(
                 "room-17",
                 "출구",
@@ -438,6 +442,14 @@ namespace Darkness
                 { room7.Id, room7 },
                 { room8.Id, room8 },
                 { room9.Id, room9 },
+                { room10.Id, room10 },
+                { room11.Id, room11 },
+                { room12.Id, room12 },
+                { room13.Id, room13 },
+                { room14.Id, room14 },
+                { room15.Id, room15 },
+                { room16.Id, room16 },
+                { room17.Id, room17 },
             };
         }
     }

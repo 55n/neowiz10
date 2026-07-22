@@ -10,6 +10,7 @@ namespace Darkness
         public string Name { get { return Type.Name; } }
         public int CurrentHealth { get; private set; }
         public int CurrentFocus { get; private set; }
+        public int MaxFocus { get { return Type.MaxFocus; } }
         public int Attack
         {
             get

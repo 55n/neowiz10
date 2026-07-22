@@ -73,7 +73,8 @@ namespace Darkness
                     result.Damages.Add(new DamageContext(
                         plan.Source,
                         target,
-                        effect.Application.Magnitude));
+                        effect.Application.Magnitude,
+                        effect.Application.IgnoresDefense));
                 }
                 else if (effect.Application.Operation ==
                          EffectOperation.Attack)
@@ -107,6 +108,18 @@ namespace Darkness
                         effect.Application.AttackDeliveryType,
                         usedItem,
                         usedItem == null ? 0 : 1));
+                }
+                else if (effect.Application.Operation ==
+                         EffectOperation.RestoreFocus)
+                {
+                    ISkillUser target = (ISkillUser)effect.Target;
+                    target.RestoreFocus(effect.Application.Magnitude);
+                    IEffectTarget effectTarget =
+                        effect.Target as IEffectTarget;
+                    if (effectTarget != null)
+                    {
+                        result.AffectedEffectTargets.Add(effectTarget);
+                    }
                 }
                 else if (effect.Application.Operation ==
                          EffectOperation.SetEquipmentDurability)
@@ -205,6 +218,21 @@ namespace Darkness
                         null));
                 }
                 else if (application.Operation ==
+                         EffectOperation.RestoreFocus)
+                {
+                    ISkillUser skillUser = target as ISkillUser;
+                    if (skillUser == null ||
+                        skillUser.CurrentFocus >= skillUser.MaxFocus)
+                    {
+                        return false;
+                    }
+
+                    plan.Effects.Add(new PlannedEffect(
+                        application,
+                        skillUser,
+                        null));
+                }
+                else if (application.Operation ==
                          EffectOperation.SetEquipmentDurability)
                 {
                     IEquipmentUser equipmentUser =
@@ -248,7 +276,7 @@ namespace Darkness
                    existing.StackCount < effect.Type.MaxStackCount;
         }
 
-        private static void ApplyStatus(
+        private void ApplyStatus(
             PlannedEffect effect,
             EffectResolveResult result)
         {
@@ -256,10 +284,120 @@ namespace Darkness
             int stackCount = Math.Max(1, effect.Application.StackCount);
             for (int i = 0; i < stackCount; i++)
             {
-                target.ApplyEffect(effect.ActiveEffect);
+                ApplyStatusToTarget(
+                    target,
+                    effect.ActiveEffect,
+                    false,
+                    result);
             }
 
             result.AffectedEffectTargets.Add(target);
+            ApplyTriggeredEffects(
+                target,
+                effect.ActiveEffect,
+                result);
+        }
+
+        private void ApplyTriggeredEffects(
+            IEffectTarget target,
+            ActiveEffect sourceEffect,
+            EffectResolveResult result)
+        {
+            foreach (string effectId in
+                     sourceEffect.GetTriggeredEffectIds(target))
+            {
+                ActiveEffect triggeredEffect =
+                    activeEffectFactory.Create(
+                        effectId,
+                        sourceEffect.Source);
+                if (triggeredEffect == null ||
+                    !CanApply(target, triggeredEffect))
+                {
+                    continue;
+                }
+
+                ApplyStatusToTarget(
+                    target,
+                    triggeredEffect,
+                    true,
+                    result);
+            }
+        }
+
+        private static void ApplyStatusToTarget(
+            IEffectTarget target,
+            ActiveEffect incomingEffect,
+            bool wasTriggered,
+            EffectResolveResult result)
+        {
+            ActiveEffect existingEffect = FindEffect(
+                target,
+                incomingEffect.Type.Id);
+            int previousStackCount = existingEffect == null
+                ? 0
+                : existingEffect.StackCount;
+
+            target.ApplyEffect(incomingEffect);
+
+            ActiveEffect appliedEffect = FindEffect(
+                target,
+                incomingEffect.Type.Id);
+            if (appliedEffect == null)
+            {
+                return;
+            }
+
+            result.AffectedEffectTargets.Add(target);
+            RecordAppliedEffect(
+                target,
+                appliedEffect.Type.Id,
+                wasTriggered,
+                result);
+
+            int currentStackCount = appliedEffect.StackCount;
+            if (currentStackCount == previousStackCount)
+            {
+                return;
+            }
+
+            EffectStackIncreaseContext context =
+                new EffectStackIncreaseContext(
+                    incomingEffect.Source,
+                    target,
+                    appliedEffect,
+                    previousStackCount,
+                    currentStackCount);
+            appliedEffect.OnStackIncreased(context);
+            result.Damages.AddRange(context.Damages);
+        }
+
+        private static ActiveEffect FindEffect(
+            IEffectTarget target,
+            string effectId)
+        {
+            return target.Effects.Find(effect =>
+                effect.Type != null &&
+                effect.Type.Id == effectId);
+        }
+
+        private static void RecordAppliedEffect(
+            IEffectTarget target,
+            string effectId,
+            bool wasTriggered,
+            EffectResolveResult result)
+        {
+            ActiveEffect appliedEffect = target.Effects.Find(effect =>
+                effect.Type != null && effect.Type.Id == effectId);
+            if (appliedEffect == null)
+            {
+                return;
+            }
+
+            result.AppliedEffects.Add(new AppliedEffectResult(
+                target,
+                appliedEffect.Type,
+                appliedEffect.StackCount,
+                wasTriggered));
         }
 
         private static void RemoveStatus(

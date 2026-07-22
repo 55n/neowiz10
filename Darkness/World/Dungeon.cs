@@ -14,16 +14,40 @@ namespace Darkness
         public Room CurrentRoom { get; private set; }
 
         public Dungeon()
+            : this(new RoomMoveInterceptorFactory())
         {
+        }
+
+        public Dungeon(
+            RoomMoveInterceptorFactory moveInterceptorFactory)
+        {
+            if (moveInterceptorFactory == null)
+            {
+                throw new ArgumentNullException(
+                    "moveInterceptorFactory");
+            }
+
             RoomData roomData = new RoomData();
             RoomSlotContentFactory contentFactory =
                 new RoomSlotContentFactory();
+            RoomTurnBehaviorFactory turnBehaviorFactory =
+                new RoomTurnBehaviorFactory();
 
             Rooms = new Dictionary<string, Room>();
 
             foreach (KeyValuePair<string, RoomType> pair in roomData.RoomTypes)
             {
-                Rooms.Add(pair.Key, new Room(pair.Value, contentFactory));
+                Rooms.Add(
+                    pair.Key,
+                    new Room(
+                        pair.Value,
+                        contentFactory,
+                        moveInterceptorFactory.Create(
+                            pair.Key,
+                            contentFactory),
+                        turnBehaviorFactory.Create(
+                            pair.Key,
+                            contentFactory)));
             }
 
             foreach (KeyValuePair<string, RoomType> roomPair in roomData.RoomTypes)

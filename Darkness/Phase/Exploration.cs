@@ -80,6 +80,13 @@ namespace Darkness
                 }
 
                 RoomDirection direction;
+                if (IsExitClimb(value))
+                {
+                    Utility.PlayMessage(
+                        "[당신은 어둠 속에서 올라왔다]");
+                    return GameSignal.RETURN_TO_TITLE;
+                }
+
                 if (TryGetRoomDirection(value, out direction))
                 {
                     TurnResult moveResult = turnManager.ResolveMove(
@@ -223,6 +230,13 @@ namespace Darkness
 
             direction = default(RoomDirection);
             return false;
+        }
+
+        private static bool IsExitClimb(object value)
+        {
+            return value is MoveSelectionOptions &&
+                (MoveSelectionOptions)value ==
+                    MoveSelectionOptions.CLIMB;
         }
 
         private bool TryGetPlayerAction(
@@ -427,6 +441,29 @@ namespace Darkness
                 {
                     Utility.PlayMessage(
                         InventoryMessages.ItemUsed(itemType.Name));
+                    return;
+                }
+            }
+
+            if (itemType.UseFunction == ItemFunction.RestoreHealth)
+            {
+                const int bandageHealing = 5;
+                if (hero.CurrentHealth >= hero.Type.MaxHealth)
+                {
+                    Utility.PlayMessage(
+                        InventoryMessages.ItemHadNoEffect(
+                            itemType.Name));
+                    return;
+                }
+
+                if (hero.Inventory.Discard(itemStack, 1) == 1)
+                {
+                    int previousHealth = hero.CurrentHealth;
+                    hero.RestoreHealth(bandageHealing);
+                    Utility.PlayMessage(
+                        InventoryMessages.HealthRestored(
+                            itemType.Name,
+                            hero.CurrentHealth - previousHealth));
                     return;
                 }
             }

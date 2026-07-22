@@ -9,7 +9,6 @@ namespace Darkness
         public string Name { get; private set; }
         public string Description { get; private set; }
         public ItemCategory Category { get; private set; }
-        public int Price { get; private set; }
         public int MaxStackCount { get; private set; }
         public bool IsUsable { get; private set; }
         public int Weight { get; private set; }
@@ -27,7 +26,6 @@ namespace Darkness
             string name,
             string description,
             ItemCategory category,
-            int price,
             int maxStackCount,
             bool isUsable,
             int weight,
@@ -44,7 +42,6 @@ namespace Darkness
             Name = name;
             Description = description;
             Category = category;
-            Price = price;
             MaxStackCount = maxStackCount;
             IsUsable = isUsable;
             Weight = weight;

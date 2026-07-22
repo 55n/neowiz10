@@ -6,6 +6,7 @@ namespace Darkness
         RemoveStatus,
         Damage,
         Attack,
+        RestoreFocus,
         SetEquipmentDurability
     }
 }

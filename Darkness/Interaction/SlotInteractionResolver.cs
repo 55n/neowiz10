@@ -52,7 +52,7 @@ namespace Darkness
                 foundSomething = true;
             }
 
-            if (slot.IsEmpty && slot.Type.HasDoor)
+            if (slot.AllowsDoorDiscovery && slot.Type.HasDoor)
             {
                 foundSomething = true;
             }

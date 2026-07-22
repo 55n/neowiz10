@@ -24,7 +24,7 @@ namespace Darkness
                     new List<EffectApplication>()),
                 new TrapType(
                     "poison_fog_trap",
-                    "맹독안개 함정",
+                    "독안개",
                     "바닥의 장치에서 맹독안개가 계속 뿜어져 나온다.",
                     8,
                     0,

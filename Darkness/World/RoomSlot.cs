@@ -16,6 +16,15 @@ namespace Darkness
                 return Content == null;
             }
         }
+        public bool AllowsDoorDiscovery
+        {
+            get
+            {
+                return IsEmpty ||
+                       Content is INonBlockingTerrain ||
+                       Type.ObjectType == RoomObjectType.Sand;
+            }
+        }
 
         public RoomSlot(RoomSlotType type, ISlotContent content)
         {
@@ -28,7 +37,8 @@ namespace Darkness
 
         public bool TryDiscoverDoor()
         {
-            if (IsDoorDiscovered || !Type.HasDoor || !IsEmpty ||
+            if (IsDoorDiscovered || !Type.HasDoor ||
+                !AllowsDoorDiscovery ||
                 State != SlotState.REVEALED)
             {
                 return false;

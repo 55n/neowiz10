@@ -14,9 +14,9 @@ namespace Darkness
 
             string stateMessage = previousState == decision.NextState
                 ? null
-                : StateChanged(monsterName, decision.NextState);
+                : StateChanged(NarrativeTokens.Actor, decision.NextState);
             string actionMessage = ActionPlanned(
-                monsterName,
+                NarrativeTokens.Actor,
                 decision.Action);
 
             if (string.IsNullOrEmpty(stateMessage))
@@ -72,6 +72,9 @@ namespace Darkness
                 case MonsterActionType.Attack:
                     return monsterName +
                         "은(는) 당신을 노리고 공격 태세를 갖춘다.";
+                case MonsterActionType.DrainFocus:
+                    return monsterName +
+                        "은(는) 정신을 흐트러뜨릴 움직임을 준비한다.";
                 case MonsterActionType.Move:
                     return monsterName +
                         "은(는) 다른 위치로 자리를 옮기려 한다.";
@@ -81,6 +84,12 @@ namespace Darkness
                 case MonsterActionType.UseSkill:
                     return monsterName +
                         "은(는) 당신을 향해 특별한 행동을 준비한다.";
+                case MonsterActionType.Reflect:
+                    return monsterName +
+                        "은(는) 자신이 받은 것을 그대로 되돌린다.";
+                case MonsterActionType.Vanish:
+                    return monsterName +
+                        "은(는) 어둠 속으로 사라진다.";
                 default:
                     return null;
             }

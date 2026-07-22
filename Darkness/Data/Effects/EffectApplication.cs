@@ -12,6 +12,7 @@ namespace Darkness
         public EquipmentSlot EquipmentSlot { get; private set; }
         public bool UsesFixedAttackDamage { get; private set; }
         public int AccuracyModifier { get; private set; }
+        public bool IgnoresDefense { get; private set; }
 
         public EffectApplication(
             string effectId,
@@ -27,7 +28,8 @@ namespace Darkness
                 AttackDeliveryType.Natural,
                 EquipmentSlot.Weapon,
                 false,
-                0)
+                0,
+                false)
         {
         }
 
@@ -41,7 +43,8 @@ namespace Darkness
             AttackDeliveryType attackDeliveryType,
             EquipmentSlot equipmentSlot,
             bool usesFixedAttackDamage,
-            int accuracyModifier)
+            int accuracyModifier,
+            bool ignoresDefense)
         {
             Operation = operation;
             EffectId = effectId;
@@ -53,6 +56,7 @@ namespace Darkness
             EquipmentSlot = equipmentSlot;
             UsesFixedAttackDamage = usesFixedAttackDamage;
             AccuracyModifier = accuracyModifier;
+            IgnoresDefense = ignoresDefense;
         }
 
         public static EffectApplication ApplyStatus(
@@ -71,13 +75,15 @@ namespace Darkness
                 AttackDeliveryType.Natural,
                 EquipmentSlot.Weapon,
                 false,
-                0);
+                0,
+                false);
         }
 
         public static EffectApplication Damage(
             EffectTarget target,
             int amount,
-            int applyChance = 100)
+            int applyChance = 100,
+            bool ignoresDefense = false)
         {
             return new EffectApplication(
                 EffectOperation.Damage,
@@ -89,7 +95,27 @@ namespace Darkness
                 AttackDeliveryType.Natural,
                 EquipmentSlot.Weapon,
                 false,
-                0);
+                0,
+                ignoresDefense);
+        }
+
+        public static EffectApplication RestoreFocus(
+            EffectTarget target,
+            int amount,
+            int applyChance = 100)
+        {
+            return new EffectApplication(
+                EffectOperation.RestoreFocus,
+                null,
+                target,
+                applyChance,
+                amount,
+                1,
+                AttackDeliveryType.Natural,
+                EquipmentSlot.Weapon,
+                false,
+                0,
+                false);
         }
 
         public static EffectApplication RemoveStatus(
@@ -107,7 +133,8 @@ namespace Darkness
                 AttackDeliveryType.Natural,
                 EquipmentSlot.Weapon,
                 false,
-                0);
+                0,
+                false);
         }
 
         public static EffectApplication Attack(
@@ -127,7 +154,8 @@ namespace Darkness
                 attackDeliveryType,
                 EquipmentSlot.Weapon,
                 false,
-                0);
+                0,
+                false);
         }
 
         public static EffectApplication FixedAttack(
@@ -148,7 +176,8 @@ namespace Darkness
                 attackDeliveryType,
                 EquipmentSlot.Weapon,
                 true,
-                accuracyModifier);
+                accuracyModifier,
+                false);
         }
 
         public static EffectApplication SetEquipmentDurability(
@@ -168,7 +197,8 @@ namespace Darkness
                 AttackDeliveryType.Natural,
                 equipmentSlot,
                 false,
-                0);
+                0,
+                false);
         }
     }
 }

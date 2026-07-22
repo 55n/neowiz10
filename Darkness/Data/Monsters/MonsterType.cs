@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Darkness
@@ -12,11 +11,8 @@ namespace Darkness
         public int MaxFocus { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
-        public int Speed { get; private set; }
         public int Accuracy { get; private set; }
         public int Evasion { get; private set; }
-        public List<EffectApplication> AttackEffects { get; private set; }
-        public MonsterFunction AttackFunction { get; private set; }
         public List<string> FocusSkillIds { get; private set; }
         public bool CanBePoisoned { get; private set; }
 
@@ -28,11 +24,8 @@ namespace Darkness
             int maxFocus,
             int attack,
             int defense,
-            int speed,
             int accuracy,
             int evasion,
-            List<EffectApplication> attackEffects,
-            MonsterFunction attackFunction,
             List<string> focusSkillIds,
             bool canBePoisoned = false)
         {
@@ -43,11 +36,8 @@ namespace Darkness
             MaxFocus = maxFocus;
             Attack = attack;
             Defense = defense;
-            Speed = speed;
             Accuracy = accuracy;
             Evasion = evasion;
-            AttackEffects = attackEffects;
-            AttackFunction = attackFunction;
             FocusSkillIds = focusSkillIds;
             CanBePoisoned = canBePoisoned;
         }

@@ -7,9 +7,11 @@ namespace Darkness
         public List<string> Messages { get; private set; }
         public List<AttackContext> Attacks { get; private set; }
         public List<DamageContext> Damages { get; private set; }
+        public List<FocusDamageRequest> FocusDamages { get; private set; }
         public List<SkillUseContext> SkillUses { get; private set; }
         public List<ItemThrowPlan> ItemThrows { get; private set; }
         public List<EffectRequest> EffectRequests { get; private set; }
+        public List<EffectCopyRequest> EffectCopies { get; private set; }
         public List<EquipmentDurabilityRequest> DurabilityRequests
         {
             get;
@@ -34,9 +36,11 @@ namespace Darkness
             Messages = new List<string>();
             Attacks = new List<AttackContext>();
             Damages = new List<DamageContext>();
+            FocusDamages = new List<FocusDamageRequest>();
             SkillUses = new List<SkillUseContext>();
             ItemThrows = new List<ItemThrowPlan>();
             EffectRequests = new List<EffectRequest>();
+            EffectCopies = new List<EffectCopyRequest>();
             DurabilityRequests =
                 new List<EquipmentDurabilityRequest>();
             MonsterMoves = new List<MonsterMoveRequest>();
@@ -56,9 +60,11 @@ namespace Darkness
             Messages.AddRange(other.Messages);
             Attacks.AddRange(other.Attacks);
             Damages.AddRange(other.Damages);
+            FocusDamages.AddRange(other.FocusDamages);
             SkillUses.AddRange(other.SkillUses);
             ItemThrows.AddRange(other.ItemThrows);
             EffectRequests.AddRange(other.EffectRequests);
+            EffectCopies.AddRange(other.EffectCopies);
             DurabilityRequests.AddRange(other.DurabilityRequests);
             MonsterMoves.AddRange(other.MonsterMoves);
             SlotContentChanges.AddRange(other.SlotContentChanges);

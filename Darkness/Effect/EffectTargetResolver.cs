@@ -20,7 +20,8 @@ namespace Darkness
 
             if (target == EffectTarget.Target)
             {
-                return context.SelectedTargets.Count == 0
+                return context.SelectedTargets.Count == 0 ||
+                       !CanBeTargeted(context.SelectedTargets[0])
                     ? new List<object>()
                     : new List<object>
                     {
@@ -30,7 +31,8 @@ namespace Darkness
 
             if (target == EffectTarget.AllTargets)
             {
-                return new List<object>(context.SelectedTargets);
+                return context.SelectedTargets.FindAll(
+                    CanBeTargeted);
             }
 
             if (target == EffectTarget.AllRoomSlots)
@@ -69,7 +71,8 @@ namespace Darkness
 
             foreach (RoomSlot slot in room.Slots)
             {
-                if (slot.Content is IDamageable)
+                if (slot.Content is IDamageable &&
+                    CanBeTargeted(slot.Content))
                 {
                     targets.Add(slot.Content);
                 }
@@ -85,7 +88,9 @@ namespace Darkness
             foreach (object selectedTarget in context.SelectedTargets)
             {
                 IEffectTarget occupant = selectedTarget as IEffectTarget;
-                if (occupant != null && !targets.Contains(occupant))
+                if (occupant != null &&
+                    CanBeTargeted(occupant) &&
+                    !targets.Contains(occupant))
                 {
                     targets.Add(occupant);
                 }
@@ -99,13 +104,25 @@ namespace Darkness
             foreach (RoomSlot slot in context.Room.Slots)
             {
                 Monster occupant = slot.Content as Monster;
-                if (occupant != null && !targets.Contains(occupant))
+                if (occupant != null &&
+                    CanBeTargeted(occupant) &&
+                    !targets.Contains(occupant))
                 {
                     targets.Add(occupant);
                 }
             }
 
             return targets;
+        }
+
+        private static bool CanBeTargeted(object target)
+        {
+            Monster monster = target as Monster;
+            IPlayerTargetability targetability = monster == null
+                ? null
+                : monster.Behavior as IPlayerTargetability;
+            return targetability == null ||
+                   targetability.CanBeTargetedByPlayer;
         }
     }
 }

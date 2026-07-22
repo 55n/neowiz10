@@ -61,9 +61,9 @@ namespace Darkness
                 EffectOriginType.ItemThrow,
                 plan.ThrownItem.Type.Id,
                 room,
-                plan.Target == null
+                plan.EffectTarget == null
                     ? null
-                    : new object[] { plan.Target });
+                    : new object[] { plan.EffectTarget });
         }
 
         public static EffectContext FromItemUse(

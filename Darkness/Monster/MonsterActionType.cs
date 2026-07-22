@@ -5,8 +5,11 @@ namespace Darkness
         None,
         Wait,
         Attack,
+        DrainFocus,
         Move,
         Defend,
-        UseSkill
+        UseSkill,
+        Reflect,
+        Vanish
     }
 }

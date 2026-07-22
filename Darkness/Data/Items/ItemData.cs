@@ -12,22 +12,24 @@ namespace Darkness
         {
             ItemTypes = new List<ItemType>
             {
-                new ItemType("loser_mark", "패배자 낙인", "도망친 자에게 새겨지는 불길한 낙인이다.", ItemCategory.Accessory, 0, 1, false, 1, 0, 0, 0, "cowardly_leap", Effects(), Effects(), ItemFunction.None, ItemFunction.None),
-                new ItemType("ordinary_sword", "평범한 한손검", "특별할 것 없는 평범한 한손검이다.", ItemCategory.Weapon, 10, 1, false, 4, 3, 0, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("worn_sword", "닳은 한손검", "추락 후에도 손에 남은 낡은 검이다.", ItemCategory.Weapon, 8, 1, false, 4, 3, 0, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("ordinary_armor", "평범한 갑옷", "여러 번 수선한 흔적이 있는 보통 갑옷이다.", ItemCategory.Armor, 10, 1, false, 7, 0, 2, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("guardian_charm", "수호의 부적", "치명적인 피해를 한 번 막아주는 부적이다.", ItemCategory.Accessory, 50, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("cracked_guardian_charm", "금이 간 수호의 부적", "[수호의 가호] 스킬을 사용할 수 있게 해준다.", ItemCategory.Accessory, 30, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("magic_stone", "마석", "몬스터에게서 얻는 응축된 마력이다.", ItemCategory.Consumable, 1, 99, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("monster_bait", "몬스터 미끼", "피와 살점으로 만든 미끼로 강한 먹이 냄새가 난다.", ItemCategory.Consumable, 3, 5, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Lure),
-                new ItemType("pocket", "주머니", "가방에 달아 소지품 칸 수를 2 늘린다.", ItemCategory.Consumable, 8, 1, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.ExpandInventory, ItemFunction.None),
-                new ItemType("rag_armor", "넝마", "여러 겹의 천 조각을 엮어 만든 조악한 방어구다.", ItemCategory.Armor, 3, 1, false, 2, 0, 1, 3, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
-                new ItemType("troll_oil", "트롤 기름", "체취를 가리거나 다른 위치에 강한 냄새를 남긴다.", ItemCategory.Consumable, 6, 3, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.MaskScent, ItemFunction.CreateScent),
-                new ItemType("troll_blood", "트롤 피", "재생력이 남은 희귀한 피로 체력을 크게 회복한다.", ItemCategory.Consumable, 12, 2, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.HealHealth, ItemFunction.HealHealth),
-                new ItemType("vibration_shell", "진동벌레 허물", "바닥에 부딪히면 길고 복잡한 진동을 만든다.", ItemCategory.Consumable, 5, 3, false, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.CreateVibration),
-                new ItemType("door_slime", "문붙이 점액", "사용하면 발소리를 줄이고 던져 맞히면 속박 4스택을 부여한다.", ItemCategory.Consumable, 7, 3, true, 1, 0, 0, 0, null, Effects(), Effects(Target("bind"), Target("bind"), Target("bind"), Target("bind")), ItemFunction.SilenceMovement, ItemFunction.None),
-                new ItemType("whetstone", "숫돌", "선택한 무기의 내구도를 완전히 회복하고 소모된다.", ItemCategory.Consumable, 10, 1, true, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.RepairWeapon, ItemFunction.Damage),
-                new ItemType("antidote", "해독제", "몸속에 퍼진 독을 중화해 중독 상태이상을 제거한다.", ItemCategory.Consumable, 8, 3, true, 1, 0, 0, 0, null, Effects(EffectApplication.RemoveStatus("poison", EffectTarget.Self)), Effects(), ItemFunction.None, ItemFunction.None)
+                new ItemType("loser_mark", "패배자 낙인", "도망친 자에게 새겨지는 불길한 낙인이다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "cowardly_leap", Effects(), Effects(), ItemFunction.None, ItemFunction.None),
+                new ItemType("worn_sword", "닳은 한손검", "추락 후에도 손에 남은 낡은 검이다.", ItemCategory.Weapon, 1, false, 4, 3, 0, 6, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("chain_sword", "사슬검", "갑주령의 사슬을 벼려 만든 검이다. 장착하면 [사슬결박]을 익힌다.", ItemCategory.Weapon, 1, false, 5, 4, 0, 10, "chain_bind", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("forgotten_spear", "잊혀진 창", "오래전에 이름을 잃은 전사가 사용했던 창이다. 장착하면 [휩쓸기]를 익힌다.", ItemCategory.Weapon, 1, false, 5, 7, 0, 15, "sweep", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("ordinary_armor", "평범한 갑옷", "여러 번 수선한 흔적이 있는 보통 갑옷이다.", ItemCategory.Armor, 1, false, 7, 0, 2, 10, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("spirit_armor", "영혼갑주", "갑주령의 마력이 깃든 갑옷이다. 장착하면 [영혼방벽]을 익힌다.", ItemCategory.Armor, 1, false, 6, 0, 2, 12, "spirit_barrier", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("memory_charm", "회상의 부적", "마석에 깃든 기억을 끌어내는 부적이다. 장착하면 [마력회상]을 익힌다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "magic_recollection", Effects(), Effects(), ItemFunction.None, ItemFunction.None),
+                new ItemType("guardian_charm", "수호의 부적", "치명적인 피해를 한 번 막아주는 부적이다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("cracked_guardian_charm", "금이 간 수호의 부적", "[수호의 가호] 스킬을 사용할 수 있게 해준다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "guardian_blessing", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("snowflake_pendant", "눈송이 펜던트", "차가운 기운이 맴도는 눈송이 모양의 펜던트다. 장착하면 [겨울바람]을 익힌다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "winter_wind", Effects(), Effects(), ItemFunction.None, ItemFunction.None),
+                new ItemType("magic_stone", "마석", "몬스터에게서 얻는 응축된 마력이다.", ItemCategory.Consumable, 99, false, 1, 0, 0, 0, null, Effects(), Effects(Target("magic_charge")), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("freeze_core", "동결핵", "차가운 기운이 응축된 늪귀신의 핵이다. 던진 슬롯의 대상을 얼어붙게 한다.", ItemCategory.Consumable, 3, false, 1, 0, 0, 0, null, Effects(), Effects(Target("frozen")), ItemFunction.None, ItemFunction.None),
+                new ItemType("monster_bait", "몬스터 미끼", "피와 살점으로 만든 미끼로 강한 먹이 냄새가 난다.", ItemCategory.Consumable, 5, false, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Lure),
+                new ItemType("pocket", "주머니", "가방에 달아 소지품 칸 수를 2 늘린다.", ItemCategory.Consumable, 1, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.ExpandInventory, ItemFunction.None),
+                new ItemType("rag_armor", "넝마", "여러 겹의 천 조각을 엮어 만든 조악한 방어구다.", ItemCategory.Armor, 1, false, 2, 0, 1, 5, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
+                new ItemType("whetstone", "숫돌", "선택한 무기의 내구도를 완전히 회복하고 소모된다.", ItemCategory.Consumable, 1, true, 2, 0, 0, 0, null, Effects(), Effects(), ItemFunction.RepairWeapon, ItemFunction.Damage),
+                new ItemType("antidote", "해독제", "몸속에 퍼진 독을 중화해 중독 상태이상을 제거한다.", ItemCategory.Consumable, 3, true, 1, 0, 0, 0, null, Effects(EffectApplication.RemoveStatus("poison", EffectTarget.Self)), Effects(), ItemFunction.None, ItemFunction.None),
+                new ItemType("bandage", "붕대", "상처를 감싸 생명력을 5 회복한다.", ItemCategory.Consumable, 2, true, 1, 0, 0, 0, null, Effects(), Effects(), ItemFunction.RestoreHealth, ItemFunction.None)
             }.ToDictionary(itemType => itemType.Id);
         }
 

@@ -78,6 +78,55 @@ namespace Darkness
                 null,
                 false,
                 1);
+            EffectType bind = new EffectType(
+                "bind",
+                "속박",
+                "행동할 때 1스택을 소모하고 해당 행동을 강제로 기다리기로 바꾼다.",
+                null,
+                true,
+                99);
+            EffectType magicCharge = new EffectType(
+                "magic_charge",
+                "마력충전",
+                "대상에게 마력부하 1스택을 부여한다.",
+                null,
+                true,
+                99);
+            EffectType magicOverload = new EffectType(
+                "magic_overload",
+                "마력부하",
+                "10스택에 도달하면 폭발하여 9999의 피해를 받는다.",
+                null,
+                true,
+                10);
+            EffectType magicStoneEater = new EffectType(
+                "magic_stone_eater",
+                "마석섭취자",
+                "마석을 흡수하므로 마력부하가 쌓이지 않는다.",
+                null,
+                false,
+                1);
+            EffectType fixedEffect = new EffectType(
+                "fixed",
+                "고정됨",
+                "몸이 한자리에 고정되어 회피율이 -100이 된다.",
+                null,
+                false,
+                1);
+            EffectType packTactics = new EffectType(
+                "pack_tactics",
+                "무리전술",
+                "방에 있는 다른 같은 종류의 몬스터 하나당 공격력과 방어력이 1 증가한다.",
+                null,
+                false,
+                1);
+            EffectType spiritBarrier = new EffectType(
+                "spirit_barrier",
+                "영혼방벽",
+                "다음에 받는 피해를 5 감소시킨다.",
+                null,
+                false,
+                1);
 
             EffectTypes = new Dictionary<string, EffectType>
             {
@@ -90,7 +139,14 @@ namespace Darkness
                 { startled.Id, startled },
                 { poison.Id, poison },
                 { wet.Id, wet },
-                { frozen.Id, frozen }
+                { frozen.Id, frozen },
+                { bind.Id, bind },
+                { magicCharge.Id, magicCharge },
+                { magicOverload.Id, magicOverload },
+                { magicStoneEater.Id, magicStoneEater },
+                { fixedEffect.Id, fixedEffect },
+                { packTactics.Id, packTactics },
+                { spiritBarrier.Id, spiritBarrier }
             };
         }
     }
