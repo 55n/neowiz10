@@ -40,6 +40,11 @@ namespace Darkness
                 return ResolveRoomContents(context.Room);
             }
 
+            if (target == EffectTarget.AllDamageableRoomContents)
+            {
+                return ResolveAllDamageableRoomContents(context.Room);
+            }
+
             if (target == EffectTarget.AllRoomOccupants)
             {
                 return ResolveRoomOccupants(context);
@@ -109,6 +114,26 @@ namespace Darkness
                     !targets.Contains(occupant))
                 {
                     targets.Add(occupant);
+                }
+            }
+
+            return targets;
+        }
+
+        private static List<object> ResolveAllDamageableRoomContents(
+            Room room)
+        {
+            List<object> targets = new List<object>();
+            if (room == null)
+            {
+                return targets;
+            }
+
+            foreach (RoomSlot slot in room.Slots)
+            {
+                if (slot.Content is IDamageable)
+                {
+                    targets.Add(slot.Content);
                 }
             }
 

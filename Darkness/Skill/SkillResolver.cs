@@ -39,7 +39,6 @@ namespace Darkness
 
             result.Succeeded = true;
             result.Messages.Add(SkillMessages.Used(
-                context.User.Name,
                 context.Skill.Name));
             result.Attacks.AddRange(effectResult.Attacks);
             result.Damages.AddRange(effectResult.Damages);

@@ -12,6 +12,7 @@ namespace Darkness
             SkillTypes = new List<SkillType>
             {
                 new SkillType("cowardly_leap", "비겁한 도약", "마석을 소모해 출구로 도망친다.", SkillCostType.MagicStone, 4, false, Effects()),
+                new SkillType("developer_strike", "개발자의 일격", "모든 슬롯에 방어 무시 고정 피해 10000을 준다.", SkillCostType.Focus, 0, false, SkillTargetingType.None, Effects(EffectApplication.Damage(EffectTarget.AllDamageableRoomContents, 10000, 100, true))),
                 new SkillType("last_focus", "마지막 집중", "다음 공격의 정확도에 100을 더한다.", SkillCostType.Focus, 5, false, SkillTargetingType.None, Effects(EffectApplication.ApplyStatus("perfect_focus", EffectTarget.Self))),
                 new SkillType("power_strike", "강타", "집중을 소모해 공격력의 150% 피해로 공격한다.", SkillCostType.Focus, 1, false, SkillTargetingType.SingleSlot, SkillAttackType.Weapon, Effects(EffectApplication.Attack(EffectTarget.Target, 150, 100, AttackDeliveryType.EquippedWeapon))),
                 new SkillType("sweep", "휩쓸기", "창을 크게 휘둘러 모든 슬롯의 공격 가능한 대상을 공격한다.", SkillCostType.Focus, 5, false, SkillTargetingType.None, SkillAttackType.Weapon, Effects(EffectApplication.Attack(EffectTarget.AllRoomSlots, 100, 100, AttackDeliveryType.EquippedWeapon))),

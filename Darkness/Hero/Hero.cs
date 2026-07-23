@@ -49,7 +49,7 @@ namespace Darkness
         {
             Type = type;
             CurrentHealth = type.MaxHealth;
-            CurrentFocus = type.MaxFocus;
+            CurrentFocus = 1;
             Inventory = inventory;
             Equipment = equipment;
             LearnedSkillIds = learnedSkillIds;

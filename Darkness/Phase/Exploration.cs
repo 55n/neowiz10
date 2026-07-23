@@ -174,6 +174,7 @@ namespace Darkness
             if (entryStateMessages.Count > 0)
             {
                 Utility.PlayMessages(entryStateMessages.ToArray());
+                screen.OpenExplorationSelection();
             }
 
             if (!isFirstEntry ||
@@ -606,7 +607,9 @@ namespace Darkness
 
             dungeon.MoveTo(CowardlyLeapDestinationRoomId);
             result.Messages.Add(
-                SkillMessages.Used(hero.Name, skill.Name));
+                NarrativeTemplate.Format(
+                    SkillMessages.Used(skill.Name),
+                    hero.Name));
             result.RoomChanged = true;
             result.TurnCompleted = true;
             return result;

@@ -231,6 +231,7 @@
     <Compile Include="World\MoveInterceptionContext.cs" />
     <Compile Include="World\MoveInterceptionResult.cs" />
     <Compile Include="World\Room.cs" />
+    <Compile Include="World\Room0DeveloperSwordBehavior.cs" />
     <Compile Include="World\Room11MoveInterceptor.cs" />
     <Compile Include="World\Room16MoveInterceptor.cs" />
     <Compile Include="World\RoomMoveInterceptorFactory.cs" />

@@ -6,6 +6,11 @@ namespace Darkness
             string roomId,
             RoomSlotContentFactory contentFactory = null)
         {
+            if (roomId == "room-0")
+            {
+                return new Room0DeveloperSwordBehavior();
+            }
+
             if (roomId == "room-15")
             {
                 return new BreathHunterNestBehavior();

@@ -60,7 +60,7 @@ namespace Darkness
             EffectType poison = new EffectType(
                 "poison",
                 "중독",
-                "매 플레이어 턴 종료 시 5의 피해를 입는다.",
+                "매 플레이어 턴 종료 시 3의 피해를 입는다.",
                 null,
                 false,
                 1);

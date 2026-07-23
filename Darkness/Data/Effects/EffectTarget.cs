@@ -6,6 +6,7 @@ namespace Darkness
         Target,
         AllTargets,
         AllRoomSlots,
+        AllDamageableRoomContents,
         AllRoomOccupants,
         EquippedWeapon
     }

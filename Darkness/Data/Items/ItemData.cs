@@ -13,6 +13,7 @@ namespace Darkness
             ItemTypes = new List<ItemType>
             {
                 new ItemType("loser_mark", "패배자 낙인", "도망친 자에게 새겨지는 불길한 낙인이다.", ItemCategory.Accessory, 1, false, 1, 0, 0, 0, "cowardly_leap", Effects(), Effects(), ItemFunction.None, ItemFunction.None),
+                new ItemType("developer_sword", "개발자의 검", "모든 슬롯에 10000 고정 데미지", ItemCategory.Weapon, 1, false, 0, 10000, 0, 9999, "developer_strike", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("worn_sword", "닳은 한손검", "추락 후에도 손에 남은 낡은 검이다.", ItemCategory.Weapon, 1, false, 4, 3, 0, 6, null, Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("chain_sword", "사슬검", "갑주령의 사슬을 벼려 만든 검이다. 장착하면 [사슬결박]을 익힌다.", ItemCategory.Weapon, 1, false, 5, 4, 0, 10, "chain_bind", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),
                 new ItemType("forgotten_spear", "잊혀진 창", "이름을 잃은 전사가 쓰던 창이다. 장착하면 [휩쓸기]를 익힌다.", ItemCategory.Weapon, 1, false, 5, 7, 0, 15, "sweep", Effects(), Effects(), ItemFunction.None, ItemFunction.Damage),

@@ -6,3 +6,10 @@ C:\projects\course\Darkness\obj\Release\Darkness.csproj.CoreCompileInputs.cache
 C:\projects\course\Darkness\obj\Release\Darkness.exe
 C:\projects\course\Darkness\obj\Release\Darkness.pdb
 C:\projects\course\Darkness\obj\Release\Darkness.exe.config
+C:\course\projects\Darkness\bin\Release\Darkness.exe.config
+C:\course\projects\Darkness\bin\Release\Darkness.exe
+C:\course\projects\Darkness\bin\Release\Darkness.pdb
+C:\course\projects\Darkness\obj\Release\Darkness.csproj.AssemblyReference.cache
+C:\course\projects\Darkness\obj\Release\Darkness.csproj.CoreCompileInputs.cache
+C:\course\projects\Darkness\obj\Release\Darkness.exe
+C:\course\projects\Darkness\obj\Release\Darkness.pdb

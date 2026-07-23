@@ -12,7 +12,7 @@ namespace Darkness
             return "[" + skill + "] 스킬이 발동됩니다.";
         }
 
-        public static string Used(string caster, string skill)
+        public static string Used(string skill)
         {
             return NarrativeTokens.Actor + " 은(는) [" + skill +
                    "] 을(를) 사용했다";
